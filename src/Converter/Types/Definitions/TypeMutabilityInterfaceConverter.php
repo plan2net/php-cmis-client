@@ -27,7 +27,7 @@ class TypeMutabilityInterfaceConverter implements TypeConverterInterface
      * @return boolean[] Array representation of object
      * @throws CmisInvalidArgumentException thrown if given object does not implement expected TypeMutabilityInterface
      */
-    public static function convertToSimpleType($object)
+    public static function convertToSimpleType($object): array
     {
         if (!$object instanceof TypeMutabilityInterface) {
             throw new CmisInvalidArgumentException('Given object must be of type TypeMutabilityInterface');

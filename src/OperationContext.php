@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use InvalidArgumentException;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 
 /**
@@ -22,57 +22,36 @@ class OperationContext implements OperationContextInterface
     /**
      * @var string[]
      */
-    private $filter = [];
+    private array $filter = [];
 
-    /**
-     * @var boolean
-     */
-    private $loadSecondaryTypeProperties = false;
+    private bool $loadSecondaryTypeProperties = false;
 
-    /**
-     * @var boolean
-     */
-    private $includeAcls = false;
+    private bool $includeAcls = false;
 
-    /**
-     * @var boolean
-     */
-    private $includeAllowableActions = true;
+    private bool $includeAllowableActions = true;
 
-    /**
-     * @var boolean
-     */
-    private $includePolicies = false;
+    private bool $includePolicies = false;
 
     /**
      * @var IncludeRelationships
      */
-    private $includeRelationships = null;
+    private $includeRelationships;
 
     /**
      * @var string[]
      */
     private $renditionFilter = [];
 
-    /**
-     * @var boolean
-     */
-    private $includePathSegments = true;
+    private bool $includePathSegments = true;
 
     /**
      * @var string
      */
-    private $orderBy = null;
+    private $orderBy;
 
-    /**
-     * @var boolean
-     */
-    private $cacheEnabled = false;
+    private bool $cacheEnabled = false;
 
-    /**
-     * @var integer
-     */
-    private $maxItemsPerPage = 100;
+    private int $maxItemsPerPage = 100;
 
     /**
      * Creates new Operation Context
@@ -94,7 +73,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setCacheEnabled($cacheEnabled)
+    public function setCacheEnabled($cacheEnabled): static
     {
         $this->cacheEnabled = (boolean) $cacheEnabled;
         return $this;
@@ -103,7 +82,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function getCacheKey()
+    public function getCacheKey(): string
     {
         $cacheKey = $this->isIncludeAcls() ? '1' : '0';
         $cacheKey .= $this->isIncludeAllowableActions() ? '1' : '0';
@@ -114,9 +93,8 @@ class OperationContext implements OperationContextInterface
         $cacheKey .= '|';
         $cacheKey .= (string) $this->getIncludeRelationships();
         $cacheKey .= '|';
-        $cacheKey .= $this->getRenditionFilterString();
 
-        return $cacheKey;
+        return $cacheKey . $this->getRenditionFilterString();
     }
 
     /**
@@ -130,7 +108,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setFilter(array $propertyFilters)
+    public function setFilter(array $propertyFilters): static
     {
         $filters = [];
         foreach ($propertyFilters as $filter) {
@@ -145,7 +123,7 @@ class OperationContext implements OperationContextInterface
             }
 
             if (stripos($filter, ',') !== false) {
-                throw new \InvalidArgumentException('Filter must not contain a comma!');
+                throw new InvalidArgumentException('Filter must not contain a comma!');
             }
 
             $filters[] = $filter;
@@ -167,7 +145,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setIncludeAcls($includeAcls)
+    public function setIncludeAcls($includeAcls): static
     {
         $this->includeAcls = $includeAcls;
 
@@ -185,7 +163,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setIncludeAllowableActions($includeAllowableActions)
+    public function setIncludeAllowableActions($includeAllowableActions): static
     {
         $this->includeAllowableActions = $includeAllowableActions;
         return $this;
@@ -202,7 +180,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setIncludePathSegments($includePathSegments)
+    public function setIncludePathSegments($includePathSegments): static
     {
         $this->includePathSegments = $includePathSegments;
         return $this;
@@ -219,7 +197,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setIncludePolicies($includePolicies)
+    public function setIncludePolicies($includePolicies): static
     {
         $this->includePolicies = $includePolicies;
         return $this;
@@ -236,7 +214,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setIncludeRelationships(IncludeRelationships $includeRelationships)
+    public function setIncludeRelationships(IncludeRelationships $includeRelationships): static
     {
         $this->includeRelationships = $includeRelationships;
 
@@ -254,7 +232,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setLoadSecondaryTypeProperties($loadSecondaryTypeProperties)
+    public function setLoadSecondaryTypeProperties($loadSecondaryTypeProperties): static
     {
         $this->loadSecondaryTypeProperties = (boolean) $loadSecondaryTypeProperties;
 
@@ -272,10 +250,10 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setMaxItemsPerPage($maxItemsPerPage)
+    public function setMaxItemsPerPage($maxItemsPerPage): static
     {
         if ((int) $maxItemsPerPage < 1) {
-            throw new \InvalidArgumentException('itemsPerPage must be > 0!');
+            throw new InvalidArgumentException('itemsPerPage must be > 0!');
         }
         $this->maxItemsPerPage = (int) $maxItemsPerPage;
 
@@ -293,7 +271,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setOrderBy($orderBy)
+    public function setOrderBy($orderBy): static
     {
         $this->orderBy = $orderBy;
 
@@ -311,7 +289,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setRenditionFilter(array $renditionFilter)
+    public function setRenditionFilter(array $renditionFilter): static
     {
         $filters = [];
         foreach ($renditionFilter as $filter) {
@@ -321,13 +299,13 @@ class OperationContext implements OperationContextInterface
             }
 
             if (stripos($filter, ',') !== false) {
-                throw new \InvalidArgumentException('Rendition must not contain a comma!');
+                throw new InvalidArgumentException('Rendition must not contain a comma!');
             }
 
             $filters[] = $filter;
         }
 
-        if (count($filters) === 0) {
+        if ($filters === []) {
             $filters[] = Constants::RENDITION_NONE;
         }
 
@@ -340,7 +318,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function getQueryFilterString()
+    public function getQueryFilterString(): ?string
     {
         if (count($this->filter) === 0) {
             return null;
@@ -365,7 +343,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function getRenditionFilterString()
+    public function getRenditionFilterString(): ?string
     {
         if (count($this->renditionFilter) === 0) {
             return null;
@@ -377,7 +355,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setFilterString($propertyFilter)
+    public function setFilterString($propertyFilter): static
     {
         if (empty($propertyFilter)) {
             $this->setFilter([]);
@@ -391,7 +369,7 @@ class OperationContext implements OperationContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setRenditionFilterString($renditionFilter)
+    public function setRenditionFilterString($renditionFilter): static
     {
         if (empty($renditionFilter)) {
             $this->setRenditionFilter([]);

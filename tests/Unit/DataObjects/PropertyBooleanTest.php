@@ -9,14 +9,15 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\DataObjects\PropertyBoolean;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 /**
  * Class PropertyBooleanTest
  */
-class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
+class PropertyBooleanTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -25,7 +26,7 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
      */
     protected $propertyBoolean;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->propertyBoolean = new PropertyBoolean('testId');
     }
@@ -33,15 +34,14 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider booleanCastDataProvider
      * @param boolean $expected
-     * @param mixed $value
      */
-    public function testSetValuesSetsProperty($expected, $value)
+    public function testSetValuesSetsProperty($expected, mixed $value): void
     {
         if ($value === null) {
             $expected = $value;
         }
         if (!is_bool($value) && $value !== null) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
+            $this->setExpectedException(CmisInvalidArgumentException::class, '', 1413440336);
         }
         $values = [true, $value];
         $this->propertyBoolean->setValues($values);
@@ -51,15 +51,14 @@ class PropertyBooleanTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider booleanCastDataProvider
      * @param boolean $expected
-     * @param mixed $value
      */
-    public function testSetValueSetsValuesProperty($expected, $value)
+    public function testSetValueSetsValuesProperty($expected, mixed $value): void
     {
         if ($value === null) {
             $expected = $value;
         }
         if (!is_bool($value) && $value !== null) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
+            $this->setExpectedException(CmisInvalidArgumentException::class, '', 1413440336);
         }
         $this->propertyBoolean->setValue($value);
         $this->assertAttributeSame([$expected], 'values', $this->propertyBoolean);

@@ -9,14 +9,16 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use stdClass;
 use Dkd\PhpCmis\DataObjects\Choice;
 use Dkd\PhpCmis\Definitions\ChoiceInterface;
 
 /**
  * Class ChoiceTest
  */
-class ChoiceTest extends \PHPUnit_Framework_TestCase
+class ChoiceTest extends PHPUnit_Framework_TestCase
 {
     const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\DataObjects\\Choice';
 
@@ -25,12 +27,12 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
      */
     protected $choice;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->choice = new Choice();
     }
 
-    public function testSetChoiceSetsPropertyValue()
+    public function testSetChoiceSetsPropertyValue(): void
     {
         /** @var ChoiceInterface $choice */
         $choice = $this->getMockForAbstractClass(self::CLASS_TO_TEST);
@@ -38,18 +40,18 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals([$choice], 'choices', $this->choice);
     }
 
-    public function testSetChoiceThrowsExceptionIfChoiceListContainsInvalidValue()
+    public function testSetChoiceThrowsExceptionIfChoiceListContainsInvalidValue(): void
     {
         /** @var ChoiceInterface $choice */
         $choice = $this->getMockForAbstractClass(self::CLASS_TO_TEST);
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
-        $this->choice->setChoices([$choice, new \stdClass()]);
+        $this->setExpectedException(CmisInvalidArgumentException::class, '', 1413440336);
+        $this->choice->setChoices([$choice, new stdClass()]);
     }
 
     /**
      * @depends testSetChoiceSetsPropertyValue
      */
-    public function testGetChoicesGetsPropertyValue()
+    public function testGetChoicesGetsPropertyValue(): void
     {
         $choice = $this->getMockForAbstractClass(self::CLASS_TO_TEST);
         $this->choice->setChoices([$choice]);
@@ -57,7 +59,7 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$choice], $this->choice->getChoices());
     }
 
-    public function testSetDisplayNameSetsPropertyValue()
+    public function testSetDisplayNameSetsPropertyValue(): void
     {
         $displayName = 'displayNameValue';
         $this->choice->setDisplayName($displayName);
@@ -67,14 +69,14 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetDisplayNameSetsPropertyValue
      */
-    public function testGetDisplayNameGetsPropertyValue()
+    public function testGetDisplayNameGetsPropertyValue(): void
     {
         $displayName = 'displayNameValue';
         $this->choice->setDisplayName($displayName);
         $this->assertSame($displayName, $this->choice->getDisplayName());
     }
 
-    public function testSetValueSetsPropertyValue()
+    public function testSetValueSetsPropertyValue(): void
     {
         $value = ['value', 1, true, new Choice()];
         $this->choice->setValue($value);
@@ -84,7 +86,7 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetValueSetsPropertyValue
      */
-    public function testGetValueGetsPropertyValue()
+    public function testGetValueGetsPropertyValue(): void
     {
         $value = ['value', 1, true, new Choice()];
         $this->choice->setValue($value);

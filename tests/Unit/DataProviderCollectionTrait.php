@@ -1,6 +1,9 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit;
 
+use Closure;
+use stdClass;
+
 /*
  * This file is part of php-cmis-lib.
  *
@@ -9,7 +12,6 @@ namespace Dkd\PhpCmis\Test\Unit;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 /**
  * Class DataProviderCollectionTrait
  */
@@ -17,10 +19,8 @@ trait DataProviderCollectionTrait
 {
     /**
      * Data Provider that provides an expected boolean representation and a value
-     *
-     * @return array
      */
-    public function booleanCastDataProvider()
+    public function booleanCastDataProvider(): array
     {
         return [
             [true, true],
@@ -36,10 +36,8 @@ trait DataProviderCollectionTrait
 
     /**
      * Data Provider that provides an expected integer representation and a value
-     *
-     * @return array
      */
-    public function integerCastDataProvider()
+    public function integerCastDataProvider(): array
     {
         return [
             [0, ''],
@@ -52,10 +50,8 @@ trait DataProviderCollectionTrait
 
     /**
      * Data Provider that provides an expected string representation and a value
-     *
-     * @return array
      */
-    public function stringCastDataProvider()
+    public function stringCastDataProvider(): array
     {
         return [
             ['', ''],
@@ -70,29 +66,24 @@ trait DataProviderCollectionTrait
 
     /**
      * Data provider that provides a value for all PHP types expect resource
-     *
-     * @param \Closure $filter
-     * @return array
      */
-    public function allTypesDataProvider(\Closure $filter = null)
+    public function allTypesDataProvider(Closure $filter = null): array
     {
         $values = [
             'string' => ['String'],
             'integer' => [1],
             'float' => [1.1],
             'boolean' => [true],
-            'object' => [new \stdClass()],
+            'object' => [new stdClass()],
             'array' => [[]],
             'null' => [null],
             'callable' => [
-                function () {
-                    return true;
-                }
+                fn(): true => true
             ]
         ];
 
-        if ($filter !== null) {
-            $values = array_filter($values, $filter);
+        if ($filter instanceof Closure) {
+            return array_filter($values, $filter);
         }
 
         return $values;
@@ -106,9 +97,7 @@ trait DataProviderCollectionTrait
     public function nonIntegerDataProvider()
     {
         return $this->allTypesDataProvider(
-            function ($value) {
-                return !is_int(reset($value));
-            }
+            fn($value): bool => !is_int(reset($value))
         );
     }
 
@@ -120,9 +109,7 @@ trait DataProviderCollectionTrait
     public function nonStringDataProvider()
     {
         return $this->allTypesDataProvider(
-            function ($value) {
-                return !is_string(reset($value));
-            }
+            fn($value): bool => !is_string(reset($value))
         );
     }
 
@@ -134,9 +121,7 @@ trait DataProviderCollectionTrait
     public function nonBooleanDataProvider()
     {
         return $this->allTypesDataProvider(
-            function ($value) {
-                return !is_bool(reset($value));
-            }
+            fn($value): bool => !is_bool(reset($value))
         );
     }
 
@@ -148,9 +133,7 @@ trait DataProviderCollectionTrait
     public function nonArrayDataProvider()
     {
         return $this->allTypesDataProvider(
-            function ($value) {
-                return !is_array(reset($value));
-            }
+            fn($value): bool => !is_array(reset($value))
         );
     }
 
@@ -162,9 +145,7 @@ trait DataProviderCollectionTrait
     public function nonFloatDataProvider()
     {
         return $this->allTypesDataProvider(
-            function ($value) {
-                return !is_float(reset($value));
-            }
+            fn($value): bool => !is_float(reset($value))
         );
     }
 
@@ -176,9 +157,7 @@ trait DataProviderCollectionTrait
     public function nonObjectDataProvider()
     {
         return $this->allTypesDataProvider(
-            function ($value) {
-                return !is_object(reset($value));
-            }
+            fn($value): bool => !is_object(reset($value))
         );
     }
 
@@ -190,9 +169,7 @@ trait DataProviderCollectionTrait
     public function nonCallableDataProvider()
     {
         return $this->allTypesDataProvider(
-            function ($value) {
-                return !is_callable(reset($value));
-            }
+            fn($value): bool => !is_callable(reset($value))
         );
     }
 }

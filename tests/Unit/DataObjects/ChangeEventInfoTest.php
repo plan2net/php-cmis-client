@@ -9,28 +9,29 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use DateTime;
 use Dkd\PhpCmis\DataObjects\ChangeEventInfo;
 use Dkd\PhpCmis\Enum\ChangeType;
 
 /**
  * Class ChangeEventInfoTest
  */
-class ChangeEventInfoTest extends \PHPUnit_Framework_TestCase
+class ChangeEventInfoTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var ChangeEventInfo
      */
     protected $changeEventInfo;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->changeEventInfo = new ChangeEventInfo();
     }
 
-    public function testSetChangeTimeSetsProperty()
+    public function testSetChangeTimeSetsProperty(): void
     {
-        $dateTime = new \DateTime();
+        $dateTime = new DateTime();
         $this->changeEventInfo->setChangeTime($dateTime);
         $this->assertAttributeSame($dateTime, 'changeTime', $this->changeEventInfo);
     }
@@ -38,14 +39,14 @@ class ChangeEventInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetChangeTimeSetsProperty
      */
-    public function testGetChangeTimeReturnsProperty()
+    public function testGetChangeTimeReturnsProperty(): void
     {
-        $dateTime = new \DateTime();
+        $dateTime = new DateTime();
         $this->changeEventInfo->setChangeTime($dateTime);
         $this->assertSame($dateTime, $this->changeEventInfo->getChangeTime());
     }
 
-    public function testSetChangeTypeSetsProperty()
+    public function testSetChangeTypeSetsProperty(): void
     {
         $changeType = ChangeType::cast(ChangeType::CREATED);
         $this->changeEventInfo->setchangeType($changeType);
@@ -55,7 +56,7 @@ class ChangeEventInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetChangeTypeSetsProperty
      */
-    public function testGetChangeTypeReturnsProperty()
+    public function testGetChangeTypeReturnsProperty(): void
     {
         $changeType = ChangeType::cast(ChangeType::CREATED);
         $this->changeEventInfo->setchangeType($changeType);

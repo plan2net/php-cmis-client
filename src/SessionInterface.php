@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Locale;
 use Dkd\PhpCmis\Bindings\CmisBindingInterface;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\AceInterface;
@@ -180,7 +180,6 @@ interface SessionInterface
      * Creates a new folder.
      *
      * @param string[] $properties
-     * @param ObjectIdInterface $folderId
      * @param PolicyInterface[] $policies
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
@@ -198,7 +197,6 @@ interface SessionInterface
      * Creates a new item.
      *
      * @param string[] $properties
-     * @param ObjectIdInterface $folderId
      * @param PolicyInterface[] $policies
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
@@ -256,7 +254,6 @@ interface SessionInterface
      * Creates a new policy.
      *
      * @param string[] $properties
-     * @param ObjectIdInterface $folderId
      * @param PolicyInterface[] $policies
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
@@ -311,7 +308,6 @@ interface SessionInterface
     /**
      * Creates a new type.
      *
-     * @param TypeDefinitionInterface $type
      * @return ObjectTypeInterface the new type definition
      */
     public function createType(TypeDefinitionInterface $type);
@@ -423,7 +419,7 @@ interface SessionInterface
     /**
      * Get the current locale to be used for this session.
      *
-     * @return \Locale the current locale, may be <code>null</code>
+     * @return Locale the current locale, may be <code>null</code>
      */
     public function getLocale();
 
@@ -459,10 +455,7 @@ interface SessionInterface
     /**
      * Fetches the relationships from or to an object from the repository.
      *
-     * @param ObjectIdInterface $objectId
      * @param boolean $includeSubRelationshipTypes
-     * @param RelationshipDirection $relationshipDirection
-     * @param ObjectTypeInterface $type
      * @param OperationContextInterface|null $context
      * @return RelationshipInterface[]
      */
@@ -553,8 +546,6 @@ interface SessionInterface
 
     /**
      * Removes the given object from the cache.
-     *
-     * @param ObjectIdInterface $objectId
      */
     public function removeObjectFromCache(ObjectIdInterface $objectId);
 
@@ -571,7 +562,6 @@ interface SessionInterface
      * Removes the direct ACEs of an object and sets the provided ACEs.
      * The changes are local to the given object and are not propagated to dependent objects.
      *
-     * @param ObjectIdInterface $objectId
      * @param AceInterface[] $aces
      * @return AclInterface the new ACL of the object
      */

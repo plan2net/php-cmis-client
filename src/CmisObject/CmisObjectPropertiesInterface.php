@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\CmisObject;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Data\PropertyInterface;
 use Dkd\PhpCmis\Data\SecondaryTypeInterface;
@@ -79,7 +79,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the timestamp when this CMIS object has been created (CMIS property cmis:creationDate).
      *
-     * @return \DateTime|null the creation time of the object or <code>null</code> if the property hasn't been
+     * @return DateTime|null the creation time of the object or <code>null</code> if the property hasn't been
      *         requested or hasn't been provided by the repository
      */
     public function getCreationDate();
@@ -95,7 +95,7 @@ interface CmisObjectPropertiesInterface
     /**
      * Returns the timestamp when this CMIS object has been modified (CMIS property cmis:lastModificationDate).
      *
-     * @return \DateTime|null the last modification date of the object or <code>null</code> if the property hasn't been
+     * @return DateTime|null the last modification date of the object or <code>null</code> if the property hasn't been
      *         requested or hasn't been provided by the repository
      */
     public function getLastModificationDate();

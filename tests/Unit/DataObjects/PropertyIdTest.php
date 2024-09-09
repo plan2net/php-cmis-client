@@ -25,7 +25,7 @@ class PropertyIdTest extends PropertyStringTest
      */
     protected $subjectUnderTest;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->subjectUnderTest = new PropertyId('testId');
     }

@@ -26,8 +26,6 @@ interface MutableDocumentTypeDefinitionInterface extends MutableTypeDefinitionIn
 
     /**
      * Sets if a content stream is allowed, not allowed or is required.
-     *
-     * @param ContentStreamAllowed $contentStreamAllowed
      */
     public function setContentStreamAllowed(ContentStreamAllowed $contentStreamAllowed);
 }

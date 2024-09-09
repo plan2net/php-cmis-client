@@ -42,7 +42,7 @@ class TypeDefinitionContainer extends AbstractExtensionData implements TypeDefin
     /**
      * @param TypeDefinitionContainerInterface[] $children
      */
-    public function setChildren(array $children)
+    public function setChildren(array $children): void
     {
         $this->children = $children;
     }
@@ -57,7 +57,7 @@ class TypeDefinitionContainer extends AbstractExtensionData implements TypeDefin
         return $this->typeDefinition;
     }
 
-    public function setTypeDefinition(TypeDefinitionInterface $typeDefinition)
+    public function setTypeDefinition(TypeDefinitionInterface $typeDefinition): void
     {
         $this->typeDefinition = $typeDefinition;
     }

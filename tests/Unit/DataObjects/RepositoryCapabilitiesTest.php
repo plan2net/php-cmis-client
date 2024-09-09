@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\DataObjects\CreatablePropertyTypes;
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
 use Dkd\PhpCmis\DataObjects\RepositoryCapabilities;
@@ -25,7 +25,7 @@ use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 /**
  * Class RepositoryCapabilitiesTest
  */
-class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
+class RepositoryCapabilitiesTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -34,12 +34,12 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
      */
     protected $repositoryCapabilities;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->repositoryCapabilities = new RepositoryCapabilities();
     }
 
-    public function testSetAclCapabilitySetsProperty()
+    public function testSetAclCapabilitySetsProperty(): void
     {
         $aclCapability = CapabilityAcl::cast(CapabilityAcl::DISCOVER);
         $this->repositoryCapabilities->setAclCapability($aclCapability);
@@ -49,14 +49,14 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetAclCapabilitySetsProperty
      */
-    public function testGetAclCapabilityReturnsPropertyValue()
+    public function testGetAclCapabilityReturnsPropertyValue(): void
     {
         $aclCapability = CapabilityAcl::cast(CapabilityAcl::DISCOVER);
         $this->repositoryCapabilities->setAclCapability($aclCapability);
         $this->assertSame($aclCapability, $this->repositoryCapabilities->getAclCapability());
     }
 
-    public function testSetChangesCapabilitySetsProperty()
+    public function testSetChangesCapabilitySetsProperty(): void
     {
         $changesCapability = CapabilityChanges::cast(CapabilityChanges::PROPERTIES);
         $this->repositoryCapabilities->setChangesCapability($changesCapability);
@@ -66,7 +66,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetChangesCapabilitySetsProperty
      */
-    public function testGetChangesCapabilityReturnsPropertyValue()
+    public function testGetChangesCapabilityReturnsPropertyValue(): void
     {
         $changesCapability = CapabilityChanges::cast(CapabilityChanges::PROPERTIES);
         $this->repositoryCapabilities->setChangesCapability($changesCapability);
@@ -76,9 +76,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider booleanCastDataProvider
      * @param boolean $expected
-     * @param mixed $value
      */
-    public function testSetSupportsAllVersionsSearchableSetsProperty($expected, $value)
+    public function testSetSupportsAllVersionsSearchableSetsProperty($expected, mixed $value): void
     {
         $this->repositoryCapabilities->setSupportsAllVersionsSearchable($value);
         $this->assertAttributeSame($expected, 'supportsAllVersionsSearchable', $this->repositoryCapabilities);
@@ -87,7 +86,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetSupportsAllVersionsSearchableSetsProperty
      */
-    public function testIsAllVersionsSearchableReturnsPropertyValue()
+    public function testIsAllVersionsSearchableReturnsPropertyValue(): void
     {
         $this->repositoryCapabilities->setSupportsAllVersionsSearchable(true);
         $this->assertSame(true, $this->repositoryCapabilities->isAllVersionsSearchableSupported());
@@ -96,9 +95,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider booleanCastDataProvider
      * @param boolean $expected
-     * @param mixed $value
      */
-    public function testSetIsPwcSearchableSetsProperty($expected, $value)
+    public function testSetIsPwcSearchableSetsProperty($expected, mixed $value): void
     {
         $this->repositoryCapabilities->setSupportsPwcSearchable($value);
         $this->assertAttributeSame($expected, 'isPwcSearchable', $this->repositoryCapabilities);
@@ -107,7 +105,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsPwcSearchableSetsProperty
      */
-    public function testIsIsPwcSearchableReturnsPropertyValue()
+    public function testIsIsPwcSearchableReturnsPropertyValue(): void
     {
         $this->repositoryCapabilities->setSupportsPwcSearchable(true);
         $this->assertSame(true, $this->repositoryCapabilities->isPwcSearchableSupported());
@@ -116,9 +114,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider booleanCastDataProvider
      * @param boolean $expected
-     * @param mixed $value
      */
-    public function testSetIsPwcUpdatableSetsProperty($expected, $value)
+    public function testSetIsPwcUpdatableSetsProperty($expected, mixed $value): void
     {
         $this->repositoryCapabilities->setSupportsPwcUpdatable($value);
         $this->assertAttributeSame($expected, 'isPwcUpdatable', $this->repositoryCapabilities);
@@ -127,13 +124,13 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsPwcUpdatableSetsProperty
      */
-    public function testIsIsPwcUpdatableReturnsPropertyValue()
+    public function testIsIsPwcUpdatableReturnsPropertyValue(): void
     {
         $this->repositoryCapabilities->setSupportsPwcUpdatable(true);
         $this->assertSame(true, $this->repositoryCapabilities->isPwcUpdatableSupported());
     }
 
-    public function testSetContentStreamUpdatesCapabilitySetsProperty()
+    public function testSetContentStreamUpdatesCapabilitySetsProperty(): void
     {
         $ContentStreamUpdatesCapability = CapabilityContentStreamUpdates::cast(CapabilityContentStreamUpdates::PWCONLY);
         $this->repositoryCapabilities->setContentStreamUpdatesCapability($ContentStreamUpdatesCapability);
@@ -147,7 +144,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetContentStreamUpdatesCapabilitySetsProperty
      */
-    public function testGetContentStreamUpdatesCapabilityReturnsPropertyValue()
+    public function testGetContentStreamUpdatesCapabilityReturnsPropertyValue(): void
     {
         $ContentStreamUpdatesCapability = CapabilityContentStreamUpdates::cast(CapabilityContentStreamUpdates::PWCONLY);
         $this->repositoryCapabilities->setContentStreamUpdatesCapability($ContentStreamUpdatesCapability);
@@ -157,7 +154,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSetCreatablePropertyTypesSetsProperty()
+    public function testSetCreatablePropertyTypesSetsProperty(): void
     {
         $creatablePropertyTypes = new CreatablePropertyTypes();
         $this->repositoryCapabilities->setCreatablePropertyTypes($creatablePropertyTypes);
@@ -167,14 +164,14 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetCreatablePropertyTypesSetsProperty
      */
-    public function testGetCreatablePropertyTypesReturnsPropertyValue()
+    public function testGetCreatablePropertyTypesReturnsPropertyValue(): void
     {
         $creatablePropertyTypes = new CreatablePropertyTypes();
         $this->repositoryCapabilities->setCreatablePropertyTypes($creatablePropertyTypes);
         $this->assertSame($creatablePropertyTypes, $this->repositoryCapabilities->getCreatablePropertyTypes());
     }
 
-    public function testSetJoinCapabilitySetsProperty()
+    public function testSetJoinCapabilitySetsProperty(): void
     {
         $joinCapability = CapabilityJoin::cast(CapabilityJoin::INNERANDOUTER);
         $this->repositoryCapabilities->setJoinCapability($joinCapability);
@@ -184,14 +181,14 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetJoinCapabilitySetsProperty
      */
-    public function testGetJoinCapabilityReturnsPropertyValue()
+    public function testGetJoinCapabilityReturnsPropertyValue(): void
     {
         $joinCapability = CapabilityJoin::cast(CapabilityJoin::INNERANDOUTER);
         $this->repositoryCapabilities->setJoinCapability($joinCapability);
         $this->assertSame($joinCapability, $this->repositoryCapabilities->getJoinCapability());
     }
 
-    public function testSetNewTypeSettableAttributesSetsProperty()
+    public function testSetNewTypeSettableAttributesSetsProperty(): void
     {
         $newTypeSettableAttributes = new NewTypeSettableAttributes();
         $this->repositoryCapabilities->setNewTypeSettableAttributes($newTypeSettableAttributes);
@@ -205,14 +202,14 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetNewTypeSettableAttributesSetsProperty
      */
-    public function testGetNewTypeSettableAttributesReturnsPropertyValue()
+    public function testGetNewTypeSettableAttributesReturnsPropertyValue(): void
     {
         $newTypeSettableAttributes = new NewTypeSettableAttributes();
         $this->repositoryCapabilities->setNewTypeSettableAttributes($newTypeSettableAttributes);
         $this->assertSame($newTypeSettableAttributes, $this->repositoryCapabilities->getNewTypeSettableAttributes());
     }
 
-    public function testSetOrderByCapabilitySetsProperty()
+    public function testSetOrderByCapabilitySetsProperty(): void
     {
         $orderByCapability = CapabilityOrderBy::cast(CapabilityOrderBy::CUSTOM);
         $this->repositoryCapabilities->setOrderByCapability($orderByCapability);
@@ -222,14 +219,14 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetOrderByCapabilitySetsProperty
      */
-    public function testGetOrderByCapabilityReturnsPropertyValue()
+    public function testGetOrderByCapabilityReturnsPropertyValue(): void
     {
         $orderByCapability = CapabilityOrderBy::cast(CapabilityOrderBy::CUSTOM);
         $this->repositoryCapabilities->setOrderByCapability($orderByCapability);
         $this->assertSame($orderByCapability, $this->repositoryCapabilities->getOrderByCapability());
     }
 
-    public function testSetQueryCapabilitySetsProperty()
+    public function testSetQueryCapabilitySetsProperty(): void
     {
         $queryCapability = CapabilityQuery::cast(CapabilityQuery::BOTHCOMBINED);
         $this->repositoryCapabilities->setQueryCapability($queryCapability);
@@ -239,14 +236,14 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetQueryCapabilitySetsProperty
      */
-    public function testGetQueryCapabilityReturnsPropertyValue()
+    public function testGetQueryCapabilityReturnsPropertyValue(): void
     {
         $queryCapability = CapabilityQuery::cast(CapabilityQuery::BOTHCOMBINED);
         $this->repositoryCapabilities->setQueryCapability($queryCapability);
         $this->assertSame($queryCapability, $this->repositoryCapabilities->getQueryCapability());
     }
 
-    public function testSetRenditionsCapabilitySetsProperty()
+    public function testSetRenditionsCapabilitySetsProperty(): void
     {
         $renditionsCapability = CapabilityRenditions::cast(CapabilityRenditions::NONE);
         $this->repositoryCapabilities->setRenditionsCapability($renditionsCapability);
@@ -256,7 +253,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetRenditionsCapabilitySetsProperty
      */
-    public function testGetRenditionsCapabilityReturnsPropertyValue()
+    public function testGetRenditionsCapabilityReturnsPropertyValue(): void
     {
         $renditionsCapability = CapabilityRenditions::cast(CapabilityRenditions::NONE);
         $this->repositoryCapabilities->setRenditionsCapability($renditionsCapability);
@@ -266,9 +263,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider booleanCastDataProvider
      * @param boolean $expected
-     * @param mixed $value
      */
-    public function testSetSupportsGetDescendantsSetsProperty($expected, $value)
+    public function testSetSupportsGetDescendantsSetsProperty($expected, mixed $value): void
     {
         $this->repositoryCapabilities->setSupportsGetDescendants($value);
         $this->assertAttributeSame($expected, 'supportsGetDescendants', $this->repositoryCapabilities);
@@ -277,7 +273,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsPwcUpdatableSetsProperty
      */
-    public function testSetIsGetDescendantsSupportedReturnsPropertyValue()
+    public function testSetIsGetDescendantsSupportedReturnsPropertyValue(): void
     {
         $this->repositoryCapabilities->setSupportsGetDescendants(true);
         $this->assertSame(true, $this->repositoryCapabilities->isGetDescendantsSupported());
@@ -286,9 +282,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider booleanCastDataProvider
      * @param boolean $expected
-     * @param mixed $value
      */
-    public function testSetSupportsGetFolderTreeSetsProperty($expected, $value)
+    public function testSetSupportsGetFolderTreeSetsProperty($expected, mixed $value): void
     {
         $this->repositoryCapabilities->setSupportsGetFolderTree($value);
         $this->assertAttributeSame($expected, 'supportsGetFolderTree', $this->repositoryCapabilities);
@@ -297,7 +292,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsPwcUpdatableSetsProperty
      */
-    public function testSetIsGetFolderTreeSupportedReturnsPropertyValue()
+    public function testSetIsGetFolderTreeSupportedReturnsPropertyValue(): void
     {
         $this->repositoryCapabilities->setSupportsGetFolderTree(true);
         $this->assertSame(true, $this->repositoryCapabilities->isGetFolderTreeSupported());
@@ -306,9 +301,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider booleanCastDataProvider
      * @param boolean $expected
-     * @param mixed $value
      */
-    public function testSetSupportsMultifilingSetsProperty($expected, $value)
+    public function testSetSupportsMultifilingSetsProperty($expected, mixed $value): void
     {
         $this->repositoryCapabilities->setSupportsMultifiling($value);
         $this->assertAttributeSame($expected, 'supportsMultifiling', $this->repositoryCapabilities);
@@ -317,7 +311,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsPwcUpdatableSetsProperty
      */
-    public function testSetIsMultifilingSupportedReturnsPropertyValue()
+    public function testSetIsMultifilingSupportedReturnsPropertyValue(): void
     {
         $this->repositoryCapabilities->setSupportsMultifiling(true);
         $this->assertSame(true, $this->repositoryCapabilities->isMultifilingSupported());
@@ -326,9 +320,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider booleanCastDataProvider
      * @param boolean $expected
-     * @param mixed $value
      */
-    public function testSetSupportsUnfilingSetsProperty($expected, $value)
+    public function testSetSupportsUnfilingSetsProperty($expected, mixed $value): void
     {
         $this->repositoryCapabilities->setSupportsUnfiling($value);
         $this->assertAttributeSame($expected, 'supportsUnfiling', $this->repositoryCapabilities);
@@ -337,7 +330,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsPwcUpdatableSetsProperty
      */
-    public function testSetIsUnfilingSupportedReturnsPropertyValue()
+    public function testSetIsUnfilingSupportedReturnsPropertyValue(): void
     {
         $this->repositoryCapabilities->setSupportsUnfiling(true);
         $this->assertSame(true, $this->repositoryCapabilities->isUnfilingSupported());
@@ -346,9 +339,8 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider booleanCastDataProvider
      * @param boolean $expected
-     * @param mixed $value
      */
-    public function testSetSupportsVersionSpecificFilingSetsProperty($expected, $value)
+    public function testSetSupportsVersionSpecificFilingSetsProperty($expected, mixed $value): void
     {
         $this->repositoryCapabilities->setSupportsVersionSpecificFiling($value);
         $this->assertAttributeSame($expected, 'supportsVersionSpecificFiling', $this->repositoryCapabilities);
@@ -357,7 +349,7 @@ class RepositoryCapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsPwcUpdatableSetsProperty
      */
-    public function testSetIsVersionSpecificFilingSupportedReturnsPropertyValue()
+    public function testSetIsVersionSpecificFilingSupportedReturnsPropertyValue(): void
     {
         $this->repositoryCapabilities->setSupportsVersionSpecificFiling(true);
         $this->assertSame(true, $this->repositoryCapabilities->isVersionSpecificFilingSupported());

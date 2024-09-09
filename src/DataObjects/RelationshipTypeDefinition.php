@@ -32,7 +32,7 @@ class RelationshipTypeDefinition extends AbstractTypeDefinition implements Mutab
      *
      * @param string[] $allowedSourceTypeIds of type IDs or <code>array()</code> if all types are allowed
      */
-    public function setAllowedSourceTypeIds(array $allowedSourceTypeIds)
+    public function setAllowedSourceTypeIds(array $allowedSourceTypeIds): void
     {
         $this->allowedSourceTypeIds = $allowedSourceTypeIds;
     }
@@ -42,7 +42,7 @@ class RelationshipTypeDefinition extends AbstractTypeDefinition implements Mutab
      *
      * @param string[] $allowedTargetTypeIds of type IDs or <code>array()</code> if all types are allowed
      */
-    public function setAllowedTargetTypeIds(array $allowedTargetTypeIds)
+    public function setAllowedTargetTypeIds(array $allowedTargetTypeIds): void
     {
         $this->allowedTargetTypeIds = $allowedTargetTypeIds;
     }

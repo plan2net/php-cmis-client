@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Converter;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Exception;
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\Bindings\Browser\JSONConstants;
 use Dkd\PhpCmis\Converter\Types\TypeConverterInterface;
@@ -117,11 +117,10 @@ class JsonConverter extends AbstractDataConverter
 {
     /**
      * @param array|null $data
-     * @return AllowableActions|null
      */
-    public function convertAllowableActions(array $data = null)
+    public function convertAllowableActions(array $data = null): ?AllowableActions
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -131,10 +130,10 @@ class JsonConverter extends AbstractDataConverter
 
         foreach ($data as $key => $value) {
             try {
-                if ((boolean) $value === true) {
+                if ((boolean) $value) {
                     $actions[] = Action::cast($key);
                 }
-            } catch (InvalidEnumerationValueException $exception) {
+            } catch (InvalidEnumerationValueException) {
                 $extensions[$key] = $value;
             }
         }
@@ -151,15 +150,13 @@ class JsonConverter extends AbstractDataConverter
      */
     public function convertRepositoryInfo(array $data = null)
     {
-        return empty($data) ? null : $this->setRepositoryInfoValues(new RepositoryInfoBrowserBinding(), $data);
+        return $data === null || $data === [] ? null : $this->setRepositoryInfoValues(new RepositoryInfoBrowserBinding(), $data);
     }
 
     /**
-     * @param RepositoryInfoBrowserBinding $object
      * @param array $data
-     * @return RepositoryInfoBrowserBinding
      */
-    protected function setRepositoryInfoValues(RepositoryInfoBrowserBinding $object, $data)
+    protected function setRepositoryInfoValues(RepositoryInfoBrowserBinding $object, $data): RepositoryInfoBrowserBinding
     {
         $data[JSONConstants::JSON_REPINFO_CAPABILITIES] = $this->convertRepositoryCapabilities(
             $data[JSONConstants::JSON_REPINFO_CAPABILITIES] ?? null
@@ -170,10 +167,10 @@ class JsonConverter extends AbstractDataConverter
         );
 
         $data[JSONConstants::JSON_REPINFO_CHANGES_ON_TYPE] = array_map(
-            function ($item) { return BaseTypeId::cast($item); },
+            fn($item) => BaseTypeId::cast($item),
             array_filter(
                 $data[JSONConstants::JSON_REPINFO_CHANGES_ON_TYPE] ?? [],
-                function ($item) { return !empty($item); }
+                fn($item): bool => !empty($item)
             )
         );
 
@@ -187,7 +184,7 @@ class JsonConverter extends AbstractDataConverter
             );
         }
 
-        $data = array_filter($data, function ($item) { return $item !== null; });
+        $data = array_filter($data, fn($item): bool => $item !== null);
 
         $object->setExtensions($this->convertExtension($data, JSONConstants::getRepositoryInfoKeys()));
 
@@ -212,11 +209,10 @@ class JsonConverter extends AbstractDataConverter
 
     /**
      * @param array|null $data
-     * @return RepositoryCapabilities|null
      */
-    public function convertRepositoryCapabilities(array $data = null)
+    public function convertRepositoryCapabilities(array $data = null): ?RepositoryCapabilities
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -260,7 +256,7 @@ class JsonConverter extends AbstractDataConverter
             );
         }
 
-        $data = array_filter($data, function ($item) { return $item !== null; });
+        $data = array_filter($data, fn($item): bool => $item !== null);
 
         $repositoryCapabilities = new RepositoryCapabilities();
         $repositoryCapabilities->setExtensions($this->convertExtension($data, JSONConstants::getCapabilityKeys()));
@@ -301,9 +297,9 @@ class JsonConverter extends AbstractDataConverter
      * @param string[]|null $data
      * @return NewTypeSettableAttributes|null Returns object or <code>null</code> if given data is empty
      */
-    public function convertNewTypeSettableAttributes(array $data = null)
+    public function convertNewTypeSettableAttributes(array $data = null): ?NewTypeSettableAttributes
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
         $object = new NewTypeSettableAttributes();
@@ -313,10 +309,9 @@ class JsonConverter extends AbstractDataConverter
             array_combine(
                 JSONConstants::getCapabilityNewTypeSettableAttributeKeys(),
                 array_map(
-                    function ($key) {
+                    fn($key): string =>
                         // add a prefix "canSet" to all keys as this are the property names
-                        return 'canSet' . ucfirst($key);
-                    },
+                        'canSet' . ucfirst((string) $key),
                     JSONConstants::getCapabilityNewTypeSettableAttributeKeys()
                 )
             ),
@@ -340,9 +335,9 @@ class JsonConverter extends AbstractDataConverter
      * @return CreatablePropertyTypes|null Returns a CreatablePropertyTypes object or <code>null</code> if empty data
      *      is given.
      */
-    public function convertCreatablePropertyTypes(array $data = null)
+    public function convertCreatablePropertyTypes(array $data = null): ?CreatablePropertyTypes
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -351,7 +346,7 @@ class JsonConverter extends AbstractDataConverter
         foreach ($data[JSONConstants::JSON_CAP_CREATABLE_PROPERTY_TYPES_CANCREATE] ?? [] as $canCreateItem) {
             try {
                 $canCreate[] = PropertyType::cast($canCreateItem);
-            } catch (InvalidEnumerationValueException $exception) {
+            } catch (InvalidEnumerationValueException) {
                 // ignore invalid types
             }
         }
@@ -373,9 +368,9 @@ class JsonConverter extends AbstractDataConverter
      * @param boolean $isExact
      * @return AccessControlList
      */
-    public function convertAcl(array $data = null, $isExact = false)
+    public function convertAcl(array $data = null, $isExact = false): ?AccessControlList
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -388,7 +383,7 @@ class JsonConverter extends AbstractDataConverter
 
                 $permissions = array_filter(
                     $aceData[JSONConstants::JSON_ACE_PERMISSIONS] ?? [],
-                    function($item) { return !empty($item); }
+                    fn($item): bool => !empty($item)
                 );
 
                 $principal = new Principal(
@@ -423,11 +418,10 @@ class JsonConverter extends AbstractDataConverter
 
     /**
      * @param array|null $data
-     * @return AclCapabilities|null
      */
-    public function convertAclCapabilities(array $data = null)
+    public function convertAclCapabilities(array $data = null): ?AclCapabilities
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -478,7 +472,7 @@ class JsonConverter extends AbstractDataConverter
                     'strval',
                     array_filter(
                     $permissionMapping[JSONConstants::JSON_ACLCAP_MAPPING_PERMISSION] ?? [],
-                        function ($item) { return !empty($item); }
+                        fn($item): bool => !empty($item)
                     )
                 )
             );
@@ -507,7 +501,7 @@ class JsonConverter extends AbstractDataConverter
      */
     public function convertTypeDefinition(array $data = null)
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -541,7 +535,7 @@ class JsonConverter extends AbstractDataConverter
         );
 
         $typeDefinition->populate(
-            array_filter($data, function ($item) { return !empty($item); }),
+            array_filter($data, fn($item): bool => !empty($item)),
             array_merge(
                 array_combine(JSONConstants::getTypeKeys(), JSONConstants::getTypeKeys()),
                 [
@@ -565,7 +559,7 @@ class JsonConverter extends AbstractDataConverter
      * @param array $data The data that contains the values that should be applied to the object
      * @return MutableTypeDefinitionInterface The type definition with the specific data applied
      */
-    private function convertTypeDefinitionSpecificData(array $data, MutableTypeDefinitionInterface $typeDefinition)
+    private function convertTypeDefinitionSpecificData(array $data, MutableTypeDefinitionInterface $typeDefinition): array
     {
         if ($typeDefinition instanceof MutableDocumentTypeDefinitionInterface) {
             if (!empty($data[JSONConstants::JSON_TYPE_CONTENTSTREAM_ALLOWED])) {
@@ -579,21 +573,21 @@ class JsonConverter extends AbstractDataConverter
                 'strval',
                 array_filter(
                     $data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] ?? [],
-                    function ($item) { return !empty($item); }
+                    fn($item): bool => !empty($item)
                 )
             );
             $data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] = array_map(
                 'strval',
                 array_filter(
                     $data[JSONConstants::JSON_TYPE_ALLOWED_SOURCE_TYPES] ?? [],
-                    function ($item) { return !empty($item); }
+                    fn($item): bool => !empty($item)
                 )
             );
             $data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] = array_map(
                 'strval',
                 array_filter(
                     $data[JSONConstants::JSON_TYPE_ALLOWED_TARGET_TYPES] ?? [],
-                    function ($item) { return !empty($item); }
+                    fn($item): bool => !empty($item)
                 )
             );
 
@@ -608,9 +602,9 @@ class JsonConverter extends AbstractDataConverter
      * @param array|null $data The data that should be populated to the object
      * @return TypeMutability|null Returns the type mutability object or <code>null</code> if empty array is given
      */
-    public function convertTypeMutability(array $data = null)
+    public function convertTypeMutability(array $data = null): ?TypeMutability
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
         $typeMutability = new TypeMutability();
@@ -619,10 +613,9 @@ class JsonConverter extends AbstractDataConverter
             array_combine(
                 JSONConstants::getTypeTypeMutabilityKeys(),
                 array_map(
-                    function ($key) {
+                    fn($key): string =>
                         // add a prefix "can" to all keys as this are the property names
-                        return 'can' . ucfirst($key);
-                    },
+                        'can' . ucfirst((string) $key),
                     JSONConstants::getTypeTypeMutabilityKeys()
                 )
             ),
@@ -642,7 +635,7 @@ class JsonConverter extends AbstractDataConverter
      */
     public function convertPropertyDefinition(array $data = null)
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -686,11 +679,8 @@ class JsonConverter extends AbstractDataConverter
 
     /**
      * Cast data values to the expected type
-     *
-     * @param array $data
-     * @return array
      */
-    protected function preparePropertyDefinitionData(array $data)
+    protected function preparePropertyDefinitionData(array $data): array
     {
         $data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE] = PropertyType::cast(
             $data[JSONConstants::JSON_PROPERTY_TYPE_PROPERTY_TYPE]
@@ -729,11 +719,9 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
-     * @param PropertyType $propertyType
-     * @param array $data
      * @return PropertyBooleanDefinition|PropertyDateTimeDefinition|PropertyDecimalDefinition|PropertyHtmlDefinition|PropertyIdDefinition|PropertyIntegerDefinition|PropertyStringDefinition
      */
-    protected function getPropertyDefinitionByType(PropertyType $propertyType, array $data = [])
+    protected function getPropertyDefinitionByType(PropertyType $propertyType, array $data = []): PropertyUriDefinition|PropertyHtmlDefinition|PropertyDecimalDefinition|PropertyDateTimeDefinition|PropertyIntegerDefinition|PropertyBooleanDefinition|PropertyIdDefinition|PropertyStringDefinition
     {
         $id = null;
         if (!empty($data[JSONConstants::JSON_PROPERTY_TYPE_ID])) {
@@ -774,11 +762,10 @@ class JsonConverter extends AbstractDataConverter
      * Converts an object.
      *
      * @param array|null $data
-     * @return null|ObjectData
      */
-    public function convertObject(array $data = null)
+    public function convertObject(array $data = null): ?ObjectData
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -850,32 +837,30 @@ class JsonConverter extends AbstractDataConverter
      * @param array|null $data
      * @return ObjectDataInterface[]
      */
-    public function convertObjects(array $data = null)
+    public function convertObjects(array $data = null): array
     {
         return array_filter(
             array_map(
-                [$this, 'convertObject'],
+                $this->convertObject(...),
                 array_filter(
                     (array) $data,
                     'is_array'
                 )
             ),
-            function ($item) {
+            fn($item): bool =>
                 // @TODO once a logger is available we should log an INFO message if the object could not be converted
-                return !empty($item);
-            }
+                !empty($item)
         );
     }
 
     /**
      * @param array|null $data
      * @param array $extensions
-     * @return null|Properties
      * @throws CmisRuntimeException
      */
-    public function convertProperties(array $data = null, $extensions = [])
+    public function convertProperties(array $data = null, $extensions = []): ?Properties
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
         $properties = new Properties();
@@ -892,7 +877,7 @@ class JsonConverter extends AbstractDataConverter
 
             try {
                 $propertyType = PropertyType::cast($propertyData[JSONConstants::JSON_PROPERTY_DATATYPE]);
-            } catch (InvalidEnumerationValueException $exception) {
+            } catch (InvalidEnumerationValueException) {
                 throw new CmisRuntimeException(
                     sprintf('Unknown property type "%s"!', $propertyData[JSONConstants::JSON_PROPERTY_DATATYPE])
                 );
@@ -938,12 +923,9 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
-     * @param PropertyType $propertyType
      * @param string $id
-     * @param array $propertyValues
-     * @return PropertyBoolean|PropertyDateTime|PropertyDecimal|PropertyHtml|PropertyId|PropertyInteger|PropertyString
      */
-    protected function getPropertyByPropertyType(PropertyType $propertyType, $id, array $propertyValues)
+    protected function getPropertyByPropertyType(PropertyType $propertyType, $id, array $propertyValues): PropertyDecimal|PropertyDateTime|PropertyInteger|PropertyBoolean|PropertyString
     {
         if ($propertyType->equals(PropertyType::cast(PropertyType::STRING))) {
             $property = new PropertyString($id, $this->convertStringValues($propertyValues));
@@ -976,12 +958,11 @@ class JsonConverter extends AbstractDataConverter
      *
      * @param array|null $data
      * @param array $extensions
-     * @return PropertiesInterface
-     * @throws \Exception
+     * @throws Exception
      */
-    public function convertSuccinctProperties(array $data = null, $extensions = [])
+    public function convertSuccinctProperties(array $data = null, $extensions = []): never
     {
-        throw new \Exception('Succinct properties are currently not supported.');
+        throw new Exception('Succinct properties are currently not supported.');
 // TODO IMPLEMENT SUCCINCT PROPERTY SUPPORT
 //        if (empty($data)) {
 //            return null;
@@ -1011,11 +992,10 @@ class JsonConverter extends AbstractDataConverter
      * Convert given input data to a RenditionData object
      *
      * @param array|null $data
-     * @return null|RenditionData
      */
-    public function convertRendition(array $data = null)
+    public function convertRendition(array $data = null): ?RenditionData
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
         $rendition = new RenditionData();
@@ -1056,20 +1036,19 @@ class JsonConverter extends AbstractDataConverter
      * @param array|null $data
      * @return RenditionData[]
      */
-    public function convertRenditions(array $data = null)
+    public function convertRenditions(array $data = null): array
     {
         return array_filter(
             array_map(
-                [$this, 'convertRendition'],
+                $this->convertRendition(...),
                 array_filter(
                     $data,
                     'is_array'
                 )
             ),
-            function ($item) {
+            fn($item): bool =>
                 // @TODO once a logger is available we should log an INFO message if the rendition could not be converted
-                return !empty($item);
-            }
+                !empty($item)
         );
     }
 
@@ -1080,7 +1059,7 @@ class JsonConverter extends AbstractDataConverter
      * @param string[] $cmisKeys
      * @return CmisExtensionElement[]
      */
-    public function convertExtension(array $data = null, array $cmisKeys = [])
+    public function convertExtension(array $data = null, array $cmisKeys = []): array
     {
         $extensions = [];
 
@@ -1113,10 +1092,10 @@ class JsonConverter extends AbstractDataConverter
      * @param array|null $data
      * @return ExtensionFeature[]
      */
-    public function convertExtensionFeatures(array $data = null)
+    public function convertExtensionFeatures(array $data = null): array
     {
         $features = [];
-        $extendedFeatures = array_filter(array_filter((array) $data, 'is_array'), function ($item) { return !empty($item); });
+        $extendedFeatures = array_filter(array_filter((array) $data, 'is_array'), fn($item): bool => !empty($item));
 
         foreach ($extendedFeatures as $extendedFeature) {
 
@@ -1148,7 +1127,7 @@ class JsonConverter extends AbstractDataConverter
      * @param array|null $data
      * @return PolicyIdList List of policy ids
      */
-    public function convertPolicyIdList(array $data = null)
+    public function convertPolicyIdList(array $data = null): PolicyIdList
     {
         $policyIdsList = new PolicyIdList();
         $policyIdsList->setPolicyIds(
@@ -1157,7 +1136,7 @@ class JsonConverter extends AbstractDataConverter
                     $data[JSONConstants::JSON_OBJECT_POLICY_IDS_IDS] ?? [],
                     'is_string'
                 ),
-                function ($item) { return !empty($item); }
+                fn($item): bool => !empty($item)
             )
         );
         $policyIdsList->setExtensions($this->convertExtension($data, JSONConstants::getPolicyIdsKeys()));
@@ -1167,99 +1146,72 @@ class JsonConverter extends AbstractDataConverter
 
     /**
      * Convert an acl object to a custom format
-     *
-     * @param AclInterface $acl
-     * @return mixed
      */
-    public function convertFromAcl(AclInterface $acl)
+    public function convertFromAcl(AclInterface $acl): void
     {
         // TODO: Implement convertFromAcl() method.
     }
 
     /**
      * Convert an acl capabilities object to a custom format
-     *
-     * @param AclCapabilitiesInterface $aclCapabilities
-     * @return mixed
      */
-    public function convertFromAclCapabilities(AclCapabilitiesInterface $aclCapabilities)
+    public function convertFromAclCapabilities(AclCapabilitiesInterface $aclCapabilities): void
     {
         // TODO: Implement convertFromAclCapabilities() method.
     }
 
     /**
      * Convert an allowable actions object to a custom format
-     *
-     * @param AllowableActionsInterface $allowableActions
-     * @return mixed
      */
-    public function convertFromAllowableActions(AllowableActionsInterface $allowableActions)
+    public function convertFromAllowableActions(AllowableActionsInterface $allowableActions): void
     {
         // TODO: Implement convertFromAllowableActions() method.
     }
 
     /**
      * Convert a repository info object to a custom format
-     *
-     * @param RepositoryInfoInterface $repositoryInfo
-     * @return mixed
      */
-    public function convertFromRepositoryInfo(RepositoryInfoInterface $repositoryInfo)
+    public function convertFromRepositoryInfo(RepositoryInfoInterface $repositoryInfo): void
     {
         // TODO: Implement convertFromRepositoryInfo() method.
     }
 
     /**
      * Convert a repository capabilities object to a custom format
-     *
-     * @param RepositoryCapabilitiesInterface $repositoryCapabilities
-     * @return mixed
      */
-    public function convertFromRepositoryCapabilities(RepositoryCapabilitiesInterface $repositoryCapabilities)
+    public function convertFromRepositoryCapabilities(RepositoryCapabilitiesInterface $repositoryCapabilities): void
     {
         // TODO: Implement convertFromRepositoryCapabilities() method.
     }
 
     /**
      * Convert a rendition data object to a custom format
-     *
-     * @param RenditionDataInterface $rendition
-     * @return mixed
      */
-    public function convertFromRenditionData(RenditionDataInterface $rendition)
+    public function convertFromRenditionData(RenditionDataInterface $rendition): void
     {
         // TODO: Implement convertFromRenditionData() method.
     }
 
     /**
      * Convert a object data object to a custom format
-     *
-     * @param ObjectDataInterface $objectData
-     * @return mixed
      */
-    public function convertFromObjectData(ObjectDataInterface $objectData)
+    public function convertFromObjectData(ObjectDataInterface $objectData): void
     {
         // TODO: Implement convertFromObjectData() method.
     }
 
     /**
      * Convert a properties object to a custom format
-     *
-     * @param PropertiesInterface $properties
-     * @return mixed
      */
-    public function convertFromProperties(PropertiesInterface $properties)
+    public function convertFromProperties(PropertiesInterface $properties): void
     {
         // TODO: Implement convertFromProperties() method.
     }
 
     /**
      * Convert a property data object to a custom format
-     *
-     * @param PropertyDataInterface $propertyData
-     * @return mixed
      */
-    public function convertFromPropertyData(PropertyDataInterface $propertyData)
+    public function convertFromPropertyData(PropertyDataInterface $propertyData): void
     {
         // TODO: Implement convertFromPropertyData() method.
     }
@@ -1267,7 +1219,6 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert a type definition object to a custom format
      *
-     * @param TypeDefinitionInterface $typeDefinition
      * @return string JSON representation of the type definition
      */
     public function convertFromTypeDefinition(TypeDefinitionInterface $typeDefinition)
@@ -1292,11 +1243,8 @@ class JsonConverter extends AbstractDataConverter
 
     /**
      * Cast values of an array to simple types
-     *
-     * @param array $data
-     * @return array
      */
-    protected function castArrayValuesToSimpleTypes(array $data)
+    protected function castArrayValuesToSimpleTypes(array $data): array
     {
         foreach ($data as $key => $item) {
             if (is_array($item)) {
@@ -1312,17 +1260,16 @@ class JsonConverter extends AbstractDataConverter
     /**
      * Convert an object to a simple type representation
      *
-     * @param mixed $data
      * @return mixed
      * @throws CmisRuntimeException Exception is thrown if no type converter could be found to convert the given data
      *      to a simple type
      */
-    protected function convertObjectToSimpleType($data)
+    protected function convertObjectToSimpleType(mixed $data)
     {
         /** @var null|TypeConverterInterface $converterClassName */
         $converterClassName = null;
-        if (class_exists($this->buildConverterClassName(get_class($data)))) {
-            $converterClassName = $this->buildConverterClassName(get_class($data));
+        if (class_exists($this->buildConverterClassName($data::class))) {
+            $converterClassName = $this->buildConverterClassName($data::class);
         } else {
             $classInterfaces = class_implements($data);
             foreach ((array) $classInterfaces as $classInterface) {
@@ -1344,7 +1291,7 @@ class JsonConverter extends AbstractDataConverter
 
         if ($converterClassName === null) {
             throw new CmisRuntimeException(
-                'Could not find a converter that converts "' . get_class($data) . '" to a simple type.'
+                'Could not find a converter that converts "' . $data::class . '" to a simple type.'
             );
         }
 
@@ -1357,111 +1304,82 @@ class JsonConverter extends AbstractDataConverter
      * The Dkd\PhpCmis namespace will be stripped.
      *
      * @param $className
-     * @return string
      */
-    protected function buildConverterClassName($className)
+    protected function buildConverterClassName($className): string
     {
         $converterClassName =  '\\Dkd\\PhpCmis\\Converter\\Types\\';
         $converterClassName .= str_replace('Dkd\\PhpCmis\\', '', $className);
-        $converterClassName .= 'Converter';
-        return $converterClassName;
+        return $converterClassName . 'Converter';
     }
 
     /**
      * Convert a property definition object to a custom format
-     *
-     * @param PropertyDefinitionInterface $propertyDefinition
-     * @return mixed
      */
-    public function convertFromPropertyDefinition(PropertyDefinitionInterface $propertyDefinition)
+    public function convertFromPropertyDefinition(PropertyDefinitionInterface $propertyDefinition): void
     {
         // TODO: Implement convertFromPropertyDefinition() method.
     }
 
     /**
      * Convert a type definition list object to a custom format
-     *
-     * @param TypeDefinitionListInterface $typeDefinitionList
-     * @return mixed
      */
-    public function convertFromTypeDefinitionList(TypeDefinitionListInterface $typeDefinitionList)
+    public function convertFromTypeDefinitionList(TypeDefinitionListInterface $typeDefinitionList): void
     {
         // TODO: Implement convertFromTypeDefinitionList() method.
     }
 
     /**
      * Convert a type definition container object to a custom format
-     *
-     * @param TypeDefinitionContainerInterface $typeDefinitionContainer
-     * @return mixed
      */
-    public function convertFromTypeDefinitionContainer(TypeDefinitionContainerInterface $typeDefinitionContainer)
+    public function convertFromTypeDefinitionContainer(TypeDefinitionContainerInterface $typeDefinitionContainer): void
     {
         // TODO: Implement convertFromTypeDefinitionContainer() method.
     }
 
     /**
      * Convert a object list object to a custom format
-     *
-     * @param ObjectListInterface $list
-     * @return mixed
      */
-    public function convertFromObjectList(ObjectListInterface $list)
+    public function convertFromObjectList(ObjectListInterface $list): void
     {
         // TODO: Implement convertFromObjectList() method.
     }
 
     /**
      * Convert a object in folder data object to a custom format
-     *
-     * @param ObjectInFolderDataInterface $objectInFolder
-     * @return mixed
      */
-    public function convertFromObjectInFolderData(ObjectInFolderDataInterface $objectInFolder)
+    public function convertFromObjectInFolderData(ObjectInFolderDataInterface $objectInFolder): void
     {
         // TODO: Implement convertFromObjectInFolderData() method.
     }
 
     /**
      * Convert a object in folder list object to a custom format
-     *
-     * @param ObjectInFolderListInterface $objectInFolder
-     * @return mixed
      */
-    public function convertFromObjectInFolderList(ObjectInFolderListInterface $objectInFolder)
+    public function convertFromObjectInFolderList(ObjectInFolderListInterface $objectInFolder): void
     {
         // TODO: Implement convertFromObjectInFolderList() method.
     }
 
     /**
      * Convert a object in folder container object to a custom format
-     *
-     * @param ObjectInFolderContainerInterface $container
-     * @return mixed
      */
-    public function convertFromObjectInFolderContainer(ObjectInFolderContainerInterface $container)
+    public function convertFromObjectInFolderContainer(ObjectInFolderContainerInterface $container): void
     {
         // TODO: Implement convertFromObjectInFolderContainer() method.
     }
 
     /**
      * Convert a object in parent data object to a custom format
-     *
-     * @param ObjectParentDataInterface $container
-     * @return mixed
      */
-    public function convertFromObjectParentData(ObjectParentDataInterface $container)
+    public function convertFromObjectParentData(ObjectParentDataInterface $container): void
     {
         // TODO: Implement convertFromObjectParentData() method.
     }
 
     /**
      * Convert an extension feature object to a custom format
-     *
-     * @param ExtensionFeatureInterface $extensionFeature
-     * @return mixed
      */
-    public function convertFromExtensionFeature(ExtensionFeatureInterface $extensionFeature)
+    public function convertFromExtensionFeature(ExtensionFeatureInterface $extensionFeature): void
     {
         // TODO: Implement convertFromExtensionFeature() method.
     }
@@ -1473,9 +1391,9 @@ class JsonConverter extends AbstractDataConverter
      * @return TypeDefinitionListInterface|null Returns a TypeDefinitionListInterface object or <code>null</code>
      *      if empty data is given.
      */
-    public function convertTypeChildren(array $data = null)
+    public function convertTypeChildren(array $data = null): ?TypeDefinitionList
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -1505,11 +1423,11 @@ class JsonConverter extends AbstractDataConverter
      * @param array|null $data
      * @return TypeDefinitionContainerInterface[] Returns an array of TypeDefinitionContainerInterface objects
      */
-    public function convertTypeDescendants(array $data = null)
+    public function convertTypeDescendants(array $data = null): array
     {
         $result = [];
 
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return $result;
         }
 
@@ -1538,19 +1456,18 @@ class JsonConverter extends AbstractDataConverter
      * Convert given input data to a ObjectInFolderList object
      *
      * @param array|null $data
-     * @return null|ObjectInFolderList
      */
-    public function convertObjectInFolderList(array $data = null)
+    public function convertObjectInFolderList(array $data = null): ?ObjectInFolderList
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
         $objects = array_filter(
             array_map(
-                [$this, 'convertObjectInFolder'],
+                $this->convertObjectInFolder(...),
                 $data[JSONConstants::JSON_OBJECTINFOLDERLIST_OBJECTS] ?? []
             ),
-            function ($item) { return !empty($item); }
+            fn($item): bool => $item instanceof ObjectInFolderData
         );
         $objectInFolderList = new ObjectInFolderList();
         $objectInFolderList->setObjects($objects);
@@ -1565,11 +1482,10 @@ class JsonConverter extends AbstractDataConverter
      * Convert given input data to a ObjectInFolderData object
      *
      * @param array|null $data
-     * @return ObjectInFolderData|null
      */
-    public function convertObjectInFolder(array $data = null)
+    public function convertObjectInFolder(array $data = null): ?ObjectInFolderData
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -1592,14 +1508,14 @@ class JsonConverter extends AbstractDataConverter
      * @param array|null $data
      * @return ObjectParentData[]
      */
-    public function convertObjectParents(array $data = null)
+    public function convertObjectParents(array $data = null): array
     {
         return array_filter(
             array_map(
-                [$this, 'convertObjectParentData'],
-                (array) ($data ?? [])
+                $this->convertObjectParentData(...),
+                $data ?? []
             ),
-            function ($item) {
+            function ($item): bool {
                 return !empty($item);
                 // @TODO once a logger is available we should log an INFO message if the parent data could not be converted
             }
@@ -1610,11 +1526,10 @@ class JsonConverter extends AbstractDataConverter
      * Convert given input data to a ObjectParentData object
      *
      * @param array|null $data
-     * @return null|ObjectParentData
      */
-    public function convertObjectParentData(array $data = null)
+    public function convertObjectParentData(array $data = null): ?ObjectParentData
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
         $parent = new ObjectParentData();
@@ -1634,11 +1549,10 @@ class JsonConverter extends AbstractDataConverter
      * Convert given input data array to a ObjectList object
      *
      * @param array|null $data
-     * @return null|ObjectList
      */
-    public function convertObjectList(array $data = null)
+    public function convertObjectList(array $data = null): ?ObjectList
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -1672,11 +1586,10 @@ class JsonConverter extends AbstractDataConverter
      * Convert given input data array from query result to a ObjectList object
      *
      * @param array|null $data
-     * @return null|ObjectList
      */
-    public function convertQueryResultList(array $data = null)
+    public function convertQueryResultList(array $data = null): ?ObjectList
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -1709,14 +1622,14 @@ class JsonConverter extends AbstractDataConverter
      * @param array|null $data
      * @return ObjectInFolderContainer[]
      */
-    public function convertDescendants(array $data = null)
+    public function convertDescendants(array $data = null): array
     {
         return array_filter(
             array_map(
-                [$this, 'convertDescendant'],
+                $this->convertDescendant(...),
                 $data ?? []
             ),
-            function ($item) { return !empty($item); }
+            fn($item): bool => !empty($item)
         );
     }
 
@@ -1724,12 +1637,11 @@ class JsonConverter extends AbstractDataConverter
      * Convert given input data array to a ObjectInFolderContainer object
      *
      * @param array|null $data
-     * @return null|ObjectInFolderContainer
      * @throws CmisRuntimeException
      */
-    public function convertDescendant(array $data = null)
+    public function convertDescendant(array $data = null): ?ObjectInFolderContainer
     {
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return null;
         }
 
@@ -1744,10 +1656,10 @@ class JsonConverter extends AbstractDataConverter
         $objectInFolderContainer->setChildren(
             array_filter(
                 array_map(
-                    [$this, 'convertDescendant'],
+                    $this->convertDescendant(...),
                     (array) ($data[JSONConstants::JSON_OBJECTINFOLDERCONTAINER_CHILDREN] ?? [])
                 ),
-                function ($item) { return !empty($item); }
+                fn($item): bool => $item instanceof ObjectInFolderContainer
             )
         );
 
@@ -1768,7 +1680,7 @@ class JsonConverter extends AbstractDataConverter
     {
         $result = new FailedToDeleteData();
 
-        if (empty($data)) {
+        if ($data === null || $data === []) {
             return $result;
         }
 
@@ -1779,10 +1691,9 @@ class JsonConverter extends AbstractDataConverter
     }
 
     /**
-     * @return BindingsObjectFactory
      * @codeCoverageIgnore
      */
-    protected function getBindingsObjectFactory()
+    protected function getBindingsObjectFactory(): BindingsObjectFactory
     {
         return new BindingsObjectFactory();
     }

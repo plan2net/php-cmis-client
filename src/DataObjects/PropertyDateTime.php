@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\Data\MutablePropertyDateTimeInterface;
 
 /**
@@ -20,12 +20,12 @@ class PropertyDateTime extends AbstractPropertyData implements MutablePropertyDa
     /**
      * {@inheritdoc}
      *
-     * @param \DateTime[] $values
+     * @param DateTime[] $values
      */
-    public function setValues(array $values)
+    public function setValues(array $values): void
     {
         foreach ($values as $value) {
-            $this->checkType(\DateTime::class, $value, true);
+            $this->checkType(DateTime::class, $value, true);
         }
         parent::setValues($values);
     }

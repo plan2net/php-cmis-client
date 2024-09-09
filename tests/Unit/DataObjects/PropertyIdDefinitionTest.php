@@ -9,18 +9,19 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\DataObjects\AbstractPropertyDefinition;
 use Dkd\PhpCmis\DataObjects\PropertyIdDefinition;
 
 /**
  * Class PropertyIdDefinitionTest
  */
-class PropertyIdDefinitionTest extends \PHPUnit_Framework_TestCase
+class PropertyIdDefinitionTest extends PHPUnit_Framework_TestCase
 {
-    public function testAssertIsInstanceOfAbstractPropertyDefinition()
+    public function testAssertIsInstanceOfAbstractPropertyDefinition(): void
     {
         $this->assertInstanceOf(
-            '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyDefinition',
+            AbstractPropertyDefinition::class,
             new PropertyIdDefinition('testId')
         );
     }

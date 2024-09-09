@@ -27,7 +27,6 @@ interface FolderInterface extends FileableCmisObjectInterface, FolderPropertiesI
      *
      * @param array $properties The property values that MUST be applied to the object. The array key is the property
      *     name the value is the property value.
-     * @param StreamInterface $contentStream
      * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
      *     object MUST be. Valid values are:
      *      <code>none</code>

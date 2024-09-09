@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Bindings;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Exception;
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\Converter\JsonConverter;
 use Dkd\PhpCmis\Enum\BindingType;
@@ -29,7 +29,6 @@ class CmisBindingsHelper
     const TYPE_DEFINITION_CACHE = 'dkd.phpcmis.binding.typeDefinitionCache';
 
     /**
-     * @param array $parameters
      * @param Cache|null $typeDefinitionCache
      * @return CmisBindingInterface
      */
@@ -37,7 +36,7 @@ class CmisBindingsHelper
         array $parameters,
         Cache $typeDefinitionCache = null
     ) {
-        if (count($parameters) === 0) {
+        if ($parameters === []) {
             throw new CmisRuntimeException('Session parameters must be set!');
         }
 
@@ -50,19 +49,13 @@ class CmisBindingsHelper
 
             $bindingFactory = $this->getCmisBindingFactory();
 
-            switch (true) {
-                case $bindingType->equals(BindingType::BROWSER):
-                    $binding = $bindingFactory->createCmisBrowserBinding(
-                        $parameters,
-                        $typeDefinitionCache
-                    );
-                    break;
-                case $bindingType->equals(BindingType::ATOMPUB):
-                case $bindingType->equals(BindingType::WEBSERVICES):
-                case $bindingType->equals(BindingType::CUSTOM):
-                default:
-                    $binding = null;
-            }
+            $binding = match (true) {
+                $bindingType->equals(BindingType::BROWSER) => $bindingFactory->createCmisBrowserBinding(
+                    $parameters,
+                    $typeDefinitionCache
+                ),
+                default => null,
+            };
 
             if (!is_object($binding) || !($binding instanceof CmisBinding)) {
                 throw new CmisRuntimeException(
@@ -73,7 +66,7 @@ class CmisBindingsHelper
                 );
             }
 
-        } catch (InvalidEnumerationValueException $exception) {
+        } catch (InvalidEnumerationValueException) {
             throw new CmisRuntimeException(
                 'Invalid binding type given: ' . $parameters[SessionParameter::BINDING_TYPE]
             );
@@ -87,7 +80,6 @@ class CmisBindingsHelper
      * object in the session it will be returned. If there is no SPI object it
      * will be created and put into the session.
      *
-     * @param BindingSessionInterface $session
      * @return CmisInterface
      */
     public function getSpi(BindingSessionInterface $session)
@@ -113,7 +105,7 @@ class CmisBindingsHelper
 
         try {
             $spi = new $spiClass($session);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CmisRuntimeException(
                 sprintf('Could not create object of type "%s"!', $spiClass),
                 null,
@@ -127,21 +119,21 @@ class CmisBindingsHelper
     }
 
     /**
-     * @param BindingSessionInterface $session
      * @return mixed
      * @throws CmisRuntimeException
      */
     public function getHttpInvoker(BindingSessionInterface $session)
     {
         $invoker = $session->get(SessionParameter::HTTP_INVOKER_OBJECT);
-
-        if (is_object($invoker) && is_a($invoker, ClientInterface::class)) {
+        if ($invoker instanceof ClientInterface) {
             return $invoker;
-        } elseif (is_object($invoker) && !is_a($invoker, ClientInterface::class)) {
+        }
+
+        if (is_object($invoker) && !$invoker instanceof ClientInterface) {
             throw new CmisInvalidArgumentException(
                 sprintf(
                     'Invalid HTTP invoker given. The given instance "%s" does not implement %s!',
-                    get_class($invoker),
+                    $invoker::class,
                     ClientInterface::class
                 ),
                 1415281262
@@ -157,7 +149,7 @@ class CmisBindingsHelper
 
         try {
             $invoker = new $invokerClass;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CmisRuntimeException(
                 sprintf('Could not create object of type "%s"!', $invokerClass),
                 null,
@@ -171,7 +163,6 @@ class CmisBindingsHelper
     }
 
     /**
-     * @param BindingSessionInterface $session
      * @return JsonConverter
      */
     public function getJsonConverter(BindingSessionInterface $session)
@@ -191,7 +182,7 @@ class CmisBindingsHelper
 
         try {
             $jsonConverter = new $jsonConverterClass();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CmisRuntimeException(
                 sprintf('Could not create object of type "%s"!', $jsonConverterClass),
                 null,
@@ -205,10 +196,7 @@ class CmisBindingsHelper
         return $jsonConverter;
     }
 
-    /**
-     * @return CmisBindingFactory
-     */
-    protected function getCmisBindingFactory()
+    protected function getCmisBindingFactory(): CmisBindingFactory
     {
         return new CmisBindingFactory();
     }
@@ -216,7 +204,6 @@ class CmisBindingsHelper
     /**
      * Returns the type definition cache from the session.
      *
-     * @param BindingSessionInterface $session
      * @return Cache
      * @throws CmisRuntimeException Exception is thrown if cache instance could not be initialized.
      */
@@ -230,7 +217,7 @@ class CmisBindingsHelper
         $className = $session->get(SessionParameter::TYPE_DEFINITION_CACHE_CLASS);
         try {
             $cache = new $className();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CmisRuntimeException(
                 sprintf('Could not create object of type "%s"!', $className),
                 null,

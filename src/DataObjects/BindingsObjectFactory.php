@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\BindingsObjectFactoryInterface;
 use Dkd\PhpCmis\Data\PropertyDataInterface;
@@ -25,7 +25,6 @@ use Dkd\PhpCmis\Definitions\PropertyUriDefinitionInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
-use GuzzleHttp\Stream\StreamInterface;
 
 /**
  * CMIS binding object factory implementation.
@@ -37,18 +36,16 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
      *
      * @param string $principal
      * @param string[] $permissions
-     * @return AccessControlEntry
      */
-    public function createAccessControlEntry($principal, array $permissions)
+    public function createAccessControlEntry($principal, array $permissions): AccessControlEntry
     {
         return new AccessControlEntry(new Principal($principal), $permissions);
     }
 
     /**
      * @param AceInterface[] $aces
-     * @return AccessControlList
      */
-    public function createAccessControlList(array $aces)
+    public function createAccessControlList(array $aces): AccessControlList
     {
         return new AccessControlList($aces);
     }
@@ -60,18 +57,16 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
      * @param integer $length
      * @param string $mimeType
      * @param mixed $stream @TODO define datatype
-     * @return StreamInterface
      */
-    public function createContentStream($filename, $length, $mimeType, $stream)
+    public function createContentStream($filename, $length, $mimeType, $stream): void
     {
         // TODO: Implement createContentStream() method.
     }
 
     /**
      * @param PropertyDataInterface[] $propertiesData
-     * @return Properties
      */
-    public function createPropertiesData(array $propertiesData)
+    public function createPropertiesData(array $propertiesData): Properties
     {
         $properties = new Properties();
         $properties->addProperties($propertiesData);
@@ -79,48 +74,51 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
     }
 
     /**
-     * @param PropertyDefinitionInterface $propertyDefinition
-     * @param array $values
      * @return PropertyDataInterface
      */
     public function createPropertyData(PropertyDefinitionInterface $propertyDefinition, array $values)
     {
         if ($propertyDefinition instanceof PropertyStringDefinitionInterface) {
             return $this->createPropertyStringData($propertyDefinition->getId(), $values);
-        } elseif ($propertyDefinition instanceof PropertyBooleanDefinitionInterface) {
+        }
+        if ($propertyDefinition instanceof PropertyBooleanDefinitionInterface) {
             return $this->createPropertyBooleanData($propertyDefinition->getId(), $values);
-        } elseif ($propertyDefinition instanceof PropertyIdDefinitionInterface) {
+        }
+        if ($propertyDefinition instanceof PropertyIdDefinitionInterface) {
             return $this->createPropertyIdData($propertyDefinition->getId(), $values);
-        } elseif ($propertyDefinition instanceof PropertyDateTimeDefinitionInterface) {
+        }
+        if ($propertyDefinition instanceof PropertyDateTimeDefinitionInterface) {
             return $this->createPropertyDateTimeData($propertyDefinition->getId(), $values);
-        } elseif ($propertyDefinition instanceof PropertyDecimalDefinitionInterface) {
+        }
+        if ($propertyDefinition instanceof PropertyDecimalDefinitionInterface) {
             return $this->createPropertyDecimalData($propertyDefinition->getId(), $values);
-        } elseif ($propertyDefinition instanceof PropertyHtmlDefinitionInterface) {
+        }
+        if ($propertyDefinition instanceof PropertyHtmlDefinitionInterface) {
             return $this->createPropertyHtmlData($propertyDefinition->getId(), $values);
-        } elseif ($propertyDefinition instanceof PropertyIntegerDefinitionInterface) {
+        }
+        if ($propertyDefinition instanceof PropertyIntegerDefinitionInterface) {
             return $this->createPropertyIntegerData($propertyDefinition->getId(), $values);
-        } elseif ($propertyDefinition instanceof PropertyUriDefinitionInterface) {
+        }
+        if ($propertyDefinition instanceof PropertyUriDefinitionInterface) {
             return $this->createPropertyUriData($propertyDefinition->getId(), $values);
         }
-        throw new CmisRuntimeException(sprintf('Unknown property definition: %s', get_class($propertyDefinition)));
+        throw new CmisRuntimeException(sprintf('Unknown property definition: %s', $propertyDefinition::class));
     }
 
     /**
      * @param string $id
      * @param boolean[] $values
-     * @return PropertyBoolean
      */
-    public function createPropertyBooleanData($id, array $values)
+    public function createPropertyBooleanData($id, array $values): PropertyBoolean
     {
         return new PropertyBoolean($id, $values);
     }
 
     /**
      * @param string $id
-     * @param \DateTime[] $values
-     * @return PropertyDateTime
+     * @param DateTime[] $values
      */
-    public function createPropertyDateTimeData($id, array $values)
+    public function createPropertyDateTimeData($id, array $values): PropertyDateTime
     {
         return new PropertyDateTime($id, $values);
     }
@@ -128,9 +126,8 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
     /**
      * @param string $id
      * @param float[] $values
-     * @return PropertyDecimal
      */
-    public function createPropertyDecimalData($id, array $values)
+    public function createPropertyDecimalData($id, array $values): PropertyDecimal
     {
         return new PropertyDecimal($id, $values);
     }
@@ -138,9 +135,8 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
     /**
      * @param string $id
      * @param string[] $values
-     * @return PropertyHtml
      */
-    public function createPropertyHtmlData($id, array $values)
+    public function createPropertyHtmlData($id, array $values): PropertyHtml
     {
         return new PropertyHtml($id, $values);
     }
@@ -148,9 +144,8 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
     /**
      * @param string $id
      * @param string[] $values
-     * @return PropertyId
      */
-    public function createPropertyIdData($id, array $values)
+    public function createPropertyIdData($id, array $values): PropertyId
     {
         return new PropertyId($id, $values);
     }
@@ -158,9 +153,8 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
     /**
      * @param string $id
      * @param integer[] $values
-     * @return PropertyInteger
      */
-    public function createPropertyIntegerData($id, array $values)
+    public function createPropertyIntegerData($id, array $values): PropertyInteger
     {
         return new PropertyInteger($id, $values);
     }
@@ -168,9 +162,8 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
     /**
      * @param string $id
      * @param string[] $values
-     * @return PropertyString
      */
-    public function createPropertyStringData($id, array $values)
+    public function createPropertyStringData($id, array $values): PropertyString
     {
         return new PropertyString($id, $values);
     }
@@ -178,9 +171,8 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
     /**
      * @param string $id
      * @param string[] $values
-     * @return PropertyUri
      */
-    public function createPropertyUriData($id, array $values)
+    public function createPropertyUriData($id, array $values): PropertyUri
     {
         return new PropertyUri($id, $values);
     }
@@ -190,12 +182,11 @@ class BindingsObjectFactory implements BindingsObjectFactoryInterface
      *
      * @param string $baseTypeIdString
      * @param string $typeId
-     * @return FolderTypeDefinition|DocumentTypeDefinition|RelationshipTypeDefinition|PolicyTypeDefinition|ItemTypeDefinition|SecondaryTypeDefinition
      * @throws CmisInvalidArgumentException Exception is thrown if the base type exists in the BaseTypeId enumeration
      *      but is not implemented here. This could only happen if the base type enumeration is extended which requires
      *      a CMIS specification change.
      */
-    public function getTypeDefinitionByBaseTypeId($baseTypeIdString, $typeId)
+    public function getTypeDefinitionByBaseTypeId($baseTypeIdString, $typeId): SecondaryTypeDefinition|ItemTypeDefinition|PolicyTypeDefinition|RelationshipTypeDefinition|DocumentTypeDefinition|FolderTypeDefinition
     {
         $baseTypeId = BaseTypeId::cast($baseTypeIdString);
 

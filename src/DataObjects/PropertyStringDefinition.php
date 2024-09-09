@@ -39,7 +39,7 @@ class PropertyStringDefinition extends AbstractPropertyDefinition implements Mut
      * @param integer $maxLength the maximum string length in characters or <code>null</code>
      * if the the length is not limited
      */
-    public function setMaxLength($maxLength)
+    public function setMaxLength($maxLength): void
     {
         $this->maxLength = $this->castValueToSimpleType('integer', $maxLength);
     }

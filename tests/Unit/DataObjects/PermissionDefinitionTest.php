@@ -26,7 +26,7 @@ class PermissionDefinitionTest extends PHPUnit_Framework_TestCase
      */
     protected $permissionDefinition;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->permissionDefinition = new PermissionDefinition();
     }
@@ -34,9 +34,8 @@ class PermissionDefinitionTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider stringCastDataProvider
      * @param string $expected
-     * @param mixed $value
      */
-    public function testSetDescriptionSetsProperty($expected, $value)
+    public function testSetDescriptionSetsProperty($expected, mixed $value): void
     {
         $this->permissionDefinition->setDescription($value);
         $this->assertAttributeSame($expected, 'description', $this->permissionDefinition);
@@ -45,7 +44,7 @@ class PermissionDefinitionTest extends PHPUnit_Framework_TestCase
     /**
      * @depends testSetDescriptionSetsProperty
      */
-    public function testGetDescriptionReturnsPropertyValue()
+    public function testGetDescriptionReturnsPropertyValue(): void
     {
         $this->permissionDefinition->setDescription('foo');
         $this->assertSame('foo', $this->permissionDefinition->getDescription());
@@ -54,9 +53,8 @@ class PermissionDefinitionTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider stringCastDataProvider
      * @param string $expected
-     * @param mixed $value
      */
-    public function testSetIdSetsProperty($expected, $value)
+    public function testSetIdSetsProperty($expected, mixed $value): void
     {
         $this->permissionDefinition->setId($value);
         $this->assertAttributeSame($expected, 'id', $this->permissionDefinition);
@@ -65,7 +63,7 @@ class PermissionDefinitionTest extends PHPUnit_Framework_TestCase
     /**
      * @depends testSetIdSetsProperty
      */
-    public function testGetIdReturnsPropertyValue()
+    public function testGetIdReturnsPropertyValue(): void
     {
         $this->permissionDefinition->setId('foo');
         $this->assertSame('foo', $this->permissionDefinition->getId());

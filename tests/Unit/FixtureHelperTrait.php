@@ -24,9 +24,9 @@ trait FixtureHelperTrait
      * @param string $fixture the path to the json fixture file
      * @return array|mixed
      */
-    protected function getResponseFixtureContentAsArray($fixture)
+    protected function getResponseFixtureContentAsArray(string $fixture): array
     {
-        $fixtureFilename = dirname(dirname(__FILE__)) . '/Fixtures/' . $fixture;
+        $fixtureFilename = dirname(__FILE__, 2) . '/Fixtures/' . $fixture;
         if (!file_exists($fixtureFilename)) {
             $this->fail(sprintf('Fixture "%s" not found!', $fixtureFilename));
         }
@@ -35,7 +35,7 @@ trait FixtureHelperTrait
         $result = [];
         try {
             $result = (array) \json_decode($response->getBody(), true);
-        } catch (RuntimeException $exception) {
+        } catch (RuntimeException) {
             $this->fail(sprintf('Fixture "%s" does not contain a valid JSON body!', $fixtureFilename));
         }
 

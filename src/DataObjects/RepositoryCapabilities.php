@@ -135,10 +135,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
         return CapabilityAcl::cast($this->aclCapability);
     }
 
-    /**
-     * @param CapabilityAcl $aclCapability
-     */
-    public function setAclCapability(CapabilityAcl $aclCapability)
+    public function setAclCapability(CapabilityAcl $aclCapability): void
     {
         $this->aclCapability = $aclCapability;
     }
@@ -154,7 +151,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
     /**
      * @param boolean $supportsAllVersionsSearchable
      */
-    public function setSupportsAllVersionsSearchable($supportsAllVersionsSearchable)
+    public function setSupportsAllVersionsSearchable($supportsAllVersionsSearchable): void
     {
         $this->supportsAllVersionsSearchable = (boolean) $supportsAllVersionsSearchable;
     }
@@ -167,10 +164,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
         return CapabilityChanges::cast($this->changesCapability);
     }
 
-    /**
-     * @param CapabilityChanges $changesCapability
-     */
-    public function setChangesCapability(CapabilityChanges $changesCapability)
+    public function setChangesCapability(CapabilityChanges $changesCapability): void
     {
         $this->changesCapability = $changesCapability;
     }
@@ -183,10 +177,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
         return CapabilityContentStreamUpdates::cast($this->contentStreamUpdatesCapability);
     }
 
-    /**
-     * @param CapabilityContentStreamUpdates $contentStreamUpdatesCapability
-     */
-    public function setContentStreamUpdatesCapability(CapabilityContentStreamUpdates $contentStreamUpdatesCapability)
+    public function setContentStreamUpdatesCapability(CapabilityContentStreamUpdates $contentStreamUpdatesCapability): void
     {
         $this->contentStreamUpdatesCapability = $contentStreamUpdatesCapability;
     }
@@ -199,10 +190,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
         return $this->creatablePropertyTypes;
     }
 
-    /**
-     * @param CreatablePropertyTypesInterface $creatablePropertyTypes
-     */
-    public function setCreatablePropertyTypes(CreatablePropertyTypesInterface $creatablePropertyTypes)
+    public function setCreatablePropertyTypes(CreatablePropertyTypesInterface $creatablePropertyTypes): void
     {
         $this->creatablePropertyTypes = $creatablePropertyTypes;
     }
@@ -218,7 +206,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
     /**
      * @param boolean $isPwcSearchable
      */
-    public function setSupportsPwcSearchable($isPwcSearchable)
+    public function setSupportsPwcSearchable($isPwcSearchable): void
     {
         $this->isPwcSearchable = (boolean) $isPwcSearchable;
     }
@@ -234,7 +222,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
     /**
      * @param boolean $isPwcUpdatable
      */
-    public function setSupportsPwcUpdatable($isPwcUpdatable)
+    public function setSupportsPwcUpdatable($isPwcUpdatable): void
     {
         $this->isPwcUpdatable = (boolean) $isPwcUpdatable;
     }
@@ -247,10 +235,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
         return CapabilityJoin::cast($this->joinCapability);
     }
 
-    /**
-     * @param CapabilityJoin $joinCapability
-     */
-    public function setJoinCapability(CapabilityJoin $joinCapability)
+    public function setJoinCapability(CapabilityJoin $joinCapability): void
     {
         $this->joinCapability = $joinCapability;
     }
@@ -263,10 +248,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
         return $this->newTypeSettableAttributes;
     }
 
-    /**
-     * @param NewTypeSettableAttributesInterface $newTypeSettableAttributes
-     */
-    public function setNewTypeSettableAttributes(NewTypeSettableAttributesInterface $newTypeSettableAttributes)
+    public function setNewTypeSettableAttributes(NewTypeSettableAttributesInterface $newTypeSettableAttributes): void
     {
         $this->newTypeSettableAttributes = $newTypeSettableAttributes;
     }
@@ -279,10 +261,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
         return CapabilityOrderBy::cast($this->orderByCapability);
     }
 
-    /**
-     * @param CapabilityOrderBy $orderByCapability
-     */
-    public function setOrderByCapability(CapabilityOrderBy $orderByCapability)
+    public function setOrderByCapability(CapabilityOrderBy $orderByCapability): void
     {
         $this->orderByCapability = $orderByCapability;
     }
@@ -295,10 +274,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
         return CapabilityQuery::cast($this->queryCapability);
     }
 
-    /**
-     * @param CapabilityQuery $queryCapability
-     */
-    public function setQueryCapability(CapabilityQuery $queryCapability)
+    public function setQueryCapability(CapabilityQuery $queryCapability): void
     {
         $this->queryCapability = $queryCapability;
     }
@@ -311,10 +287,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
         return CapabilityRenditions::cast($this->renditionsCapability);
     }
 
-    /**
-     * @param CapabilityRenditions $renditionsCapability
-     */
-    public function setRenditionsCapability(CapabilityRenditions $renditionsCapability)
+    public function setRenditionsCapability(CapabilityRenditions $renditionsCapability): void
     {
         $this->renditionsCapability = $renditionsCapability;
     }
@@ -330,7 +303,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
     /**
      * @param boolean $supportsGetDescendants
      */
-    public function setSupportsGetDescendants($supportsGetDescendants)
+    public function setSupportsGetDescendants($supportsGetDescendants): void
     {
         $this->supportsGetDescendants = (boolean) $supportsGetDescendants;
     }
@@ -346,7 +319,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
     /**
      * @param boolean $supportsGetFolderTree
      */
-    public function setSupportsGetFolderTree($supportsGetFolderTree)
+    public function setSupportsGetFolderTree($supportsGetFolderTree): void
     {
         $this->supportsGetFolderTree = (boolean) $supportsGetFolderTree;
     }
@@ -362,7 +335,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
     /**
      * @param boolean $supportsMultifiling
      */
-    public function setSupportsMultifiling($supportsMultifiling)
+    public function setSupportsMultifiling($supportsMultifiling): void
     {
         $this->supportsMultifiling = (boolean) $supportsMultifiling;
     }
@@ -378,7 +351,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
     /**
      * @param boolean $supportsUnfiling
      */
-    public function setSupportsUnfiling($supportsUnfiling)
+    public function setSupportsUnfiling($supportsUnfiling): void
     {
         $this->supportsUnfiling = (boolean) $supportsUnfiling;
     }
@@ -394,7 +367,7 @@ class RepositoryCapabilities extends AbstractExtensionData implements Repository
     /**
      * @param boolean $supportsVersionSpecificFiling
      */
-    public function setSupportsVersionSpecificFiling($supportsVersionSpecificFiling)
+    public function setSupportsVersionSpecificFiling($supportsVersionSpecificFiling): void
     {
         $this->supportsVersionSpecificFiling = (boolean) $supportsVersionSpecificFiling;
     }

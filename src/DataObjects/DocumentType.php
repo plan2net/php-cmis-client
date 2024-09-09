@@ -27,7 +27,6 @@ class DocumentType extends DocumentTypeDefinition implements DocumentTypeInterfa
      * Constructor of the object type. This constructor MUST set the session property to the given session and
      * call the <code>self::populate</code> method with the given <code>$typeDefinition</code>
      *
-     * @param SessionInterface $session
      * @param DocumentTypeDefinitionInterface $typeDefinition
      * @throws CmisInvalidArgumentException Throws exception if invalid type definition is given
      */
@@ -37,7 +36,7 @@ class DocumentType extends DocumentTypeDefinition implements DocumentTypeInterfa
             throw new CmisInvalidArgumentException(
                 sprintf(
                     'Type definition must be instance of DocumentTypeDefinitionInterface but is "%s"',
-                    get_class($typeDefinition)
+                    $typeDefinition::class
                 )
             );
         }

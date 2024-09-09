@@ -9,7 +9,8 @@ namespace Dkd\PhpCmis\Test\Unit;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use ReflectionClass;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\OperationContext;
@@ -17,31 +18,31 @@ use Dkd\PhpCmis\OperationContext;
 /**
  * Class OperationContextTest
  */
-class OperationContextTest extends \PHPUnit_Framework_TestCase
+class OperationContextTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var OperationContext
      */
     protected $operationContext;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->operationContext = new OperationContext();
     }
 
-    public function testConstructorCallsSetRenditionFilterToInitalizeIt()
+    public function testConstructorCallsSetRenditionFilterToInitalizeIt(): void
     {
-        $operationContextMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\OperationContext')->disableOriginalConstructor(
+        $operationContextMock = $this->getMockBuilder(OperationContext::class)->disableOriginalConstructor(
         )->getMock();
         $operationContextMock->expects($this->once())->method('setRenditionFilter')->with([]);
 
         // now call the constructor
-        $reflectedClass = new \ReflectionClass(get_class($operationContextMock));
+        $reflectedClass = new ReflectionClass($operationContextMock::class);
         $constructor = $reflectedClass->getConstructor();
         $constructor->invoke($operationContextMock);
     }
 
-    public function testConstructorInitializesIncludeRelationshipsAttribute()
+    public function testConstructorInitializesIncludeRelationshipsAttribute(): void
     {
         $this->assertAttributeEquals(
             IncludeRelationships::cast(IncludeRelationships::NONE),
@@ -50,7 +51,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSetIncludeAclsSetsProperty()
+    public function testSetIncludeAclsSetsProperty(): void
     {
         $this->operationContext->setIncludeAcls(true);
         $this->assertAttributeSame(true, 'includeAcls', $this->operationContext);
@@ -58,7 +59,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(false, 'includeAcls', $this->operationContext);
     }
 
-    public function testSetIncludeAllowableActionsSetsProperty()
+    public function testSetIncludeAllowableActionsSetsProperty(): void
     {
         $this->operationContext->setIncludeAllowableActions(true);
         $this->assertAttributeSame(true, 'includeAllowableActions', $this->operationContext);
@@ -66,7 +67,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(false, 'includeAllowableActions', $this->operationContext);
     }
 
-    public function testSetIncludePathSegmentsSetsProperty()
+    public function testSetIncludePathSegmentsSetsProperty(): void
     {
         $this->operationContext->setIncludePathSegments(true);
         $this->assertAttributeSame(true, 'includePathSegments', $this->operationContext);
@@ -74,7 +75,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(false, 'includePathSegments', $this->operationContext);
     }
 
-    public function testSetIncludePoliciesSetsProperty()
+    public function testSetIncludePoliciesSetsProperty(): void
     {
         $this->operationContext->setIncludePolicies(true);
         $this->assertAttributeSame(true, 'includePolicies', $this->operationContext);
@@ -82,7 +83,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(false, 'includePolicies', $this->operationContext);
     }
 
-    public function testSetFilterSetsProperty()
+    public function testSetFilterSetsProperty(): void
     {
         $this->operationContext->setFilter(['foo']);
         $this->assertAttributeSame(['foo'], 'filter', $this->operationContext);
@@ -90,19 +91,19 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(['baz', 'bar'], 'filter', $this->operationContext);
     }
 
-    public function testSetFilterSetsPropertyAndIgnoresEmptyFilterValues()
+    public function testSetFilterSetsPropertyAndIgnoresEmptyFilterValues(): void
     {
         $this->operationContext->setFilter(['foo', '', 0, 'bar']);
         $this->assertAttributeSame(['foo', '0', 'bar'], 'filter', $this->operationContext);
     }
 
-    public function testSetFilterThrowsExceptionIfFilterContainsComma()
+    public function testSetFilterThrowsExceptionIfFilterContainsComma(): void
     {
         $this->setExpectedException('\\InvalidArgumentException', 'Filter must not contain a comma!');
         $this->operationContext->setFilter(['foo', 'bar,baz']);
     }
 
-    public function testSetRenditionFilterSetsProperty()
+    public function testSetRenditionFilterSetsProperty(): void
     {
         $this->operationContext->setRenditionFilter(['foo']);
         $this->assertAttributeSame(['foo'], 'renditionFilter', $this->operationContext);
@@ -110,25 +111,25 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(['baz', 'bar'], 'renditionFilter', $this->operationContext);
     }
 
-    public function testSetRenditionFilterThrowsExceptionIfFilterContainsComma()
+    public function testSetRenditionFilterThrowsExceptionIfFilterContainsComma(): void
     {
         $this->setExpectedException('\\InvalidArgumentException', 'Rendition must not contain a comma!');
         $this->operationContext->setRenditionFilter(['foo', 'bar,baz']);
     }
 
-    public function testSetRenditionFilterIgnoresEmptyFilters()
+    public function testSetRenditionFilterIgnoresEmptyFilters(): void
     {
         $this->operationContext->setRenditionFilter(['', 0, 'foo']);
         $this->assertAttributeSame(['0' ,'foo'], 'renditionFilter', $this->operationContext);
     }
 
-    public function testSetRenditionFilterSetsRenditionNoneIfEmptyListOfRenditionsGiven()
+    public function testSetRenditionFilterSetsRenditionNoneIfEmptyListOfRenditionsGiven(): void
     {
         $this->operationContext->setRenditionFilter([]);
         $this->assertAttributeSame([Constants::RENDITION_NONE], 'renditionFilter', $this->operationContext);
     }
 
-    public function testSetLoadSecondaryTypePropertiesSetsProperty()
+    public function testSetLoadSecondaryTypePropertiesSetsProperty(): void
     {
         $this->operationContext->setLoadSecondaryTypeProperties(false);
         $this->assertAttributeSame(false, 'loadSecondaryTypeProperties', $this->operationContext);
@@ -136,7 +137,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(true, 'loadSecondaryTypeProperties', $this->operationContext);
     }
 
-    public function testSetMaxItemsPerPageSetsProperty()
+    public function testSetMaxItemsPerPageSetsProperty(): void
     {
         $this->operationContext->setMaxItemsPerPage(10);
         $this->assertAttributeSame(10, 'maxItemsPerPage', $this->operationContext);
@@ -144,19 +145,19 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(20, 'maxItemsPerPage', $this->operationContext);
     }
 
-    public function testSetMaxItemsPerPageThrowsExceptionIfInvalidValueIsGiven()
+    public function testSetMaxItemsPerPageThrowsExceptionIfInvalidValueIsGiven(): void
     {
         $this->setExpectedException('\\InvalidArgumentException');
         $this->operationContext->setMaxItemsPerPage(0);
     }
 
-    public function testSetOrderBySetsProperty()
+    public function testSetOrderBySetsProperty(): void
     {
         $this->operationContext->setOrderBy('foo ASC, Bar desc');
         $this->assertAttributeSame('foo ASC, Bar desc', 'orderBy', $this->operationContext);
     }
 
-    public function testSetIncludeRelationshipsSetsProperty()
+    public function testSetIncludeRelationshipsSetsProperty(): void
     {
         $this->operationContext->setIncludeRelationships(IncludeRelationships::cast(IncludeRelationships::BOTH));
         $this->assertAttributeEquals(
@@ -172,7 +173,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSetFilterStringExplodesStringByCommaAndSetsResultAsFilterProperty()
+    public function testSetFilterStringExplodesStringByCommaAndSetsResultAsFilterProperty(): void
     {
         $this->operationContext->setFilterString('');
         $this->assertAttributeSame([], 'filter', $this->operationContext);
@@ -182,7 +183,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(['foo', 'bar', 'baz'], 'filter', $this->operationContext);
     }
 
-    public function testSetRenditionFilterStringExplodesStringByCommaAndSetsResultAsFilterProperty()
+    public function testSetRenditionFilterStringExplodesStringByCommaAndSetsResultAsFilterProperty(): void
     {
         $this->operationContext->setRenditionFilterString('');
         $this->assertAttributeSame(['cmis:none'], 'renditionFilter', $this->operationContext);
@@ -192,7 +193,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(['foo', 'bar', 'baz'], 'renditionFilter', $this->operationContext);
     }
 
-    public function testGetCacheKeyReturnsStringBasedOnPropertyValues()
+    public function testGetCacheKeyReturnsStringBasedOnPropertyValues(): void
     {
         $this->assertSame('0101||none|cmis:none', $this->operationContext->getCacheKey());
 
@@ -210,7 +211,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSetCacheEnabledSetsProperty()
+    public function testSetCacheEnabledSetsProperty(): void
     {
         $this->assertAttributeSame(false, 'cacheEnabled', $this->operationContext);
         $returnValue = $this->operationContext->setCacheEnabled(true);
@@ -218,7 +219,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->operationContext, $returnValue);
     }
 
-    public function testIsCacheEnabledReturnsValueOfProperty()
+    public function testIsCacheEnabledReturnsValueOfProperty(): void
     {
         $this->assertAttributeSame($this->operationContext->isCacheEnabled(), 'cacheEnabled', $this->operationContext);
     }
@@ -226,18 +227,18 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetFilterSetsProperty
      */
-    public function testGetFilterReturnsValueOfProperty()
+    public function testGetFilterReturnsValueOfProperty(): void
     {
         $this->operationContext->setFilter(['foo', 'bar']);
         $this->assertAttributeSame($this->operationContext->getFilter(), 'filter', $this->operationContext);
     }
 
-    public function testIsIncludeAclsReturnsValueOfProperty()
+    public function testIsIncludeAclsReturnsValueOfProperty(): void
     {
         $this->assertAttributeSame($this->operationContext->isIncludeAcls(), 'includeAcls', $this->operationContext);
     }
 
-    public function testIsIncludeAllowableActionsReturnsValueOfProperty()
+    public function testIsIncludeAllowableActionsReturnsValueOfProperty(): void
     {
         $this->assertAttributeSame(
             $this->operationContext->isIncludeAllowableActions(),
@@ -246,7 +247,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testIsIncludePathSegmentsReturnsValueOfProperty()
+    public function testIsIncludePathSegmentsReturnsValueOfProperty(): void
     {
         $this->assertAttributeSame(
             $this->operationContext->isIncludePathSegments(),
@@ -255,7 +256,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testIsIncludePoliciesReturnsValueOfProperty()
+    public function testIsIncludePoliciesReturnsValueOfProperty(): void
     {
         $this->assertAttributeSame(
             $this->operationContext->isIncludePolicies(),
@@ -264,7 +265,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetIncludeRelationshipsReturnsValueOfProperty()
+    public function testGetIncludeRelationshipsReturnsValueOfProperty(): void
     {
         $this->assertAttributeSame(
             $this->operationContext->getIncludeRelationships(),
@@ -273,7 +274,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetMaxItemsPerPageReturnsValueOfProperty()
+    public function testGetMaxItemsPerPageReturnsValueOfProperty(): void
     {
         $this->assertAttributeSame(
             $this->operationContext->getMaxItemsPerPage(),
@@ -282,7 +283,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetOrderByReturnsValueOfProperty()
+    public function testGetOrderByReturnsValueOfProperty(): void
     {
         $this->assertAttributeSame(
             $this->operationContext->getOrderBy(),
@@ -291,7 +292,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetRenditionFilterReturnsValueOfProperty()
+    public function testGetRenditionFilterReturnsValueOfProperty(): void
     {
         $this->assertAttributeSame(
             $this->operationContext->getRenditionFilter(),
@@ -300,7 +301,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetFilterStringReturnsNullIfNoFilterIsSet()
+    public function testGetFilterStringReturnsNullIfNoFilterIsSet(): void
     {
         $this->assertAttributeSame([], 'filter', $this->operationContext);
         $this->assertNull($this->operationContext->getQueryFilterString());
@@ -309,7 +310,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetFilterSetsProperty
      */
-    public function testGetFilterStringReturnsStarIfFilterContainsAStar()
+    public function testGetFilterStringReturnsStarIfFilterContainsAStar(): void
     {
         $this->operationContext->setFilter(['foo', OperationContext::PROPERTIES_WILDCARD]);
         $this->assertSame(OperationContext::PROPERTIES_WILDCARD, $this->operationContext->getQueryFilterString());
@@ -319,7 +320,7 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
      * @depends testSetFilterSetsProperty
      * @depends testSetLoadSecondaryTypePropertiesSetsProperty
      */
-    public function testGetFilterStringAddsRequiredPropertiesAndReturnsValueOfPropertyAsString()
+    public function testGetFilterStringAddsRequiredPropertiesAndReturnsValueOfPropertyAsString(): void
     {
         $this->operationContext->setFilter(['foo', 'bar']);
         $this->assertSame(
@@ -334,9 +335,9 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetRenditionFilterStringReturnsNullIfNoFilterIsDefined()
+    public function testGetRenditionFilterStringReturnsNullIfNoFilterIsDefined(): void
     {
-        $operationContext = new \ReflectionClass('\\Dkd\\PhpCmis\\OperationContext');
+        $operationContext = new ReflectionClass(OperationContext::class);
         $renditionFilterProperty = $operationContext->getProperty('renditionFilter');
         $renditionFilterProperty->setAccessible(true);
         $renditionFilterProperty->setValue($this->operationContext, []);
@@ -347,13 +348,13 @@ class OperationContextTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetRenditionFilterSetsProperty
      */
-    public function testGetRenditionFilterStringReturnsCommaSeparatedStringOfRenditionFilters()
+    public function testGetRenditionFilterStringReturnsCommaSeparatedStringOfRenditionFilters(): void
     {
         $this->operationContext->setRenditionFilter(['foo', 'bar']);
         $this->assertSame('foo,bar', $this->operationContext->getRenditionFilterString());
     }
 
-    public function testLoadSecondaryTypePropertiesReturnsValueOfProperty()
+    public function testLoadSecondaryTypePropertiesReturnsValueOfProperty(): void
     {
         $this->assertAttributeSame(
             $this->operationContext->loadSecondaryTypeProperties(),

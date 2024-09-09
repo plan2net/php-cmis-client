@@ -34,7 +34,6 @@ class AccessControlEntry extends AbstractExtensionData implements MutableAceInte
     protected $isDirect;
 
     /**
-     * @param PrincipalInterface $principal
      * @param string[] $permissions
      */
     public function __construct(PrincipalInterface $principal, array $permissions)
@@ -54,7 +53,7 @@ class AccessControlEntry extends AbstractExtensionData implements MutableAceInte
     /**
      * @param string[] $permissions
      */
-    public function setPermissions(array $permissions)
+    public function setPermissions(array $permissions): void
     {
         foreach ($permissions as $permission) {
             $this->checkType('string', $permission);
@@ -70,10 +69,7 @@ class AccessControlEntry extends AbstractExtensionData implements MutableAceInte
         return $this->principal;
     }
 
-    /**
-     * @param PrincipalInterface $principal
-     */
-    public function setPrincipal(PrincipalInterface $principal)
+    public function setPrincipal(PrincipalInterface $principal): void
     {
         $this->principal = $principal;
     }
@@ -99,7 +95,7 @@ class AccessControlEntry extends AbstractExtensionData implements MutableAceInte
     /**
      * @param boolean $isDirect
      */
-    public function setIsDirect($isDirect)
+    public function setIsDirect($isDirect): void
     {
         $this->isDirect = $this->castValueToSimpleType('boolean', $isDirect);
     }

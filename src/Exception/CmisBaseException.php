@@ -1,6 +1,8 @@
 <?php
 namespace Dkd\PhpCmis\Exception;
 
+use RuntimeException;
+
 /*
  * This file is part of php-cmis-client.
  *
@@ -9,13 +11,12 @@ namespace Dkd\PhpCmis\Exception;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 /**
  * CMIS Base Exception.
  *
  * Base exception class for all CMIS exceptions.
  */
-abstract class CmisBaseException extends \RuntimeException
+abstract class CmisBaseException extends RuntimeException
 {
 
 }

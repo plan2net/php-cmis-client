@@ -9,7 +9,12 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Data\RepositoryCapabilitiesInterface;
+use Dkd\PhpCmis\Data\AclCapabilitiesInterface;
+use Dkd\PhpCmis\Data\ExtensionFeatureInterface;
+use stdClass;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\DataObjects\RepositoryInfo;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\Enum\CmisVersion;
@@ -17,7 +22,7 @@ use Dkd\PhpCmis\Enum\CmisVersion;
 /**
  * Class RepositoryInfoTest
  */
-class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
+class RepositoryInfoTest extends PHPUnit_Framework_TestCase
 {
     const DO_NOT_TEST_INVALID_TYPE_VALUE = 'doNotTestInvalidType';
 
@@ -26,7 +31,7 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      */
     protected $repositoryInfo;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->repositoryInfo = new RepositoryInfo();
     }
@@ -104,13 +109,13 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
             // RepositoryCapabilitiesInterface properties
             [
                 'propertyName' => 'capabilities',
-                'validValue' => $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\RepositoryCapabilitiesInterface'),
+                'validValue' => $this->getMockForAbstractClass(RepositoryCapabilitiesInterface::class),
                 'invalidValue' => self::DO_NOT_TEST_INVALID_TYPE_VALUE
             ],
             // AclCapabilitiesInterface properties
             [
                 'propertyName' => 'aclCapabilities',
-                'validValue' => $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AclCapabilitiesInterface'),
+                'validValue' => $this->getMockForAbstractClass(AclCapabilitiesInterface::class),
                 'invalidValue' => self::DO_NOT_TEST_INVALID_TYPE_VALUE
             ],
             // CmisVersion properties
@@ -130,10 +135,10 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
                 'propertyName' => 'extensionFeatures',
                 'validValue' => [
                     $this->getMockForAbstractClass(
-                        '\\Dkd\\PhpCmis\\Data\\ExtensionFeatureInterface'
+                        ExtensionFeatureInterface::class
                     )
                 ],
-                'invalidValue' => [new \stdClass()]
+                'invalidValue' => [new stdClass()]
             ]
         ];
     }
@@ -143,9 +148,8 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider propertiesOfSutDataProvider
      * @param string $propertyName
-     * @param mixed $validValue
      */
-    public function testPropertySetterSetsProperty($propertyName, $validValue)
+    public function testPropertySetterSetsProperty($propertyName, mixed $validValue): void
     {
         $setterName = 'set' . ucfirst($propertyName);
         $this->repositoryInfo->$setterName($validValue);
@@ -157,17 +161,15 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider propertiesOfSutDataProvider
      * @param string $propertyName
-     * @param mixed $validValue
-     * @param mixed $invalidValue
      */
-    public function testPropertySetterCastsValueToExpectedType($propertyName, $validValue, $invalidValue)
+    public function testPropertySetterCastsValueToExpectedType($propertyName, mixed $validValue, mixed $invalidValue): void
     {
         if ($invalidValue !== self::DO_NOT_TEST_INVALID_TYPE_VALUE) {
             $setterName = 'set' . ucfirst($propertyName);
             $validType = gettype($validValue);
             if ($validType === 'object' || $validType === 'array') {
                 $this->setExpectedException(
-                    '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                    CmisInvalidArgumentException::class,
                     '',
                     1413440336
                 );
@@ -184,9 +186,8 @@ class RepositoryInfoTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider propertiesOfSutDataProvider
      * @param string $propertyName
-     * @param mixed $validValue
      */
-    public function testPropertyGetterReturnsPropertyValue($propertyName, $validValue)
+    public function testPropertyGetterReturnsPropertyValue($propertyName, mixed $validValue): void
     {
         $setterName = 'set' . ucfirst($propertyName);
         $getterName = 'get' . ucfirst($propertyName);

@@ -41,7 +41,6 @@ interface DataConverterInterface
     /**
      * Convert an acl object to a custom format
      *
-     * @param AclInterface $acl
      * @return mixed
      */
     public function convertFromAcl(AclInterface $acl);
@@ -49,7 +48,6 @@ interface DataConverterInterface
     /**
      * Convert an acl capabilities object to a custom format
      *
-     * @param AclCapabilitiesInterface $aclCapabilities
      * @return mixed
      */
     public function convertFromAclCapabilities(AclCapabilitiesInterface $aclCapabilities);
@@ -57,7 +55,6 @@ interface DataConverterInterface
     /**
      * Convert an allowable actions object to a custom format
      *
-     * @param AllowableActionsInterface $allowableActions
      * @return mixed
      */
     public function convertFromAllowableActions(AllowableActionsInterface $allowableActions);
@@ -65,7 +62,6 @@ interface DataConverterInterface
     /**
      * Convert a repository info object to a custom format
      *
-     * @param RepositoryInfoInterface $repositoryInfo
      * @return mixed
      */
     public function convertFromRepositoryInfo(RepositoryInfoInterface $repositoryInfo);
@@ -73,7 +69,6 @@ interface DataConverterInterface
     /**
      * Convert a repository capabilities object to a custom format
      *
-     * @param RepositoryCapabilitiesInterface $repositoryCapabilities
      * @return mixed
      */
     public function convertFromRepositoryCapabilities(RepositoryCapabilitiesInterface $repositoryCapabilities);
@@ -81,7 +76,6 @@ interface DataConverterInterface
     /**
      * Convert a rendition data object to a custom format
      *
-     * @param RenditionDataInterface $rendition
      * @return mixed
      */
     public function convertFromRenditionData(RenditionDataInterface $rendition);
@@ -89,7 +83,6 @@ interface DataConverterInterface
     /**
      * Convert a object data object to a custom format
      *
-     * @param ObjectDataInterface $objectData
      * @return mixed
      */
     public function convertFromObjectData(ObjectDataInterface $objectData);
@@ -97,7 +90,6 @@ interface DataConverterInterface
     /**
      * Convert a properties object to a custom format
      *
-     * @param PropertiesInterface $properties
      * @return mixed
      */
     public function convertFromProperties(PropertiesInterface $properties);
@@ -105,7 +97,6 @@ interface DataConverterInterface
     /**
      * Convert a property data object to a custom format
      *
-     * @param PropertyDataInterface $propertyData
      * @return mixed
      */
     public function convertFromPropertyData(PropertyDataInterface $propertyData);
@@ -113,7 +104,6 @@ interface DataConverterInterface
     /**
      * Convert a type definition object to a custom format
      *
-     * @param TypeDefinitionInterface $typeDefinition
      * @return mixed
      */
     public function convertFromTypeDefinition(TypeDefinitionInterface $typeDefinition);
@@ -121,7 +111,6 @@ interface DataConverterInterface
     /**
      * Convert a property definition object to a custom format
      *
-     * @param PropertyDefinitionInterface $propertyDefinition
      * @return mixed
      */
     public function convertFromPropertyDefinition(PropertyDefinitionInterface $propertyDefinition);
@@ -129,7 +118,6 @@ interface DataConverterInterface
     /**
      * Convert a type definition list object to a custom format
      *
-     * @param TypeDefinitionListInterface $typeDefinitionList
      * @return mixed
      */
     public function convertFromTypeDefinitionList(TypeDefinitionListInterface $typeDefinitionList);
@@ -137,7 +125,6 @@ interface DataConverterInterface
     /**
      * Convert a type definition container object to a custom format
      *
-     * @param TypeDefinitionContainerInterface $typeDefinitionContainer
      * @return mixed
      */
     public function convertFromTypeDefinitionContainer(TypeDefinitionContainerInterface $typeDefinitionContainer);
@@ -145,7 +132,6 @@ interface DataConverterInterface
     /**
      * Convert a object list object to a custom format
      *
-     * @param ObjectListInterface $list
      * @return mixed
      */
     public function convertFromObjectList(ObjectListInterface $list);
@@ -153,7 +139,6 @@ interface DataConverterInterface
     /**
      * Convert a object in folder data object to a custom format
      *
-     * @param ObjectInFolderDataInterface $objectInFolder
      * @return mixed
      */
     public function convertFromObjectInFolderData(ObjectInFolderDataInterface $objectInFolder);
@@ -161,7 +146,6 @@ interface DataConverterInterface
     /**
      * Convert a object in folder list object to a custom format
      *
-     * @param ObjectInFolderListInterface $objectInFolder
      * @return mixed
      */
     public function convertFromObjectInFolderList(ObjectInFolderListInterface $objectInFolder);
@@ -169,7 +153,6 @@ interface DataConverterInterface
     /**
      * Convert a object in folder container object to a custom format
      *
-     * @param ObjectInFolderContainerInterface $container
      * @return mixed
      */
     public function convertFromObjectInFolderContainer(ObjectInFolderContainerInterface $container);
@@ -177,7 +160,6 @@ interface DataConverterInterface
     /**
      * Convert a object in parent data object to a custom format
      *
-     * @param ObjectParentDataInterface $container
      * @return mixed
      */
     public function convertFromObjectParentData(ObjectParentDataInterface $container);
@@ -185,7 +167,6 @@ interface DataConverterInterface
     /**
      * Convert a extension feature object to a custom format
      *
-     * @param ExtensionFeatureInterface $extensionFeature
      * @return mixed
      */
     public function convertFromExtensionFeature(ExtensionFeatureInterface $extensionFeature);
@@ -340,7 +321,6 @@ interface DataConverterInterface
      * Convert given input data to an Extension object
      *
      * @param array|null $data
-     * @param array $cmisKeys
      * @return CmisExtensionElementInterface[]
      */
     public function convertExtension(array $data = null, array $cmisKeys = []);

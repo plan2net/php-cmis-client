@@ -169,8 +169,6 @@ interface OperationContextInterface
 
     /**
      * Sets which relationships should be returned.
-     *
-     * @param IncludeRelationships $include
      */
     public function setIncludeRelationships(IncludeRelationships $include);
 

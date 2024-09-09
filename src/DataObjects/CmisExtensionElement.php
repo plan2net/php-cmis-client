@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use InvalidArgumentException;
 use Dkd\PhpCmis\Data\CmisExtensionElementInterface;
 
 /**
@@ -24,48 +24,36 @@ class CmisExtensionElement implements CmisExtensionElementInterface
      */
     protected $name;
 
-    /**
-     * @var string
-     */
-    protected $namespace;
+    protected string $namespace;
 
-    /**
-     * @var string|null
-     */
-    protected $value;
-
-    /**
-     * @var array
-     */
-    protected $attributes = [];
+    protected ?string $value;
 
     /**
      * @var CmisExtensionElement[]
      */
-    protected $children = [];
+    protected array $children;
 
     /**
      * @param string $namespace
      * @param string $name
-     * @param array $attributes
      * @param string|null $value
      * @param CmisExtensionElement[] $children
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $namespace,
         $name,
-        array $attributes = [],
+        protected array $attributes = [],
         $value = null,
         array $children = []
     ) {
-        if ($value !== null && count($children) > 0) {
-            throw new \InvalidArgumentException('Value and children given! Only one of them is allowed.');
+        if ($value !== null && $children !== []) {
+            throw new InvalidArgumentException('Value and children given! Only one of them is allowed.');
         }
 
         $name = (string) $name;
         if ($name === '') {
-            throw new \InvalidArgumentException('Name must be given!');
+            throw new InvalidArgumentException('Name must be given!');
         }
 
         $this->name = $name;
@@ -77,7 +65,6 @@ class CmisExtensionElement implements CmisExtensionElementInterface
         // This could be done with AbstractExtensionData::checkType() which is currently not available here.
         // The checkType method could be moved to a trait but this would raise the required php version to 5.4.
         $this->children = $children;
-        $this->attributes = $attributes;
     }
 
     /**

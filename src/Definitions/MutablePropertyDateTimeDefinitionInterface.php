@@ -21,8 +21,6 @@ interface MutablePropertyDateTimeDefinitionInterface extends
 {
     /**
      * Sets which datetime resolution is supported by this property.
-     *
-     * @param DateTimeResolution $dateTimeResolution
      */
     public function setDateTimeResolution(DateTimeResolution $dateTimeResolution);
 }

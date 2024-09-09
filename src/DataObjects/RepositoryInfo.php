@@ -107,18 +107,12 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
      */
     protected $extensionFeatures = [];
 
-    /**
-     * @param AclCapabilitiesInterface $aclCapabilities
-     */
-    public function setAclCapabilities(AclCapabilitiesInterface $aclCapabilities)
+    public function setAclCapabilities(AclCapabilitiesInterface $aclCapabilities): void
     {
         $this->aclCapabilities = $aclCapabilities;
     }
 
-    /**
-     * @param RepositoryCapabilitiesInterface $capabilities
-     */
-    public function setCapabilities(RepositoryCapabilitiesInterface $capabilities)
+    public function setCapabilities(RepositoryCapabilitiesInterface $capabilities): void
     {
         $this->capabilities = $capabilities;
     }
@@ -126,15 +120,15 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param boolean $changesIncomplete
      */
-    public function setChangesIncomplete($changesIncomplete)
+    public function setChangesIncomplete($changesIncomplete): void
     {
         $this->changesIncomplete = $this->castValueToSimpleType('boolean', $changesIncomplete);
     }
 
     /**
-     * @param \Dkd\PhpCmis\Enum\BaseTypeId[] $changesOnType
+     * @param BaseTypeId[] $changesOnType
      */
-    public function setChangesOnType(array $changesOnType)
+    public function setChangesOnType(array $changesOnType): void
     {
         foreach ($changesOnType as $baseTypeId) {
             $this->checkType(BaseTypeId::class, $baseTypeId);
@@ -145,7 +139,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $this->castValueToSimpleType('string', $description);
     }
@@ -153,7 +147,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param ExtensionFeatureInterface[] $extensionFeatures
      */
-    public function setExtensionFeatures(array $extensionFeatures)
+    public function setExtensionFeatures(array $extensionFeatures): void
     {
         foreach ($extensionFeatures as $extensionFeature) {
             $this->checkType(ExtensionFeatureInterface::class, $extensionFeature);
@@ -164,7 +158,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $this->castValueToSimpleType('string', $id, true);
     }
@@ -172,7 +166,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $latestChangeLogToken
      */
-    public function setLatestChangeLogToken($latestChangeLogToken)
+    public function setLatestChangeLogToken($latestChangeLogToken): void
     {
         $this->latestChangeLogToken = $this->castValueToSimpleType('string', $latestChangeLogToken, true);
     }
@@ -180,7 +174,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $this->castValueToSimpleType('string', $name, true);
     }
@@ -188,7 +182,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $principalIdAnonymous
      */
-    public function setPrincipalIdAnonymous($principalIdAnonymous)
+    public function setPrincipalIdAnonymous($principalIdAnonymous): void
     {
         $this->principalIdAnonymous = $this->castValueToSimpleType('string', $principalIdAnonymous, true);
     }
@@ -196,7 +190,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $principalIdAnyone
      */
-    public function setPrincipalIdAnyone($principalIdAnyone)
+    public function setPrincipalIdAnyone($principalIdAnyone): void
     {
         $this->principalIdAnyone = $this->castValueToSimpleType('string', $principalIdAnyone, true);
     }
@@ -204,7 +198,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $productName
      */
-    public function setProductName($productName)
+    public function setProductName($productName): void
     {
         $this->productName = $this->castValueToSimpleType('string', $productName, true);
     }
@@ -212,7 +206,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $productVersion
      */
-    public function setProductVersion($productVersion)
+    public function setProductVersion($productVersion): void
     {
         $this->productVersion = $this->castValueToSimpleType('string', $productVersion, true);
     }
@@ -220,7 +214,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $rootFolderId
      */
-    public function setRootFolderId($rootFolderId)
+    public function setRootFolderId($rootFolderId): void
     {
         $this->rootFolderId = $this->castValueToSimpleType('string', $rootFolderId, true);
     }
@@ -228,7 +222,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $thinClientUri
      */
-    public function setThinClientUri($thinClientUri)
+    public function setThinClientUri($thinClientUri): void
     {
         $this->thinClientUri = $this->castValueToSimpleType('string', $thinClientUri, true);
     }
@@ -236,7 +230,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
     /**
      * @param string $vendorName
      */
-    public function setVendorName($vendorName)
+    public function setVendorName($vendorName): void
     {
         $this->vendorName = $this->castValueToSimpleType('string', $vendorName, true);
     }
@@ -366,7 +360,7 @@ class RepositoryInfo extends AbstractExtensionData implements RepositoryInfoInte
      *
      * @param CmisVersion|null $cmisVersion
      */
-    public function setCmisVersion(CmisVersion $cmisVersion = null)
+    public function setCmisVersion(CmisVersion $cmisVersion = null): void
     {
         $this->cmisVersion = CmisVersion::cast($cmisVersion);
     }

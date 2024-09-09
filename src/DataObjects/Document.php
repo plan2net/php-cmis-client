@@ -78,7 +78,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * If this is a PWC (private working copy) the check out will be reversed.
      */
-    public function cancelCheckOut()
+    public function cancelCheckOut(): void
     {
         $this->getBinding()->getVersioningService()->cancelCheckOut($this->getRepositoryId(), $this->getId());
 
@@ -205,7 +205,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
         array $addAces = [],
         array $removeAces = [],
         OperationContextInterface $context = null
-    ) {
+    ): ?DocumentInterface {
         try {
             $newObjectId = $this->getSession()->createDocumentFromSource(
                 $this,
@@ -216,7 +216,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
                 $addAces,
                 $removeAces
             );
-        } catch (CmisNotSupportedException $notSupportedException) {
+        } catch (CmisNotSupportedException) {
             $newObjectId = $this->copyViaClient(
                 $targetFolderId,
                 $properties,
@@ -228,10 +228,11 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
         }
 
         $document = $this->getNewlyCreatedObject($newObjectId, $context);
-
         if ($document === null) {
             return null;
-        } elseif (!$document instanceof DocumentInterface) {
+        }
+
+        if (!$document instanceof DocumentInterface) {
             throw new CmisRuntimeException('Newly created object is not a document! New id: ' . $document->getId());
         }
 
@@ -317,7 +318,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     /**
      * Deletes this document and all its versions.
      */
-    public function deleteAllVersions()
+    public function deleteAllVersions(): void
     {
         $this->delete(true);
     }
@@ -363,7 +364,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      * @param OperationContextInterface|null $context
      * @return DocumentInterface[]
      */
-    public function getAllVersions(OperationContextInterface $context = null)
+    public function getAllVersions(OperationContextInterface $context = null): array
     {
         $context = $this->ensureContext($context);
         $versions = $this->getBinding()->getVersioningService()->getAllVersions(
@@ -376,7 +377,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
 
         $objectFactory = $this->getSession()->getObjectFactory();
         $result = [];
-        if (count($versions)) {
+        if (count($versions) !== 0) {
             foreach ($versions as $objectData) {
                 $document = $objectFactory->convertObject($objectData, $context);
                 if (!($document instanceof DocumentInterface)) {
@@ -411,15 +412,13 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
     public function getContentUrl($streamId = null)
     {
         $objectService = $this->getBinding()->getObjectService();
-        if ($objectService instanceof LinkAccessInterface) {
-            if ($streamId === null) {
-                return $objectService->loadContentLink($this->getRepositoryId(), $this->getId());
-            } else {
-                return $objectService->loadRenditionContentLink($this->getRepositoryId(), $this->getId(), $streamId);
-            }
+        if (!$objectService instanceof LinkAccessInterface) {
+            return null;
         }
-
-        return null;
+        if ($streamId === null) {
+            return $objectService->loadContentLink($this->getRepositoryId(), $this->getId());
+        }
+        return $objectService->loadRenditionContentLink($this->getRepositoryId(), $this->getId(), $streamId);
     }
 
     /**
@@ -520,7 +519,7 @@ class Document extends AbstractFileableCmisObject implements DocumentInterface
      * @return ContentStreamHashInterface[]|null the list of content hashes or <code>null</code> if the property
      *      hasn't been requested, hasn't been provided by the repository, or the document has no content
      */
-    public function getContentStreamHashes()
+    public function getContentStreamHashes(): null
     {
         return null;
         // TODO: Implement getContentStreamHashes() method.

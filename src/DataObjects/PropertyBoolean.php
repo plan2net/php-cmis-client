@@ -22,7 +22,7 @@ class PropertyBoolean extends AbstractPropertyData implements MutablePropertyBoo
      *
      * @param boolean[] $values
      */
-    public function setValues(array $values)
+    public function setValues(array $values): void
     {
         foreach ($values as $value) {
             $this->checkType('boolean', $value, true);

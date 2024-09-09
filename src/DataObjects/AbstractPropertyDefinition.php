@@ -120,7 +120,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param string $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $this->castValueToSimpleType('string', $id, true);
     }
@@ -136,7 +136,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param string $localName
      */
-    public function setLocalName($localName)
+    public function setLocalName($localName): void
     {
         $this->localName = $this->castValueToSimpleType('string', $localName, true);
     }
@@ -152,7 +152,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param string $localNamespace
      */
-    public function setLocalNamespace($localNamespace)
+    public function setLocalNamespace($localNamespace): void
     {
         $this->localNamespace = $this->castValueToSimpleType('string', $localNamespace, true);
     }
@@ -168,7 +168,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param string $queryName
      */
-    public function setQueryName($queryName)
+    public function setQueryName($queryName): void
     {
         $this->queryName = $this->castValueToSimpleType('string', $queryName, true);
     }
@@ -184,7 +184,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param string $displayName
      */
-    public function setDisplayName($displayName)
+    public function setDisplayName($displayName): void
     {
         $this->displayName = $this->castValueToSimpleType('string', $displayName, true);
     }
@@ -200,7 +200,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $this->castValueToSimpleType('string', $description, true);
     }
@@ -213,10 +213,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
         return $this->propertyType;
     }
 
-    /**
-     * @param PropertyType $propertyType
-     */
-    public function setPropertyType(PropertyType $propertyType)
+    public function setPropertyType(PropertyType $propertyType): void
     {
         $this->propertyType = $propertyType;
     }
@@ -229,10 +226,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
         return $this->cardinality;
     }
 
-    /**
-     * @param Cardinality $cardinality
-     */
-    public function setCardinality(Cardinality $cardinality)
+    public function setCardinality(Cardinality $cardinality): void
     {
         $this->cardinality = $cardinality;
     }
@@ -254,7 +248,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
      *
      * @param ChoiceInterface[] $choices
      */
-    public function setChoice(array $choices)
+    public function setChoice(array $choices): void
     {
         $this->choices = $choices;
     }
@@ -270,7 +264,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param ChoiceInterface[] $choices
      */
-    public function setChoices(array $choices)
+    public function setChoices(array $choices): void
     {
         $this->choices = $choices;
     }
@@ -283,10 +277,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
         return $this->defaultValue;
     }
 
-    /**
-     * @param array $defaultValue
-     */
-    public function setDefaultValue(array $defaultValue)
+    public function setDefaultValue(array $defaultValue): void
     {
         $this->defaultValue = $defaultValue;
     }
@@ -299,10 +290,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
         return $this->updatability;
     }
 
-    /**
-     * @param Updatability $updatability
-     */
-    public function setUpdatability(Updatability $updatability)
+    public function setUpdatability(Updatability $updatability): void
     {
         $this->updatability = $updatability;
     }
@@ -318,7 +306,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param boolean $isInherited
      */
-    public function setIsInherited($isInherited)
+    public function setIsInherited($isInherited): void
     {
         $this->isInherited = $this->castValueToSimpleType('boolean', $isInherited);
     }
@@ -334,7 +322,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param boolean $isQueryable
      */
-    public function setIsQueryable($isQueryable)
+    public function setIsQueryable($isQueryable): void
     {
         $this->isQueryable = $this->castValueToSimpleType('boolean', $isQueryable);
     }
@@ -350,7 +338,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param boolean $isOrderable
      */
-    public function setIsOrderable($isOrderable)
+    public function setIsOrderable($isOrderable): void
     {
         $this->isOrderable = $this->castValueToSimpleType('boolean', $isOrderable);
     }
@@ -366,7 +354,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param boolean $isRequired
      */
-    public function setIsRequired($isRequired)
+    public function setIsRequired($isRequired): void
     {
         $this->isRequired = $this->castValueToSimpleType('boolean', $isRequired);
     }
@@ -382,7 +370,7 @@ abstract class AbstractPropertyDefinition extends AbstractExtensionData implemen
     /**
      * @param boolean $isOpenChoice
      */
-    public function setIsOpenChoice($isOpenChoice)
+    public function setIsOpenChoice($isOpenChoice): void
     {
         $this->isOpenChoice = $this->castValueToSimpleType('boolean', $isOpenChoice);
     }

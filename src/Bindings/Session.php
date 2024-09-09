@@ -15,10 +15,7 @@ namespace Dkd\PhpCmis\Bindings;
  */
 class Session implements BindingSessionInterface
 {
-    /**
-     * @var string
-     */
-    protected $sessionId;
+    protected string $sessionId;
 
     /**
      * @var array
@@ -48,7 +45,7 @@ class Session implements BindingSessionInterface
      *
      * @return string[]
      */
-    public function getKeys()
+    public function getKeys(): array
     {
         return array_keys($this->data);
     }
@@ -71,7 +68,7 @@ class Session implements BindingSessionInterface
      * @param string $key
      * @param mixed $value
      */
-    public function put($key, $value)
+    public function put($key, $value): void
     {
         $this->data[$key] = $value;
     }
@@ -81,7 +78,7 @@ class Session implements BindingSessionInterface
      *
      * @param string $key
      */
-    public function remove($key)
+    public function remove($key): void
     {
         unset($this->data[$key]);
     }

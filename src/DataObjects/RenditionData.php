@@ -68,7 +68,7 @@ class RenditionData extends AbstractExtensionData implements RenditionDataInterf
     /**
      * @param integer $height
      */
-    public function setHeight($height)
+    public function setHeight($height): void
     {
         $this->height = (integer) $height;
     }
@@ -84,7 +84,7 @@ class RenditionData extends AbstractExtensionData implements RenditionDataInterf
     /**
      * @param string $kind
      */
-    public function setKind($kind)
+    public function setKind($kind): void
     {
         $this->kind = (string) $kind;
     }
@@ -100,7 +100,7 @@ class RenditionData extends AbstractExtensionData implements RenditionDataInterf
     /**
      * @param integer $length
      */
-    public function setLength($length)
+    public function setLength($length): void
     {
         $this->length = (integer) $length;
     }
@@ -116,7 +116,7 @@ class RenditionData extends AbstractExtensionData implements RenditionDataInterf
     /**
      * @param string $mimeType
      */
-    public function setMimeType($mimeType)
+    public function setMimeType($mimeType): void
     {
         $this->mimeType = (string) $mimeType;
     }
@@ -132,7 +132,7 @@ class RenditionData extends AbstractExtensionData implements RenditionDataInterf
     /**
      * @param string $renditionDocumentId
      */
-    public function setRenditionDocumentId($renditionDocumentId)
+    public function setRenditionDocumentId($renditionDocumentId): void
     {
         $this->renditionDocumentId = (string) $renditionDocumentId;
     }
@@ -148,7 +148,7 @@ class RenditionData extends AbstractExtensionData implements RenditionDataInterf
     /**
      * @param string $streamId
      */
-    public function setStreamId($streamId)
+    public function setStreamId($streamId): void
     {
         $this->streamId = (string) $streamId;
     }
@@ -164,7 +164,7 @@ class RenditionData extends AbstractExtensionData implements RenditionDataInterf
     /**
      * @param string $title
      */
-    public function setTitle($title)
+    public function setTitle($title): void
     {
         $this->title = (string) $title;
     }
@@ -180,7 +180,7 @@ class RenditionData extends AbstractExtensionData implements RenditionDataInterf
     /**
      * @param integer $width
      */
-    public function setWidth($width)
+    public function setWidth($width): void
     {
         $this->width = (integer) $width;
     }

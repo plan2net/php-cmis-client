@@ -9,7 +9,11 @@ namespace Dkd\PhpCmis\Test\Unit;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Data\DocumentInterface;
+use GuzzleHttp\Stream\StreamInterface;
+use Dkd\PhpCmis\Bindings\Browser\ObjectService;
+use Dkd\PhpCmis\Bindings\CmisBindingInterface;
 use Dkd\PhpCmis\Data\RepositoryInfoInterface;
 use Dkd\PhpCmis\DataObjects\ObjectId;
 use Dkd\PhpCmis\DataObjects\Rendition;
@@ -19,7 +23,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 /**
  * Class RenditionTest
  */
-class RenditionTest extends \PHPUnit_Framework_TestCase
+class RenditionTest extends PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
 
@@ -28,25 +32,25 @@ class RenditionTest extends \PHPUnit_Framework_TestCase
      */
     protected $sessionMock;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
+        $this->sessionMock = $this->getMockBuilder(SessionInterface::class)->getMockForAbstractClass();
     }
 
-    public function testConstructorSetsSessionFromGivenSessionParameter()
+    public function testConstructorSetsSessionFromGivenSessionParameter(): void
     {
         $rendition = new Rendition($this->sessionMock, 'objectId');
         $this->assertAttributeSame($this->sessionMock, 'session', $rendition);
     }
 
-    public function testConstructorSetsObjectIdFromGivenObjectId()
+    public function testConstructorSetsObjectIdFromGivenObjectId(): void
     {
         $objectId = 'fooObjectId';
         $rendition = new Rendition($this->sessionMock, $objectId);
         $this->assertAttributeSame($objectId, 'objectId', $rendition);
     }
 
-    public function testGetHeightReturnsHeight()
+    public function testGetHeightReturnsHeight(): void
     {
         $height = 123;
         $rendition = new Rendition($this->sessionMock, 'objectId');
@@ -54,13 +58,13 @@ class RenditionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($height, $rendition->getHeight());
     }
 
-    public function testGetHeightReturnsMinus1IfNoAvailable()
+    public function testGetHeightReturnsMinus1IfNoAvailable(): void
     {
         $rendition = new Rendition($this->sessionMock, 'objectId');
         $this->assertSame(-1, $rendition->getHeight());
     }
 
-    public function testGetLengthReturnsLength()
+    public function testGetLengthReturnsLength(): void
     {
         $length = 124;
         $rendition = new Rendition($this->sessionMock, 'objectId');
@@ -68,13 +72,13 @@ class RenditionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($length, $rendition->getLength());
     }
 
-    public function testGetLengthReturnsMinus1IfNoAvailable()
+    public function testGetLengthReturnsMinus1IfNoAvailable(): void
     {
         $rendition = new Rendition($this->sessionMock, 'objectId');
         $this->assertSame(-1, $rendition->getLength());
     }
 
-    public function testGetWidthReturnsWidth()
+    public function testGetWidthReturnsWidth(): void
     {
         $width = 125;
         $rendition = new Rendition($this->sessionMock, 'objectId');
@@ -82,16 +86,16 @@ class RenditionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($width, $rendition->getWidth());
     }
 
-    public function testGetWidthReturnsMinus1IfNoAvailable()
+    public function testGetWidthReturnsMinus1IfNoAvailable(): void
     {
         $rendition = new Rendition($this->sessionMock, 'objectId');
         $this->assertSame(-1, $rendition->getWidth());
     }
 
-    public function testGetRenditionDocumentReturnsDocument()
+    public function testGetRenditionDocumentReturnsDocument(): void
     {
         $renditionDocumentId = 'foo';
-        $documentMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Data\\DocumentInterface')->getMockForAbstractClass();
+        $documentMock = $this->getMockBuilder(DocumentInterface::class)->getMockForAbstractClass();
 
         $this->sessionMock->expects($this->once())->method('createObjectId')->with(
             $renditionDocumentId
@@ -107,21 +111,21 @@ class RenditionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($documentMock, $rendition->getRenditionDocument());
     }
 
-    public function testGetContentStreamReturnsStream()
+    public function testGetContentStreamReturnsStream(): void
     {
         $streamId = 'bar';
         $objectId = 'foo';
 
         /** @var  RepositoryInfoInterface|PHPUnit_Framework_MockObject_MockObject $repositoryInfoMock */
         $repositoryInfoMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Data\\RepositoryInfoInterface'
+            RepositoryInfoInterface::class
         )->setMethods(['getId'])->getMockForAbstractClass();
         $repositoryInfoMock->expects($this->any())->method('getId')->willReturn('repositoryId');
 
-        $streamMock = $this->getMockBuilder('\\GuzzleHttp\\Stream\\StreamInterface')->getMockForAbstractClass();
+        $streamMock = $this->getMockBuilder(StreamInterface::class)->getMockForAbstractClass();
 
         $objectServiceMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\Browser\\ObjectService'
+            ObjectService::class
         )->setMethods(['getContentStream'])->disableOriginalConstructor()->getMockForAbstractClass();
 
         $objectServiceMock->expects($this->once())->method('getContentStream')->with(
@@ -131,7 +135,7 @@ class RenditionTest extends \PHPUnit_Framework_TestCase
         )->willReturn($streamMock);
 
         $bindingMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\CmisBindingInterface'
+            CmisBindingInterface::class
         )->setMethods(['getObjectService'])->disableOriginalConstructor()->getMockForAbstractClass();
 
         $bindingMock->expects($this->once())->method('getObjectService')->willReturn($objectServiceMock);

@@ -26,7 +26,7 @@ trait TypeHelperTrait
      * @return boolean returns <code>true</code> if the given value is instance of expected type
      * @throws CmisInvalidArgumentException Exception is thrown if the given value does not match to the expected type
      */
-    protected function checkType($expectedType, $value, $nullAllowed = false)
+    protected function checkType($expectedType, mixed $value, $nullAllowed = false): bool
     {
         $invalidType = null;
         $valueType = gettype($value);
@@ -34,13 +34,13 @@ trait TypeHelperTrait
 
         if ($valueType === 'object') {
             if (!is_a($value, $expectedType)) {
-                $invalidType = get_class($value);
+                $invalidType = $value::class;
             }
         } elseif ($expectedType !== $valueType) {
             $invalidType = $valueType;
         }
 
-        if ($invalidType !== null && ($nullAllowed === false || ($nullAllowed === true && $value !== null))) {
+        if ($invalidType !== null && ($nullAllowed === false || ($nullAllowed && $value !== null))) {
             throw new CmisInvalidArgumentException(
                 sprintf(
                     'Argument of type "%s" given but argument of type "%s" was expected.',
@@ -63,14 +63,13 @@ trait TypeHelperTrait
      * @param boolean $nullIsValidValue defines if <code>null</code> is also a valid value
      * @return mixed
      */
-    protected function castValueToSimpleType($expectedType, $value, $nullIsValidValue = false)
+    protected function castValueToSimpleType($expectedType, mixed $value, $nullIsValidValue = false)
     {
         try {
             $this->checkType($expectedType, $value, $nullIsValidValue);
-        } catch (CmisInvalidArgumentException $exception) {
-            if (PHP_INT_SIZE == 4 && $expectedType == 'integer' && is_double($value)) {
-                //TODO: 32bit - handle this specially?
-                settype($value, $expectedType);
+        } catch (CmisInvalidArgumentException) {
+            if (PHP_INT_SIZE == 4 && $expectedType == 'integer' && is_float($value)) {
+                $value = (int) $value;
             } else {
                 trigger_error(
                     sprintf(

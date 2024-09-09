@@ -21,7 +21,6 @@ interface PropertyInterface extends PropertyDataInterface
     /**
      * Initialize the property with its definition and values
      *
-     * @param PropertyDefinitionInterface $propertyDefinition
      * @param mixed[] $values
      */
     public function __construct(PropertyDefinitionInterface $propertyDefinition, array $values);

@@ -131,7 +131,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param string $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $this->castValueToSimpleType('string', $id);
     }
@@ -149,7 +149,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param string $localName
      */
-    public function setLocalName($localName)
+    public function setLocalName($localName): void
     {
         $this->localName = $this->castValueToSimpleType('string', $localName);
     }
@@ -167,7 +167,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param string $localNamespace
      */
-    public function setLocalNamespace($localNamespace)
+    public function setLocalNamespace($localNamespace): void
     {
         $this->localNamespace = $this->castValueToSimpleType('string', $localNamespace, true);
     }
@@ -185,7 +185,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param string $queryName
      */
-    public function setQueryName($queryName)
+    public function setQueryName($queryName): void
     {
         $this->queryName = $this->castValueToSimpleType('string', $queryName);
     }
@@ -203,7 +203,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param string $displayName
      */
-    public function setDisplayName($displayName)
+    public function setDisplayName($displayName): void
     {
         $this->displayName = $this->castValueToSimpleType('string', $displayName);
     }
@@ -221,7 +221,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $this->castValueToSimpleType('string', $description);
     }
@@ -236,10 +236,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
         return $this->baseTypeId;
     }
 
-    /**
-     * @param BaseTypeId $baseTypeId
-     */
-    public function setBaseTypeId(BaseTypeId $baseTypeId)
+    public function setBaseTypeId(BaseTypeId $baseTypeId): void
     {
         $this->baseTypeId = $baseTypeId;
     }
@@ -257,7 +254,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param string $parentTypeId
      */
-    public function setParentTypeId($parentTypeId)
+    public function setParentTypeId($parentTypeId): void
     {
         $this->parentTypeId = $this->castValueToSimpleType('string', $parentTypeId, true);
     }
@@ -275,7 +272,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param boolean $isCreatable
      */
-    public function setIsCreatable($isCreatable)
+    public function setIsCreatable($isCreatable): void
     {
         $this->isCreatable = $this->castValueToSimpleType('boolean', $isCreatable, true);
     }
@@ -293,7 +290,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param boolean $isFileable
      */
-    public function setIsFileable($isFileable)
+    public function setIsFileable($isFileable): void
     {
         $this->isFileable = $this->castValueToSimpleType('boolean', $isFileable, true);
     }
@@ -311,7 +308,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param boolean $isQueryable
      */
-    public function setIsQueryable($isQueryable)
+    public function setIsQueryable($isQueryable): void
     {
         $this->isQueryable = $this->castValueToSimpleType('boolean', $isQueryable, true);
     }
@@ -329,7 +326,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param boolean $isIncludedInSupertypeQuery
      */
-    public function setIsIncludedInSupertypeQuery($isIncludedInSupertypeQuery)
+    public function setIsIncludedInSupertypeQuery($isIncludedInSupertypeQuery): void
     {
         $this->isIncludedInSupertypeQuery = $this->castValueToSimpleType('boolean', $isIncludedInSupertypeQuery, true);
     }
@@ -349,7 +346,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
      *
      * @param boolean $isFulltextIndexed
      */
-    public function setIsFulltextIndexed($isFulltextIndexed)
+    public function setIsFulltextIndexed($isFulltextIndexed): void
     {
         $this->isFulltextIndexed = $this->castValueToSimpleType('boolean', $isFulltextIndexed, true);
     }
@@ -365,7 +362,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param boolean $isControllableAcl
      */
-    public function setIsControllableAcl($isControllableAcl)
+    public function setIsControllableAcl($isControllableAcl): void
     {
         $this->isControllableAcl = $this->castValueToSimpleType('boolean', $isControllableAcl, true);
     }
@@ -381,7 +378,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param boolean $isControllablePolicy
      */
-    public function setIsControllablePolicy($isControllablePolicy)
+    public function setIsControllablePolicy($isControllablePolicy): void
     {
         $this->isControllablePolicy = $this->castValueToSimpleType('boolean', $isControllablePolicy, true);
     }
@@ -394,7 +391,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
      */
     public function getPropertyDefinition($id)
     {
-        return (isset($this->propertyDefinitions[$id]) ? $this->propertyDefinitions[$id] : null);
+        return ($this->propertyDefinitions[$id] ?? null);
     }
 
     /**
@@ -410,17 +407,14 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
     /**
      * @param PropertyDefinitionInterface[] $propertyDefinitions
      */
-    public function setPropertyDefinitions(array $propertyDefinitions)
+    public function setPropertyDefinitions(array $propertyDefinitions): void
     {
         foreach ($propertyDefinitions as $propertyDefinition) {
             $this->addPropertyDefinition($propertyDefinition);
         }
     }
 
-    /**
-     * @param PropertyDefinitionInterface $propertyDefinition
-     */
-    public function addPropertyDefinition(PropertyDefinitionInterface $propertyDefinition)
+    public function addPropertyDefinition(PropertyDefinitionInterface $propertyDefinition): void
     {
         $this->propertyDefinitions[$propertyDefinition->getId()] = $propertyDefinition;
     }
@@ -435,10 +429,7 @@ abstract class AbstractTypeDefinition extends AbstractExtensionData implements T
         return $this->typeMutability;
     }
 
-    /**
-     * @param TypeMutabilityInterface $typeMutability
-     */
-    public function setTypeMutability(TypeMutabilityInterface $typeMutability)
+    public function setTypeMutability(TypeMutabilityInterface $typeMutability): void
     {
         $this->typeMutability = $typeMutability;
     }

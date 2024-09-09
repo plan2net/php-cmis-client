@@ -9,25 +9,25 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition;
 
 /**
  * Class RelationshipTypeDefinitionTest
  */
-class RelationshipTypeDefinitionTest extends \PHPUnit_Framework_TestCase
+class RelationshipTypeDefinitionTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var RelationshipTypeDefinition
      */
     protected $relationshipTypeDefinition;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->relationshipTypeDefinition = new RelationshipTypeDefinition('typeId');
     }
 
-    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinition()
+    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinition(): void
     {
         $dummyTypeDefinition = new RelationshipTypeDefinition('typeId');
         $dummyTypeDefinition->setAllowedTargetTypeIds(['foo']);
@@ -39,13 +39,13 @@ class RelationshipTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($dummyTypeDefinition, $this->relationshipTypeDefinition);
     }
 
-    public function testDefaultValuesAreEmpty()
+    public function testDefaultValuesAreEmpty(): void
     {
         $this->assertAttributeSame([], 'allowedTargetTypeIds', $this->relationshipTypeDefinition);
         $this->assertAttributeSame([], 'allowedTargetTypeIds', $this->relationshipTypeDefinition);
     }
 
-    public function testSetAllowedTargetTypeIdsSetsProperty()
+    public function testSetAllowedTargetTypeIdsSetsProperty(): void
     {
         $this->relationshipTypeDefinition->setAllowedTargetTypeIds(['foo']);
         $this->assertAttributeSame(['foo'], 'allowedTargetTypeIds', $this->relationshipTypeDefinition);
@@ -54,13 +54,13 @@ class RelationshipTypeDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetAllowedTargetTypeIdsSetsProperty
      */
-    public function testGetAllowedTargetTypeIdsGetsProperty()
+    public function testGetAllowedTargetTypeIdsGetsProperty(): void
     {
         $this->relationshipTypeDefinition->setAllowedTargetTypeIds(['foo']);
         $this->assertSame(['foo'], $this->relationshipTypeDefinition->getAllowedTargetTypeIds());
     }
 
-    public function testSetAllowedSourceTypeIdsSetsProperty()
+    public function testSetAllowedSourceTypeIdsSetsProperty(): void
     {
         $this->relationshipTypeDefinition->setAllowedSourceTypeIds(['foo']);
         $this->assertAttributeSame(['foo'], 'allowedSourceTypeIds', $this->relationshipTypeDefinition);
@@ -69,7 +69,7 @@ class RelationshipTypeDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetAllowedSourceTypeIdsSetsProperty
      */
-    public function testGetAllowedSourceTypeIdsGetsProperty()
+    public function testGetAllowedSourceTypeIdsGetsProperty(): void
     {
         $this->relationshipTypeDefinition->setAllowedSourceTypeIds(['foo']);
         $this->assertSame(['foo'], $this->relationshipTypeDefinition->getAllowedSourceTypeIds());

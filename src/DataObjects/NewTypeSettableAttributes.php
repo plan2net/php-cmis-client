@@ -95,7 +95,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetControllableAcl
      */
-    public function setCanSetControllableAcl($canSetControllableAcl)
+    public function setCanSetControllableAcl($canSetControllableAcl): void
     {
         $this->canSetControllableAcl = $this->castValueToSimpleType('boolean', $canSetControllableAcl);
     }
@@ -113,7 +113,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetControllablePolicy
      */
-    public function setCanSetControllablePolicy($canSetControllablePolicy)
+    public function setCanSetControllablePolicy($canSetControllablePolicy): void
     {
         $this->canSetControllablePolicy = $this->castValueToSimpleType('boolean', $canSetControllablePolicy);
     }
@@ -131,7 +131,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetCreatable
      */
-    public function setCanSetCreatable($canSetCreatable)
+    public function setCanSetCreatable($canSetCreatable): void
     {
         $this->canSetCreatable = $this->castValueToSimpleType('boolean', $canSetCreatable);
     }
@@ -149,7 +149,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetDescription
      */
-    public function setCanSetDescription($canSetDescription)
+    public function setCanSetDescription($canSetDescription): void
     {
         $this->canSetDescription = $this->castValueToSimpleType('boolean', $canSetDescription);
     }
@@ -167,7 +167,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetDisplayName
      */
-    public function setCanSetDisplayName($canSetDisplayName)
+    public function setCanSetDisplayName($canSetDisplayName): void
     {
         $this->canSetDisplayName = $this->castValueToSimpleType('boolean', $canSetDisplayName);
     }
@@ -185,7 +185,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetFileable
      */
-    public function setCanSetFileable($canSetFileable)
+    public function setCanSetFileable($canSetFileable): void
     {
         $this->canSetFileable = $this->castValueToSimpleType('boolean', $canSetFileable);
     }
@@ -203,7 +203,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetFulltextIndexed
      */
-    public function setCanSetFulltextIndexed($canSetFulltextIndexed)
+    public function setCanSetFulltextIndexed($canSetFulltextIndexed): void
     {
         $this->canSetFulltextIndexed = $this->castValueToSimpleType('boolean', $canSetFulltextIndexed);
     }
@@ -221,7 +221,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetId
      */
-    public function setCanSetId($canSetId)
+    public function setCanSetId($canSetId): void
     {
         $this->canSetId = $this->castValueToSimpleType('boolean', $canSetId);
     }
@@ -239,7 +239,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetIncludedInSupertypeQuery
      */
-    public function setCanSetIncludedInSupertypeQuery($canSetIncludedInSupertypeQuery)
+    public function setCanSetIncludedInSupertypeQuery($canSetIncludedInSupertypeQuery): void
     {
         $this->canSetIncludedInSupertypeQuery = $this->castValueToSimpleType(
             'boolean',
@@ -260,7 +260,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetLocalName
      */
-    public function setCanSetLocalName($canSetLocalName)
+    public function setCanSetLocalName($canSetLocalName): void
     {
         $this->canSetLocalName = $this->castValueToSimpleType('boolean', $canSetLocalName);
     }
@@ -278,7 +278,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetLocalNamespace
      */
-    public function setCanSetLocalNamespace($canSetLocalNamespace)
+    public function setCanSetLocalNamespace($canSetLocalNamespace): void
     {
         $this->canSetLocalNamespace = $this->castValueToSimpleType('boolean', $canSetLocalNamespace);
     }
@@ -296,7 +296,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetQueryable
      */
-    public function setCanSetQueryable($canSetQueryable)
+    public function setCanSetQueryable($canSetQueryable): void
     {
         $this->canSetQueryable = $this->castValueToSimpleType('boolean', $canSetQueryable);
     }
@@ -314,7 +314,7 @@ class NewTypeSettableAttributes extends AbstractExtensionData implements NewType
     /**
      * @param boolean $canSetQueryName
      */
-    public function setCanSetQueryName($canSetQueryName)
+    public function setCanSetQueryName($canSetQueryName): void
     {
         $this->canSetQueryName = $this->castValueToSimpleType('boolean', $canSetQueryName);
     }

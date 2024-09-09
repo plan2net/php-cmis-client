@@ -1,6 +1,8 @@
 <?php
 namespace Dkd\PhpCmis\Definitions;
 
+use DateTime;
+
 /*
  * This file is part of php-cmis-client.
  *
@@ -9,7 +11,6 @@ namespace Dkd\PhpCmis\Definitions;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 /**
  * Choice value interface.
  */
@@ -42,14 +43,14 @@ interface ChoiceInterface
     /**
      * Return the value of the choice value.
      *
-     * @return ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|\DateTime[]
+     * @return ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|DateTime[]
      */
     public function getValue();
 
     /**
      * Sets the value of the choice value.
      *
-     * @param ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|\DateTime[] $value
+     * @param ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|DateTime[] $value
      */
     public function setValue(array $value);
 }

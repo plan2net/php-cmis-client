@@ -47,7 +47,7 @@ class AccessControlList extends AbstractExtensionData implements MutableAclInter
     /**
      * @param AceInterface[] $aces
      */
-    public function setAces(array $aces)
+    public function setAces(array $aces): void
     {
         foreach ($aces as $ace) {
             $this->checkType(AceInterface::class, $ace);
@@ -67,7 +67,7 @@ class AccessControlList extends AbstractExtensionData implements MutableAclInter
     /**
      * @param boolean $isExact
      */
-    public function setIsExact($isExact)
+    public function setIsExact($isExact): void
     {
         $this->isExact = $this->castValueToSimpleType('boolean', $isExact);
     }

@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\Bindings\CmisBindingInterface;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\AceInterface;
@@ -114,9 +114,6 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Initialize the CMIS Object
      *
-     * @param SessionInterface $session
-     * @param ObjectTypeInterface $objectType
-     * @param OperationContextInterface $context
      * @param ObjectDataInterface|null $objectData
      */
     public function initialize(
@@ -124,7 +121,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
         ObjectTypeInterface $objectType,
         OperationContextInterface $context,
         ObjectDataInterface $objectData = null
-    ) {
+    ): void {
         if (count($this->getMissingBaseProperties($objectType->getPropertyDefinitions())) !== 0) {
             throw new CmisInvalidArgumentException(
                 sprintf(
@@ -141,17 +138,15 @@ abstract class AbstractCmisObject implements CmisObjectInterface
         $this->creationContext = clone $context;
         $this->refreshTimestamp = (integer) round(microtime(true) * 1000);
 
-        if ($objectData !== null) {
+        if ($objectData instanceof ObjectDataInterface) {
             $this->initializeObjectData($objectData);
         }
     }
 
     /**
      * Handle initialization for objectData
-     *
-     * @param ObjectDataInterface $objectData
      */
-    private function initializeObjectData(ObjectDataInterface $objectData)
+    private function initializeObjectData(ObjectDataInterface $objectData): void
     {
         // handle properties
         if ($objectData->getProperties() !== null) {
@@ -194,15 +189,13 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             }
         }
 
-        $this->extensions[(string) ExtensionLevel::OBJECT] = $objectData->getExtensions();
+        $this->extensions[ExtensionLevel::OBJECT] = $objectData->getExtensions();
     }
 
     /**
      * Handle initialization of properties from the object data
-     *
-     * @param PropertiesInterface $properties
      */
-    private function initializeObjectDataProperties(PropertiesInterface $properties)
+    private function initializeObjectDataProperties(PropertiesInterface $properties): void
     {
         // get secondary types
         $propertyList = $properties->getProperties();
@@ -229,10 +222,8 @@ abstract class AbstractCmisObject implements CmisObjectInterface
 
     /**
      * Handle initialization of policies from the object data
-     *
-     * @param PolicyIdListInterface $policies
      */
-    private function initializeObjectDataPolicies(PolicyIdListInterface $policies)
+    private function initializeObjectDataPolicies(PolicyIdListInterface $policies): void
     {
         foreach ($policies->getPolicyIds() as $policyId) {
             $policy = $this->getSession()->getObject($this->getSession()->createObjectId($policyId));
@@ -241,7 +232,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             }
         }
 
-        $this->extensions[(string) ExtensionLevel::POLICIES] = $policies->getExtensions();
+        $this->extensions[ExtensionLevel::POLICIES] = $policies->getExtensions();
     }
 
 
@@ -351,7 +342,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      *
      * @param boolean $allVersions indicates if all versions of the object should be deleted
      */
-    public function delete($allVersions = true)
+    public function delete($allVersions = true): void
     {
         $this->getSession()->delete($this, $allVersions);
     }
@@ -368,7 +359,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      */
     public function updateProperties(array $properties, $refresh = true)
     {
-        if (empty($properties)) {
+        if ($properties === []) {
             throw new CmisInvalidArgumentException('Properties must not be empty!');
         }
 
@@ -377,7 +368,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
 
         $updatability = [];
         $updatability[] = Updatability::cast(Updatability::READWRITE);
-        if ((boolean) $this->getPropertyValue(PropertyIds::IS_VERSION_SERIES_CHECKED_OUT) === true) {
+        if ((boolean) $this->getPropertyValue(PropertyIds::IS_VERSION_SERIES_CHECKED_OUT)) {
             $updatability[] = Updatability::cast(Updatability::WHENCHECKEDOUT);
         }
 
@@ -432,9 +423,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             PropertyIds::NAME => $newName,
         ];
 
-        $object = $this->updateProperties($properties, $refresh);
-
-        return $object;
+        return $this->updateProperties($properties, $refresh);
     }
 
     /**
@@ -505,7 +494,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the timestamp when this CMIS object has been created (CMIS property cmis:creationDate).
      *
-     * @return \DateTime|null the creation time of the object or <code>null</code> if the property hasn't been
+     * @return DateTime|null the creation time of the object or <code>null</code> if the property hasn't been
      *         requested or hasn't been provided by the repository
      */
     public function getCreationDate()
@@ -526,7 +515,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Returns the timestamp when this CMIS object has been modified (CMIS property cmis:lastModificationDate).
      *
-     * @return \DateTime|null the last modification date of the object or <code>null</code> if the property hasn't been
+     * @return DateTime|null the last modification date of the object or <code>null</code> if the property hasn't been
      *         requested or hasn't been provided by the repository
      */
     public function getLastModificationDate()
@@ -645,7 +634,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
             }
         }
 
-        return empty($result) ? null : $result;
+        return $result === [] ? null : $result;
     }
 
     /**
@@ -661,7 +650,6 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Checks if the given action is an allowed action for the object
      *
-     * @param Action $action
      * @return boolean
      */
     public function hasAllowableAction(Action $action)
@@ -689,7 +677,6 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      *
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
-     * @param AclPropagation $aclPropagation
      * @return AclInterface the new ACL of this object
      */
     public function applyAcl(array $addAces, array $removeAces, AclPropagation $aclPropagation)
@@ -705,7 +692,6 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      * Adds ACEs to the object and refreshes this object afterwards.
      *
      * @param AceInterface[] $addAces
-     * @param AclPropagation $aclPropagation
      * @return AclInterface the new ACL of this object
      */
     public function addAcl(array $addAces, AclPropagation $aclPropagation)
@@ -716,8 +702,6 @@ abstract class AbstractCmisObject implements CmisObjectInterface
     /**
      * Removes ACEs to the object and refreshes this object afterwards.
      *
-     * @param array $removeAces
-     * @param AclPropagation $aclPropagation
      * @return AclInterface the new ACL of this object
      */
     public function removeAcl(array $removeAces, AclPropagation $aclPropagation)
@@ -785,19 +769,16 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      *
      * @param ObjectIdInterface[] $policyIds
      */
-    public function applyPolicies(array $policyIds)
+    public function applyPolicies(array $policyIds): void
     {
         $this->getSession()->applyPolicies($this, $policyIds);
     }
 
     /**
      * Returns the applied policies if they have been fetched for this object.
-     *
-     * @return PolicyInterface[]
      */
-    public function getPolicies()
+    public function getPolicies(): void
     {
-        $this->policies;
     }
 
     /**
@@ -805,7 +786,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      *
      * @param ObjectIdInterface[] $policyIds
      */
-    public function removePolicy(array $policyIds)
+    public function removePolicy(array $policyIds): void
     {
         $this->getSession()->removePolicy($this, $policyIds);
     }
@@ -852,7 +833,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      *
      * @throws CmisObjectNotFoundException - if the object doesn't exist anymore in the repository
      */
-    public function refresh()
+    public function refresh(): void
     {
         $operationContext = $this->getCreationContext();
 
@@ -882,7 +863,7 @@ abstract class AbstractCmisObject implements CmisObjectInterface
      * @param integer $durationInMillis
      * @throws CmisObjectNotFoundException - if the object doesn't exist anymore in the repository
      */
-    public function refreshIfOld($durationInMillis = 0)
+    public function refreshIfOld($durationInMillis = 0): void
     {
         if ($this->getRefreshTimestamp() < ((round(microtime(true) * 1000)) - (integer) $durationInMillis)) {
             $this->refresh();

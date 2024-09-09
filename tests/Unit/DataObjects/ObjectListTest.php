@@ -9,42 +9,44 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use stdClass;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\DataObjects\ObjectList;
 
 /**
  * Class ObjectListTest
  */
-class ObjectListTest extends \PHPUnit_Framework_TestCase
+class ObjectListTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectList
      */
     protected $objectList;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectList = new ObjectList([$this->getObjectDataMock()]);
     }
 
-    public function testSetObjectsSetsProperty()
+    public function testSetObjectsSetsProperty(): void
     {
         $objects = [$this->getObjectDataMock()];
         $this->objectList->setObjects($objects);
         $this->assertAttributeSame($objects, 'objects', $this->objectList);
     }
 
-    public function testSetObjectsThrowsExceptionIfAGivenObjectIsNotOfTypeObjectDataInterface()
+    public function testSetObjectsThrowsExceptionIfAGivenObjectIsNotOfTypeObjectDataInterface(): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->objectList->setObjects([new \stdClass()]);
+        $this->setExpectedException(CmisInvalidArgumentException::class);
+        $this->objectList->setObjects([new stdClass()]);
     }
 
     /**
      * @depends testSetObjectsSetsProperty
      */
-    public function testGetObjectsReturnsPropertyValue()
+    public function testGetObjectsReturnsPropertyValue(): void
     {
         $objects = [
             $this->getObjectDataMock(),
@@ -54,7 +56,7 @@ class ObjectListTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($objects, $this->objectList->getObjects());
     }
 
-    public function testSetHasMoreItemsSetsHasMoreItems()
+    public function testSetHasMoreItemsSetsHasMoreItems(): void
     {
         $this->objectList->setHasMoreItems(true);
         $this->assertAttributeSame(true, 'hasMoreItems', $this->objectList);
@@ -62,7 +64,7 @@ class ObjectListTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(false, 'hasMoreItems', $this->objectList);
     }
 
-    public function testSetHasMoreItemsCastsValueToBoolean()
+    public function testSetHasMoreItemsCastsValueToBoolean(): void
     {
         $this->setExpectedException('\\PHPUnit_Framework_Error_Notice');
         $this->objectList->setHasMoreItems(1);
@@ -72,7 +74,7 @@ class ObjectListTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetHasMoreItemsSetsHasMoreItems
      */
-    public function testHasMoreItemsReturnsHasMoreItems()
+    public function testHasMoreItemsReturnsHasMoreItems(): void
     {
         $this->objectList->setHasMoreItems(true);
         $this->assertTrue($this->objectList->hasMoreItems());
@@ -80,7 +82,7 @@ class ObjectListTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->objectList->hasMoreItems());
     }
 
-    public function testSetNumItemsSetsNumItems()
+    public function testSetNumItemsSetsNumItems(): void
     {
         $this->objectList->setNumItems(2);
         $this->assertAttributeSame(2, 'numItems', $this->objectList);
@@ -91,7 +93,7 @@ class ObjectListTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetNumItemsSetsNumItems
      */
-    public function testNumItemsReturnsNumItems()
+    public function testNumItemsReturnsNumItems(): void
     {
         $this->objectList->setNumItems(2);
         $this->assertEquals(2, $this->objectList->getNumItems());
@@ -105,7 +107,7 @@ class ObjectListTest extends \PHPUnit_Framework_TestCase
     protected function getObjectDataMock()
     {
         return $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Data\\ObjectDataInterface'
+            ObjectDataInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
     }
 }

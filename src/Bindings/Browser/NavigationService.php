@@ -83,7 +83,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => (string) $maxItems]);
         }
 
-        if ($includeRelationships !== null) {
+        if ($includeRelationships instanceof IncludeRelationships) {
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
@@ -155,7 +155,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => (string) $maxItems]);
         }
 
-        if ($includeRelationships !== null) {
+        if ($includeRelationships instanceof IncludeRelationships) {
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
@@ -211,7 +211,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
-        if ($includeRelationships !== null) {
+        if ($includeRelationships instanceof IncludeRelationships) {
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
@@ -301,7 +301,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
-        if ($includeRelationships !== null) {
+        if ($includeRelationships instanceof IncludeRelationships) {
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
@@ -354,7 +354,7 @@ class NavigationService extends AbstractBrowserBindingService implements Navigat
             $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
-        if ($includeRelationships !== null) {
+        if ($includeRelationships instanceof IncludeRelationships) {
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 

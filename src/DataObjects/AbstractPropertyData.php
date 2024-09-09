@@ -44,9 +44,8 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
 
     /**
      * @param string $id
-     * @param mixed $value
      */
-    public function __construct($id, $value = null)
+    public function __construct($id, mixed $value = null)
     {
         $this->setId($id);
 
@@ -68,7 +67,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
     /**
      * {@inheritdoc}
      */
-    public function setDisplayName($displayName)
+    public function setDisplayName($displayName): void
     {
         $this->displayName = (string) $displayName;
     }
@@ -84,7 +83,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
     /**
      * {@inheritdoc}
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = (string) $id;
     }
@@ -100,7 +99,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
     /**
      * {@inheritdoc}
      */
-    public function setLocalName($localName)
+    public function setLocalName($localName): void
     {
         $this->localName = (string) $localName;
     }
@@ -116,7 +115,7 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
     /**
      * {@inheritdoc}
      */
-    public function setQueryName($queryName)
+    public function setQueryName($queryName): void
     {
         $this->queryName = (string) $queryName;
     }
@@ -132,18 +131,15 @@ abstract class AbstractPropertyData extends AbstractExtensionData implements Mut
     /**
      * {@inheritdoc}
      */
-    public function setValues(array $values)
+    public function setValues(array $values): void
     {
-        $this->values = [];
-        if (is_array($values)) {
-            $this->values = array_values($values);
-        }
+        $this->values = array_values($values);
     }
 
     /**
      * {@inheritdoc}
      */
-    final public function setValue($value)
+    final public function setValue($value): void
     {
         $this->setValues([$value]);
     }

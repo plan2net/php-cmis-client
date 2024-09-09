@@ -1,12 +1,16 @@
 <?php
+use GuzzleHttp\Client;
+use Dkd\PhpCmis\SessionParameter;
+use Dkd\PhpCmis\Enum\BindingType;
+use Dkd\PhpCmis\SessionFactory;
+
 require_once(__DIR__ . '/../vendor/autoload.php');
 if (!is_file(__DIR__ . '/conf/Configuration.php')) {
     die("Please add your connection credentials to the file \"" . __DIR__ . "/conf/Configuration.php\".\n");
-} else {
-    require_once(__DIR__ . '/conf/Configuration.php');
 }
+require_once(__DIR__ . '/conf/Configuration.php');
 
-$httpInvoker = new \GuzzleHttp\Client(
+$httpInvoker = new Client(
     [
         'auth' => [
             CMIS_BROWSER_USER,
@@ -16,13 +20,13 @@ $httpInvoker = new \GuzzleHttp\Client(
 );
 
 $parameters = [
-    \Dkd\PhpCmis\SessionParameter::BINDING_TYPE => \Dkd\PhpCmis\Enum\BindingType::BROWSER,
-    \Dkd\PhpCmis\SessionParameter::BROWSER_URL => CMIS_BROWSER_URL,
-    \Dkd\PhpCmis\SessionParameter::BROWSER_SUCCINCT => false,
-    \Dkd\PhpCmis\SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker
+    SessionParameter::BINDING_TYPE => BindingType::BROWSER,
+    SessionParameter::BROWSER_URL => CMIS_BROWSER_URL,
+    SessionParameter::BROWSER_SUCCINCT => false,
+    SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker
 ];
 
-$sessionFactory = new \Dkd\PhpCmis\SessionFactory();
+$sessionFactory = new SessionFactory();
 
 echo "REPOSITORIES: \n";
 foreach ($sessionFactory->getRepositories($parameters) as $repository) {

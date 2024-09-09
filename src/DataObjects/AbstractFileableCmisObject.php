@@ -32,9 +32,6 @@ use Dkd\PhpCmis\SessionInterface;
 abstract class AbstractFileableCmisObject extends AbstractCmisObject implements FileableCmisObjectInterface
 {
     /**
-     * @param SessionInterface $session
-     * @param ObjectTypeInterface $objectType
-     * @param OperationContextInterface $context
      * @param ObjectDataInterface|null $objectData
      */
     public function __construct(
@@ -216,7 +213,7 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
      * @param boolean $allVersions Add all versions of the object to the folder if the repository supports
      *     version-specific filing. Defaults to <code>true</code>.
      */
-    public function addToFolder(ObjectIdInterface $folderId, $allVersions = true)
+    public function addToFolder(ObjectIdInterface $folderId, $allVersions = true): void
     {
         $objectId = $this->getId();
         $this->getBinding()->getMultiFilingService()->addObjectToFolder(
@@ -235,7 +232,7 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
      *
      * @param ObjectIdInterface $folderId the object ID of the folder from which this object should be removed
      */
-    public function removeFromFolder(ObjectIdInterface $folderId)
+    public function removeFromFolder(ObjectIdInterface $folderId): void
     {
         $objectId = $this->getId();
 
@@ -261,7 +258,7 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
         OperationContextInterface $context = null
     ) {
         // if no context is provided the object will not be fetched
-        if ($context === null || $objectId === null) {
+        if (!$context instanceof OperationContextInterface || !$objectId instanceof ObjectIdInterface) {
             return null;
         }
 
@@ -279,8 +276,8 @@ abstract class AbstractFileableCmisObject extends AbstractCmisObject implements 
      */
     protected function ensureContext(OperationContextInterface $context = null)
     {
-        if ($context === null) {
-            $context = $this->getSession()->getDefaultContext();
+        if (!$context instanceof OperationContextInterface) {
+            return $this->getSession()->getDefaultContext();
         }
 
         return $context;

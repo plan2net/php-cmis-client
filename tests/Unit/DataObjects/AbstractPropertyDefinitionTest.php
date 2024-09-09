@@ -9,7 +9,9 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\DataObjects\AbstractPropertyDefinition;
+use Dkd\PhpCmis\Definitions\ChoiceInterface;
 use Dkd\PhpCmis\DataObjects\AbstractTypeDefinition;
 use Dkd\PhpCmis\Enum\Cardinality;
 use Dkd\PhpCmis\Enum\PropertyType;
@@ -19,7 +21,7 @@ use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 /**
  * Class AbstractPropertyDefinitionTest
  */
-class AbstractPropertyDefinitionTest extends \PHPUnit_Framework_TestCase
+class AbstractPropertyDefinitionTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -45,10 +47,10 @@ class AbstractPropertyDefinitionTest extends \PHPUnit_Framework_TestCase
         'isOpenChoice',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->abstractPropertyDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyDefinition'
+            AbstractPropertyDefinition::class
         )->setConstructorArgs(['testId'])->getMockForAbstractClass();
     }
 
@@ -91,7 +93,7 @@ class AbstractPropertyDefinitionTest extends \PHPUnit_Framework_TestCase
         $cardinality = Cardinality::cast(Cardinality::MULTI);
         $updatability = Updatability::cast(Updatability::ONCREATE);
         $choices = [
-            $this->getMockBuilder('\\Dkd\\PhpCmis\\Definitions\\ChoiceInterface')->getMockForAbstractClass()
+            $this->getMockBuilder(ChoiceInterface::class)->getMockForAbstractClass()
         ];
 
         return [
@@ -124,14 +126,12 @@ class AbstractPropertyDefinitionTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider propertyDataProvider
      * @param string $propertyName
-     * @param mixed $propertyValue
-     * @param mixed $expectedAttributeValue
      */
     public function testPropertySetterSetsPropertyAndCastsToExpectedType(
         $propertyName,
-        $expectedAttributeValue,
-        $propertyValue
-    ) {
+        mixed $expectedAttributeValue,
+        mixed $propertyValue
+    ): void {
         $setterName = 'set' . ucfirst($propertyName);
         @$this->abstractPropertyDefinition->$setterName($propertyValue);
         $this->assertAttributeSame($expectedAttributeValue, $propertyName, $this->abstractPropertyDefinition);
@@ -143,17 +143,11 @@ class AbstractPropertyDefinitionTest extends \PHPUnit_Framework_TestCase
      * @depends      testPropertySetterSetsPropertyAndCastsToExpectedType
      * @dataProvider propertyDataProvider
      * @param string $propertyName
-     * @param mixed $expectedAttributeValue
-     * @param mixed $propertyValue
      */
-    public function testPropertyGetterReturnsPropertyValue($propertyName, $expectedAttributeValue, $propertyValue)
+    public function testPropertyGetterReturnsPropertyValue($propertyName, mixed $expectedAttributeValue, mixed $propertyValue): void
     {
         $setterName = 'set' . ucfirst($propertyName);
-        if (preg_match('/^is[A-z].*/', $propertyName)) {
-            $getterName = $propertyName;
-        } else {
-            $getterName = 'get' . ucfirst($propertyName);
-        }
+        $getterName = preg_match('/^is[A-z].*/', $propertyName) ? $propertyName : 'get' . ucfirst($propertyName);
         @$this->abstractPropertyDefinition->$setterName($propertyValue);
         $this->assertSame(
             $expectedAttributeValue,

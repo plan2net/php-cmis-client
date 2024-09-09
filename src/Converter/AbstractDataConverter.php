@@ -9,7 +9,8 @@ namespace Dkd\PhpCmis\Converter;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
+use Exception;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use function array_filter;
 use function array_map;
@@ -22,7 +23,6 @@ abstract class AbstractDataConverter implements DataConverterInterface
     /**
      * Cast all array values to string
      *
-     * @param array $source
      * @return array
      */
     protected function convertStringValues(array $source)
@@ -33,7 +33,6 @@ abstract class AbstractDataConverter implements DataConverterInterface
     /**
      * Cast all array values to boolean
      *
-     * @param array $source
      * @return array
      */
     protected function convertBooleanValues(array $source)
@@ -44,7 +43,6 @@ abstract class AbstractDataConverter implements DataConverterInterface
     /**
      * Cast all array values to integer
      *
-     * @param array $source
      * @return array
      */
     protected function convertIntegerValues(array $source)
@@ -55,7 +53,6 @@ abstract class AbstractDataConverter implements DataConverterInterface
     /**
      * Cast all array values to float
      *
-     * @param array $source
      * @return array
      */
     protected function convertDecimalValues(array $source)
@@ -73,30 +70,29 @@ abstract class AbstractDataConverter implements DataConverterInterface
             [$this, 'convertDateTimeValue'],
             array_filter(
                 (array) $source,
-                function ($item) { return !empty($item); }
+                fn($item): bool => !empty($item)
             )
         );
     }
 
     /**
-     * @param mixed $source
-     * @return \DateTime
+     * @return DateTime
      */
-    protected function convertDateTimeValue($source)
+    protected function convertDateTimeValue(mixed $source)
     {
         if (is_int($source)) {
-            $date = new \DateTime();
+            $date = new DateTime();
             // DateTimes are given in a Timestamp with milliseconds.
             // see http://docs.oasis-open.org/cmis/CMIS/v1.1/os/CMIS-v1.1-os.html#x1-5420004
             $date->setTimestamp($source / 1000);
-        } elseif (PHP_INT_SIZE == 4 && is_double($source)) {
+        } elseif (PHP_INT_SIZE == 4 && is_float($source)) {
             //TODO: 32-bit - handle this specially?
-            $date = new \DateTime();
+            $date = new DateTime();
             $date->setTimestamp($source / 1000);
         } elseif (is_string($source)) {
             try {
-                $date = new \DateTime($source);
-            } catch (\Exception $exception) {
+                $date = new DateTime($source);
+            } catch (Exception $exception) {
                 throw new CmisRuntimeException('Invalid property value: ' . $source, 1416296900, $exception);
             }
         } else {

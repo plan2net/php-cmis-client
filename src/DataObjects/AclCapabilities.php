@@ -49,10 +49,7 @@ class AclCapabilities extends AbstractExtensionData implements AclCapabilitiesIn
         return $this->aclPropagation;
     }
 
-    /**
-     * @param AclPropagation $aclPropagation
-     */
-    public function setAclPropagation(AclPropagation $aclPropagation)
+    public function setAclPropagation(AclPropagation $aclPropagation): void
     {
         $this->aclPropagation = $aclPropagation;
     }
@@ -60,7 +57,7 @@ class AclCapabilities extends AbstractExtensionData implements AclCapabilitiesIn
     /**
      * @param PermissionDefinitionInterface[] $permissionDefinitionList
      */
-    public function setPermissions(array $permissionDefinitionList)
+    public function setPermissions(array $permissionDefinitionList): void
     {
         foreach ($permissionDefinitionList as $permissionDefinition) {
             $this->checkType(PermissionDefinitionInterface::class, $permissionDefinition);
@@ -87,7 +84,7 @@ class AclCapabilities extends AbstractExtensionData implements AclCapabilitiesIn
     /**
      * @param PermissionMappingInterface[] $permissionMapping
      */
-    public function setPermissionMapping(array $permissionMapping)
+    public function setPermissionMapping(array $permissionMapping): void
     {
         foreach ($permissionMapping as $permissionMappingItem) {
             $this->checkType(PermissionMappingInterface::class, $permissionMappingItem);
@@ -103,10 +100,7 @@ class AclCapabilities extends AbstractExtensionData implements AclCapabilitiesIn
         return $this->supportedPermissions;
     }
 
-    /**
-     * @param SupportedPermissions $supportedPermissions
-     */
-    public function setSupportedPermissions(SupportedPermissions $supportedPermissions)
+    public function setSupportedPermissions(SupportedPermissions $supportedPermissions): void
     {
         $this->supportedPermissions = $supportedPermissions;
     }

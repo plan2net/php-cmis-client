@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
@@ -41,17 +41,17 @@ interface QueryStatementInterface
      * Sets the designated parameter to the given DateTime value.
      *
      * @param integer $parameterIndex the parameter index (one-based)
-     * @param \DateTime $dateTime the DateTime value as DateTime object
+     * @param DateTime $dateTime the DateTime value as DateTime object
      */
-    public function setDateTime($parameterIndex, \DateTime $dateTime);
+    public function setDateTime($parameterIndex, DateTime $dateTime);
 
     /**
      * Sets the designated parameter to the given DateTime value with the prefix 'TIMESTAMP '.
      *
      * @param integer $parameterIndex the parameter index (one-based)
-     * @param \DateTime $dateTime the DateTime value as DateTime object
+     * @param DateTime $dateTime the DateTime value as DateTime object
      */
-    public function setDateTimeTimestamp($parameterIndex, \DateTime $dateTime);
+    public function setDateTimeTimestamp($parameterIndex, DateTime $dateTime);
 
     /**
      * Sets the designated parameter to the given object ID.
@@ -73,7 +73,6 @@ interface QueryStatementInterface
      * Sets the designated parameter to the query name of the given property.
      *
      * @param integer $parameterIndex the parameter index (one-based)
-     * @param PropertyDefinitionInterface $propertyDefinition
      */
     public function setProperty($parameterIndex, PropertyDefinitionInterface $propertyDefinition);
 

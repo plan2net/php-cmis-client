@@ -74,10 +74,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
         return $this->acl;
     }
 
-    /**
-     * @param AclInterface $acl
-     */
-    public function setAcl(AclInterface $acl)
+    public function setAcl(AclInterface $acl): void
     {
         $this->acl = $acl;
     }
@@ -90,10 +87,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
         return $this->allowableActions;
     }
 
-    /**
-     * @param AllowableActionsInterface $allowableActions
-     */
-    public function setAllowableActions(AllowableActionsInterface $allowableActions)
+    public function setAllowableActions(AllowableActionsInterface $allowableActions): void
     {
         $this->allowableActions = $allowableActions;
     }
@@ -106,10 +100,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
         return $this->changeEventInfo;
     }
 
-    /**
-     * @param ChangeEventInfoInterface $changeEventInfo
-     */
-    public function setChangeEventInfo(ChangeEventInfoInterface $changeEventInfo)
+    public function setChangeEventInfo(ChangeEventInfoInterface $changeEventInfo): void
     {
         $this->changeEventInfo = $changeEventInfo;
     }
@@ -117,7 +108,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     /**
      * @param boolean $isExactAcl
      */
-    public function setIsExactAcl($isExactAcl)
+    public function setIsExactAcl($isExactAcl): void
     {
         $this->isExactAcl = $this->castValueToSimpleType('boolean', $isExactAcl, true);
     }
@@ -141,10 +132,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
         return $this->policyIds;
     }
 
-    /**
-     * @param PolicyIdListInterface $policyIds
-     */
-    public function setPolicyIds(PolicyIdListInterface $policyIds)
+    public function setPolicyIds(PolicyIdListInterface $policyIds): void
     {
         $this->policyIds = $policyIds;
     }
@@ -157,10 +145,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
         return $this->properties;
     }
 
-    /**
-     * @param PropertiesInterface $properties
-     */
-    public function setProperties(PropertiesInterface $properties)
+    public function setProperties(PropertiesInterface $properties): void
     {
         $this->properties = $properties;
     }
@@ -176,7 +161,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     /**
      * @param ObjectDataInterface[] $relationships
      */
-    public function setRelationships(array $relationships)
+    public function setRelationships(array $relationships): void
     {
         foreach ($relationships as $relationship) {
             $this->checkType(ObjectDataInterface::class, $relationship);
@@ -195,7 +180,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     /**
      * @param RenditionDataInterface[] $renditions
      */
-    public function setRenditions(array $renditions)
+    public function setRenditions(array $renditions): void
     {
         $this->renditions = $renditions;
     }
@@ -211,7 +196,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
         if (is_string($value)) {
             try {
                 return BaseTypeId::cast($value);
-            } catch (InvalidEnumerationValueException $e) {
+            } catch (InvalidEnumerationValueException) {
                 // invalid base type -> return null
             }
         }
@@ -224,7 +209,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
      *
      * @return string|null the object ID or <code>null</code> if the object ID is unknown
      */
-    public function getId()
+    public function getId(): ?string
     {
         $value = $this->getFirstValue(PropertyIds::OBJECT_ID);
         if (is_string($value)) {
@@ -237,10 +222,9 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
      * Returns the first value of a property or <code>null</code> if the
      * property is not set.
      *
-     * @param string $id
      * @return mixed
      */
-    private function getFirstValue($id)
+    private function getFirstValue(string $id)
     {
         if ($this->properties === null) {
             return null;

@@ -27,7 +27,7 @@ class FailedToDeleteData extends AbstractExtensionData implements FailedToDelete
      *
      * @param string[] $ids List of ids that could not be deleted
      */
-    public function setIds(array $ids)
+    public function setIds(array $ids): void
     {
         $this->ids = $ids;
     }

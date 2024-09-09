@@ -17,7 +17,7 @@ use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
  */
 class RepositoryInfoBrowserBindingTest extends RepositoryInfoTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->repositoryInfo = new RepositoryInfoBrowserBinding();
     }

@@ -9,14 +9,14 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\DataObjects\RenditionData;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 /**
  * Class RenditionDataTest
  */
-class RenditionDataTest extends \PHPUnit_Framework_TestCase
+class RenditionDataTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -25,12 +25,12 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
      */
     protected $renditionData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->renditionData = new RenditionData();
     }
 
-    public function testSetStreamIdSetsProperty()
+    public function testSetStreamIdSetsProperty(): void
     {
         $this->renditionData->setStreamId('stream-id');
         $this->assertAttributeSame('stream-id', 'streamId', $this->renditionData);
@@ -39,7 +39,7 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetStreamIdSetsProperty
      */
-    public function testGetStreamIdReturnsPropertyValue()
+    public function testGetStreamIdReturnsPropertyValue(): void
     {
         $this->renditionData->setStreamId('stream-id');
         $this->assertSame('stream-id', $this->renditionData->getStreamId());
@@ -48,9 +48,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider integerCastDataProvider
      * @param integer $expected
-     * @param mixed $value
      */
-    public function testSetHeightSetsPropertyAsInteger($expected, $value)
+    public function testSetHeightSetsPropertyAsInteger($expected, mixed $value): void
     {
         $this->renditionData->setHeight($value);
         $this->assertAttributeSame($expected, 'height', $this->renditionData);
@@ -59,7 +58,7 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetHeightSetsPropertyAsInteger
      */
-    public function testGetHeightReturnsPropertyValue()
+    public function testGetHeightReturnsPropertyValue(): void
     {
         $this->renditionData->setHeight(10);
         $this->assertSame(10, $this->renditionData->getHeight());
@@ -68,9 +67,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider integerCastDataProvider
      * @param integer $expected
-     * @param mixed $value
      */
-    public function testSetWidthSetsPropertyAsInteger($expected, $value)
+    public function testSetWidthSetsPropertyAsInteger($expected, mixed $value): void
     {
         $this->renditionData->setWidth($value);
         $this->assertAttributeSame($expected, 'width', $this->renditionData);
@@ -79,7 +77,7 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetWidthSetsPropertyAsInteger
      */
-    public function testGetWidthReturnsPropertyValue()
+    public function testGetWidthReturnsPropertyValue(): void
     {
         $this->renditionData->setWidth(10);
         $this->assertSame(10, $this->renditionData->getWidth());
@@ -88,9 +86,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider integerCastDataProvider
      * @param integer $expected
-     * @param mixed $value
      */
-    public function testSetLengthSetsPropertyAsInteger($expected, $value)
+    public function testSetLengthSetsPropertyAsInteger($expected, mixed $value): void
     {
         $this->renditionData->setLength($value);
         $this->assertAttributeSame($expected, 'length', $this->renditionData);
@@ -99,7 +96,7 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetLengthSetsPropertyAsInteger
      */
-    public function testGetLengthReturnsPropertyValue()
+    public function testGetLengthReturnsPropertyValue(): void
     {
         $this->renditionData->setLength(10);
         $this->assertSame(10, $this->renditionData->getLength());
@@ -108,9 +105,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider stringCastDataProvider
      * @param string $expected
-     * @param mixed $value
      */
-    public function testSetMimeTypeSetsPropertyAsString($expected, $value)
+    public function testSetMimeTypeSetsPropertyAsString($expected, mixed $value): void
     {
         $this->renditionData->setMimeType($value);
         $this->assertAttributeSame($expected, 'mimeType', $this->renditionData);
@@ -119,7 +115,7 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetMimeTypeSetsPropertyAsString
      */
-    public function testGetMimeTypeReturnsPropertyValue()
+    public function testGetMimeTypeReturnsPropertyValue(): void
     {
         $this->renditionData->setMimeType('foo');
         $this->assertSame('foo', $this->renditionData->getMimeType());
@@ -128,9 +124,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider stringCastDataProvider
      * @param string $expected
-     * @param mixed $value
      */
-    public function testSetKindSetsPropertyAsString($expected, $value)
+    public function testSetKindSetsPropertyAsString($expected, mixed $value): void
     {
         $this->renditionData->setKind($value);
         $this->assertAttributeSame($expected, 'kind', $this->renditionData);
@@ -139,7 +134,7 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetKindSetsPropertyAsString
      */
-    public function testGetKindReturnsPropertyValue()
+    public function testGetKindReturnsPropertyValue(): void
     {
         $this->renditionData->setKind('foo');
         $this->assertSame('foo', $this->renditionData->getKind());
@@ -148,9 +143,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider stringCastDataProvider
      * @param string $expected
-     * @param mixed $value
      */
-    public function testSetTitleSetsPropertyAsString($expected, $value)
+    public function testSetTitleSetsPropertyAsString($expected, mixed $value): void
     {
         $this->renditionData->setTitle($value);
         $this->assertAttributeSame($expected, 'title', $this->renditionData);
@@ -159,7 +153,7 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetTitleSetsPropertyAsString
      */
-    public function testGetTitleReturnsPropertyValue()
+    public function testGetTitleReturnsPropertyValue(): void
     {
         $this->renditionData->setTitle('foo');
         $this->assertSame('foo', $this->renditionData->getTitle());
@@ -168,9 +162,8 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider stringCastDataProvider
      * @param string $expected
-     * @param mixed $value
      */
-    public function testSetRenditionDocumentIdSetsPropertyAsString($expected, $value)
+    public function testSetRenditionDocumentIdSetsPropertyAsString($expected, mixed $value): void
     {
         $this->renditionData->setRenditionDocumentId($value);
         $this->assertAttributeSame($expected, 'renditionDocumentId', $this->renditionData);
@@ -179,7 +172,7 @@ class RenditionDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetRenditionDocumentIdSetsPropertyAsString
      */
-    public function testGetRenditionDocumentIdReturnsPropertyValue()
+    public function testGetRenditionDocumentIdReturnsPropertyValue(): void
     {
         $this->renditionData->setRenditionDocumentId('foo');
         $this->assertSame('foo', $this->renditionData->getRenditionDocumentId());

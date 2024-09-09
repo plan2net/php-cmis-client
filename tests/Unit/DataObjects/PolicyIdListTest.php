@@ -9,13 +9,13 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\DataObjects\PolicyIdList;
 
 /**
  * Class PolicyIdListTest
  */
-class PolicyIdListTest extends \PHPUnit_Framework_TestCase
+class PolicyIdListTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -23,12 +23,12 @@ class PolicyIdListTest extends \PHPUnit_Framework_TestCase
      */
     protected $policyIdList;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->policyIdList = new PolicyIdList();
     }
 
-    public function testSetPolicyIdsSetsProperty()
+    public function testSetPolicyIdsSetsProperty(): void
     {
         $policyIdsList = ['foo', 'bar'];
         $this->policyIdList->setPolicyIds($policyIdsList);
@@ -38,7 +38,7 @@ class PolicyIdListTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetPolicyIdsSetsProperty
      */
-    public function testGetPolicyIdsReturnsPropertyValue()
+    public function testGetPolicyIdsReturnsPropertyValue(): void
     {
         $policyIdsList = ['foo', 'bar'];
         $this->policyIdList->setPolicyIds($policyIdsList);

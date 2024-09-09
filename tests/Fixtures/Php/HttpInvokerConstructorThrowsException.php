@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Test\Fixtures\Php;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Exception;
 use GuzzleHttp\Client;
 
 /**
@@ -19,6 +19,6 @@ class HttpInvokerConstructorThrowsException extends Client
 {
     public function __construct()
     {
-        throw new \Exception('This class can not be instantiated!');
+        throw new Exception('This class can not be instantiated!');
     }
 }

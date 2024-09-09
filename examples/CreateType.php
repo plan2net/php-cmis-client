@@ -1,12 +1,19 @@
 <?php
+use GuzzleHttp\Client;
+use Dkd\PhpCmis\SessionParameter;
+use Dkd\PhpCmis\Enum\BindingType;
+use Dkd\PhpCmis\SessionFactory;
+use Dkd\PhpCmis\DataObjects\TypeMutability;
+use Dkd\PhpCmis\Enum\BaseTypeId;
+use Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException;
+
 require_once(__DIR__ . '/../vendor/autoload.php');
 if (!is_file(__DIR__ . '/conf/Configuration.php')) {
     die("Please add your connection credentials to the file \"" . __DIR__ . "/conf/Configuration.php\".\n");
-} else {
-    require_once(__DIR__ . '/conf/Configuration.php');
 }
+require_once(__DIR__ . '/conf/Configuration.php');
 
-$httpInvoker = new \GuzzleHttp\Client(
+$httpInvoker = new Client(
     [
         'auth' =>
             [
@@ -17,20 +24,20 @@ $httpInvoker = new \GuzzleHttp\Client(
 );
 
 $parameters = [
-    \Dkd\PhpCmis\SessionParameter::BINDING_TYPE => \Dkd\PhpCmis\Enum\BindingType::BROWSER,
-    \Dkd\PhpCmis\SessionParameter::BROWSER_URL => CMIS_BROWSER_URL,
-    \Dkd\PhpCmis\SessionParameter::BROWSER_SUCCINCT => false,
-    \Dkd\PhpCmis\SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker,
+    SessionParameter::BINDING_TYPE => BindingType::BROWSER,
+    SessionParameter::BROWSER_URL => CMIS_BROWSER_URL,
+    SessionParameter::BROWSER_SUCCINCT => false,
+    SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker,
 ];
 
-$sessionFactory = new \Dkd\PhpCmis\SessionFactory();
+$sessionFactory = new SessionFactory();
 
 // If no repository id is defined use the first repository
 if (CMIS_REPOSITORY_ID === null) {
     $repositories = $sessionFactory->getRepositories($parameters);
-    $parameters[\Dkd\PhpCmis\SessionParameter::REPOSITORY_ID] = $repositories[0]->getId();
+    $parameters[SessionParameter::REPOSITORY_ID] = $repositories[0]->getId();
 } else {
-    $parameters[\Dkd\PhpCmis\SessionParameter::REPOSITORY_ID] = CMIS_REPOSITORY_ID;
+    $parameters[SessionParameter::REPOSITORY_ID] = CMIS_REPOSITORY_ID;
 }
 
 $session = $sessionFactory->createSession($parameters);
@@ -39,15 +46,15 @@ echo "Create CMIS type\n\n";
 
 
 try {
-    $typeMutability = new \Dkd\PhpCmis\DataObjects\TypeMutability();
+    $typeMutability = new TypeMutability();
     $typeMutability->setCanCreate(true);
     $typeMutability->setCanUpdate(true);
     $typeMutability->setCanDelete(true);
     $typeDefinition = $session->getObjectFactory()->createTypeDefinition(
         'typo3:page',
         'page',
-        (string) \Dkd\PhpCmis\Enum\BaseTypeId::cast(\Dkd\PhpCmis\Enum\BaseTypeId::CMIS_DOCUMENT),
-        (string) \Dkd\PhpCmis\Enum\BaseTypeId::cast(\Dkd\PhpCmis\Enum\BaseTypeId::CMIS_DOCUMENT),
+        (string) BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT),
+        (string) BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT),
         true,
         true,
         true,
@@ -66,7 +73,7 @@ try {
 
     echo "Type definition has been created. Id: " . $typeDefinition->getId() . "\n";
     echo "Please delete that definition now by hand!\n";
-} catch (\Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException $e) {
+} catch (CmisContentAlreadyExistsException $e) {
     echo "********* ERROR **********\n";
     echo $e->getMessage() . "\n";
     echo "**************************\n";

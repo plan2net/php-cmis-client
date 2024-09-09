@@ -9,13 +9,13 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\DataObjects\FailedToDeleteData;
 
 /**
  * Class FailedToDeleteDataTest
  */
-class FailedToDeleteDataTest extends \PHPUnit_Framework_TestCase
+class FailedToDeleteDataTest extends PHPUnit_Framework_TestCase
 {
     public function testSetIdsSetsIdsPropertyToGivenValue()
     {
@@ -30,7 +30,7 @@ class FailedToDeleteDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIdsSetsIdsPropertyToGivenValue
      */
-    public function testGetIdsReturnsIdsProperty($failedToDeleteData)
+    public function testGetIdsReturnsIdsProperty($failedToDeleteData): void
     {
         $this->assertSame(['foo', 'bar'], $failedToDeleteData->getIds());
     }

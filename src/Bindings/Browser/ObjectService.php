@@ -12,7 +12,6 @@ namespace Dkd\PhpCmis\Bindings\Browser;
 
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AclInterface;
-use Dkd\PhpCmis\Data\AllowableActionsInterface;
 use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\Data\FailedToDeleteDataInterface;
@@ -65,7 +64,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $isLastChunk,
         & $changeToken = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         // TODO: Implement appendContentStream() method.
     }
 
@@ -74,11 +73,9 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      *
      * @param string $repositoryId the identifier for the repository
      * @param BulkUpdateObjectIdAndChangeTokenInterface[] $objectIdsAndChangeTokens
-     * @param PropertiesInterface $properties
      * @param string[] $addSecondaryTypeIds the secondary types to apply
      * @param string[] $removeSecondaryTypeIds the secondary types to remove
      * @param ExtensionDataInterface|null $extension
-     * @return BulkUpdateObjectIdAndChangeTokenInterface[]
      */
     public function bulkUpdateProperties(
         $repositoryId,
@@ -87,18 +84,13 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         array $addSecondaryTypeIds,
         array $removeSecondaryTypeIds,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         // TODO: Implement bulkUpdateProperties() method.
     }
 
     /**
      * @param string $action
-     * @param PropertiesInterface $properties
      * @param string[] $policies
-     * @param AclInterface $addAces
-     * @param AclInterface $removeAces
-     * @param ExtensionDataInterface $extension
-     * @return array
      */
     protected function createQueryArray(
         $action,
@@ -107,7 +99,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): array {
         $queryArray = array_replace(
             [
                 Constants::CONTROL_CMISACTION => $action,
@@ -116,15 +108,15 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $this->convertPropertiesToQueryArray($properties),
             $this->convertPolicyIdArrayToQueryArray($policies)
         );
-        if (!empty($removeAces)) {
+        if ($removeAces instanceof AclInterface) {
             $queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
                 $removeAces,
                 Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
                 Constants::CONTROL_REMOVE_ACE_PERMISSION
             ));
         }
-        if (!empty($addAces)) {
-            $queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
+        if ($addAces instanceof AclInterface) {
+            return array_replace($queryArray, $this->convertAclToQueryArray(
                 $addAces,
                 Constants::CONTROL_ADD_ACE_PRINCIPAL,
                 Constants::CONTROL_ADD_ACE_PERMISSION
@@ -166,11 +158,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        if ($folderId === null) {
-            $url = $this->getRepositoryUrl($repositoryId);
-        } else {
-            $url = $this->getObjectUrl($repositoryId, $folderId);
-        }
+        $url = $folderId === null ? $this->getRepositoryUrl($repositoryId) : $this->getObjectUrl($repositoryId, $folderId);
 
         $queryArray = $this->createQueryArray(
             Constants::CMISACTION_CREATE_DOCUMENT,
@@ -180,11 +168,11 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $removeAces,
             $extension
         );
-        if ($versioningState !== null) {
+        if ($versioningState instanceof VersioningState) {
             $queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
         }
 
-        if ($contentStream) {
+        if ($contentStream instanceof StreamInterface) {
             $queryArray['content'] = $contentStream;
         }
 
@@ -196,8 +184,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         );
 
         if ($newObject) {
-            $newObjectId = $newObject->getId();
-            return $newObjectId;
+            return $newObject->getId();
         }
         return null;
     }
@@ -233,11 +220,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        if ($folderId === null) {
-            $url = $this->getRepositoryUrl($repositoryId);
-        } else {
-            $url = $this->getObjectUrl($repositoryId, $folderId);
-        }
+        $url = $folderId === null ? $this->getRepositoryUrl($repositoryId) : $this->getObjectUrl($repositoryId, $folderId);
 
         $queryArray = $this->createQueryArray(
             Constants::CMISACTION_CREATE_DOCUMENT_FROM_SOURCE,
@@ -248,7 +231,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $extension
         );
         $queryArray[Constants::PARAM_SOURCE_ID] = (string) $sourceId;
-        if ($versioningState !== null) {
+        if ($versioningState instanceof VersioningState) {
             $queryArray[Constants::PARAM_VERSIONING_STATE] = (string) $versioningState;
         }
 
@@ -325,11 +308,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
     ) {
-        if ($folderId === null) {
-            $url = $this->getRepositoryUrl($repositoryId);
-        } else {
-            $url = $this->getObjectUrl($repositoryId, $folderId);
-        }
+        $url = $folderId === null ? $this->getRepositoryUrl($repositoryId) : $this->getObjectUrl($repositoryId, $folderId);
 
         $queryArray = $this->createQueryArray(
             Constants::CMISACTION_CREATE_ITEM,
@@ -369,7 +348,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         // TODO: Implement createPolicy() method.
     }
 
@@ -427,7 +406,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         & $objectId,
         & $changeToken = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         if (empty($objectId)) {
             throw new CmisInvalidArgumentException('Object id must not be empty!');
         }
@@ -476,7 +455,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $objectId,
         $allVersions = true,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         $url = $this->getObjectUrl($repositoryId, $objectId);
         $content = [
            Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE,
@@ -520,7 +499,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             ]
         );
 
-        if ($unfileObjects !== null) {
+        if ($unfileObjects instanceof UnfileObject) {
             $url->getQuery()->modify([Constants::PARAM_UNFILE_OBJECTS => (string) $unfileObjects]);
         }
 
@@ -533,9 +512,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * @param string $repositoryId the identifier for the repository
      * @param string $objectId the identifier for the object
      * @param ExtensionDataInterface|null $extension
-     * @return AllowableActionsInterface
      */
-    public function getAllowableActions($repositoryId, $objectId, ExtensionDataInterface $extension = null)
+    public function getAllowableActions($repositoryId, $objectId, ExtensionDataInterface $extension = null): void
     {
         // TODO: Implement getAllowableActions() method.
     }
@@ -582,7 +560,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         }
 
         if ($offset !== null) {
-            $contentStream = new LimitStream($contentStream, $length !== null ? $length : - 1, $offset);
+            return new LimitStream($contentStream, $length ?? - 1, $offset);
         }
 
         return $contentStream;
@@ -653,7 +631,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
-        if ($includeRelationships !== null) {
+        if ($includeRelationships instanceof IncludeRelationships) {
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
@@ -731,7 +709,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
             $url->getQuery()->modify([Constants::PARAM_FILTER => (string) $filter]);
         }
 
-        if ($includeRelationships !== null) {
+        if ($includeRelationships instanceof IncludeRelationships) {
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 
@@ -908,7 +886,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         $overwriteFlag = true,
         & $changeToken = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         if (empty($objectId)) {
             throw new CmisInvalidArgumentException('Object id must not be empty!');
         }
@@ -963,7 +941,7 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
         PropertiesInterface $properties,
         & $changeToken = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         if (empty($objectId)) {
             throw new CmisInvalidArgumentException('Object id must not be empty!');
         }
@@ -996,10 +974,8 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
 
     /**
      * @param string $identifier
-     * @param mixed $additionalHashValues
-     * @return array
      */
-    protected function createCacheKey($identifier, $additionalHashValues)
+    protected function createCacheKey($identifier, mixed $additionalHashValues): array
     {
         return [
             $identifier,
@@ -1010,7 +986,6 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
     /**
      * Returns TRUE if an object with cache key $identifier is currently cached.
      *
-     * @param array $identifier
      * @return boolean
      */
     protected function isCached(array $identifier)
@@ -1033,10 +1008,9 @@ class ObjectService extends AbstractBrowserBindingService implements ObjectServi
      * Gets the cached object with cache key $identifier.
      *
      * @param string $identifier
-     * @param mixed $object
      * @return mixed
      */
-    protected function cache(array $identifier, $object)
+    protected function cache(array $identifier, mixed $object)
     {
         $this->objectCache[$identifier[0]][$identifier[1]] = $object;
         return $object;

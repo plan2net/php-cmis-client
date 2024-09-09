@@ -36,7 +36,7 @@ class RepositoryUrlCache
      * @param string $repositoryUrl
      * @param string $rootUrl
      */
-    public function addRepository($repositoryId, $repositoryUrl, $rootUrl)
+    public function addRepository($repositoryId, $repositoryUrl, $rootUrl): void
     {
         if (empty($repositoryId) || empty($repositoryUrl) || empty($rootUrl)) {
             throw new CmisInvalidArgumentException(
@@ -54,7 +54,7 @@ class RepositoryUrlCache
      *
      * @param string $repositoryId
      */
-    public function removeRepository($repositoryId)
+    public function removeRepository($repositoryId): void
     {
         unset($this->repositoryUrls[$repositoryId]);
         unset($this->rootUrls[$repositoryId]);

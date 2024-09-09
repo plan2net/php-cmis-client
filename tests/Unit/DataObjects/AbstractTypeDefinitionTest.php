@@ -9,7 +9,8 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Definitions\TypeMutabilityInterface;
 use Dkd\PhpCmis\DataObjects\AbstractTypeDefinition;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
@@ -18,7 +19,7 @@ use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 /**
  * Class AbstractTypeDefinitionTest
  */
-class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
+class AbstractTypeDefinitionTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -52,10 +53,10 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         'typeMutability'
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->abstractTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\AbstractTypeDefinition'
+            AbstractTypeDefinition::class
         )->setConstructorArgs(['typeId'])->getMockForAbstractClass();
     }
 
@@ -99,12 +100,12 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
     public function objectPropertyDataProvider()
     {
         $baseTypeId = BaseTypeId::cast(BaseTypeId::CMIS_ITEM);
-        $propertyDefinition = $this->getMockBuilder('\\Dkd\\PhpCmis\\Definitions\\PropertyDefinitionInterface')
+        $propertyDefinition = $this->getMockBuilder(PropertyDefinitionInterface::class)
                                    ->setMethods(['getId'])->getMockForAbstractClass();
         $propertyDefinition->expects($this->any())->method('getId')->willReturn('fooId');
         $propertyDefinitions = ['fooId' => $propertyDefinition];
         $typeMutability = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Definitions\\TypeMutabilityInterface'
+            TypeMutabilityInterface::class
         )->getMockForAbstractClass();
 
         return [
@@ -128,14 +129,12 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider propertyDataProvider
      * @param string $propertyName
-     * @param mixed $propertyValue
-     * @param mixed $expectedAttributeValue
      */
     public function testPropertySetterSetsPropertyAndCastsToExpectedType(
         $propertyName,
-        $expectedAttributeValue,
-        $propertyValue
-    ) {
+        mixed $expectedAttributeValue,
+        mixed $propertyValue
+    ): void {
         $setterName = 'set' . ucfirst($propertyName);
         @$this->abstractTypeDefinition->$setterName($propertyValue);
         $this->assertAttributeSame(
@@ -157,17 +156,11 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
      * @depends      testPropertySetterSetsPropertyAndCastsToExpectedType
      * @dataProvider propertyDataProvider
      * @param string $propertyName
-     * @param mixed $expectedAttributeValue
-     * @param mixed $propertyValue
      */
-    public function testPropertyGetterReturnsPropertyValue($propertyName, $expectedAttributeValue, $propertyValue)
+    public function testPropertyGetterReturnsPropertyValue($propertyName, mixed $expectedAttributeValue, mixed $propertyValue): void
     {
         $setterName = 'set' . ucfirst($propertyName);
-        if (preg_match('/^is[A-z].*/', $propertyName)) {
-            $getterName = $propertyName;
-        } else {
-            $getterName = 'get' . ucfirst($propertyName);
-        }
+        $getterName = preg_match('/^is[A-z].*/', $propertyName) ? $propertyName : 'get' . ucfirst($propertyName);
         @$this->abstractTypeDefinition->$setterName($propertyValue);
         $this->assertSame(
             $expectedAttributeValue,
@@ -179,7 +172,7 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var PropertyDefinitionInterface|\PHPUnit_Framework_MockObject_MockObject $propertyDefinition */
         $propertyDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Definitions\\PropertyDefinitionInterface'
+            PropertyDefinitionInterface::class
         )->setMethods(['getId'])->getMockForAbstractClass();
         $propertyDefinition->expects($this->any())->method('getId')->willReturn('fooId');
 
@@ -193,7 +186,7 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         return $this->abstractTypeDefinition;
     }
 
-    public function testGetPropertyDefinitionReturnsNullIfNoDefinitionWithGivenIdExists()
+    public function testGetPropertyDefinitionReturnsNullIfNoDefinitionWithGivenIdExists(): void
     {
         $this->assertNull($this->abstractTypeDefinition->getPropertyDefinition('invalidId'));
     }
@@ -202,18 +195,18 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
      * @depends testAddPropertyDefinitionAddsPropertyDefinitionWithPropertyDefinitionIdAsArrayIndex
      * @param AbstractTypeDefinition $abstractTypeDefinition
      */
-    public function testGetPropertyDefinitionReturnsPropertyDefinitionForGivenId($abstractTypeDefinition)
+    public function testGetPropertyDefinitionReturnsPropertyDefinitionForGivenId($abstractTypeDefinition): void
     {
-        $expected = $this->getMockBuilder('\\Dkd\\PhpCmis\\Definitions\\PropertyDefinitionInterface')->setMethods(
+        $expected = $this->getMockBuilder(PropertyDefinitionInterface::class)->setMethods(
             ['getId']
         )->getMockForAbstractClass();
         $this->assertEquals($expected, $abstractTypeDefinition->getPropertyDefinition('fooId'));
     }
 
-    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinitionButIgnoresNullValues()
+    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinitionButIgnoresNullValues(): void
     {
         $dummyTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\AbstractTypeDefinition'
+            AbstractTypeDefinition::class
         )->setConstructorArgs(['typeId'])->getMockForAbstractClass();
 
         $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
@@ -228,23 +221,23 @@ class AbstractTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinition()
+    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinition(): void
     {
         /** @var AbstractTypeDefinition|\PHPUnit_Framework_MockObject_MockObject $dummyTypeDefinition */
         $dummyTypeDefinition = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\AbstractTypeDefinition'
+            AbstractTypeDefinition::class
         )->setConstructorArgs(['typeId'])->getMockForAbstractClass();
 
         foreach ($this->stringProperties as $stringProperty) {
-            $setterName = 'set' . ucfirst($stringProperty);
+            $setterName = 'set' . ucfirst((string) $stringProperty);
             $dummyTypeDefinition->$setterName('dummyStringValue');
         }
         foreach ($this->booleanProperties as $booleanProperty) {
-            $setterName = 'set' . ucfirst($booleanProperty);
+            $setterName = 'set' . ucfirst((string) $booleanProperty);
             $dummyTypeDefinition->$setterName(true);
         }
         foreach ($this->objectPropertyDataProvider() as $objectProperty) {
-            $setterName = 'set' . ucfirst($objectProperty[0]);
+            $setterName = 'set' . ucfirst((string) $objectProperty[0]);
             $dummyTypeDefinition->$setterName($objectProperty[1]);
         }
 

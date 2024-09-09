@@ -9,14 +9,17 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Data\ObjectInFolderDataInterface;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use stdClass;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderData;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderList;
 
 /**
  * Class ObjectInFolderListTest
  */
-class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
+class ObjectInFolderListTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectInFolderList
@@ -28,39 +31,39 @@ class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectInFolderData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectInFolderData = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Data\\ObjectInFolderDataInterface'
+            ObjectInFolderDataInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $this->objectInFolderList = new ObjectInFolderList([$this->objectInFolderData]);
     }
 
-    public function testSetObjectsSetsProperty()
+    public function testSetObjectsSetsProperty(): void
     {
         $objects = [$this->objectInFolderData];
         $this->objectInFolderList->setObjects($objects);
         $this->assertAttributeSame($objects, 'objects', $this->objectInFolderList);
     }
 
-    public function testSetObjectsThrowsExceptionIfAGivenObjectIsNotOfTypeObjectInFolderDataInterface()
+    public function testSetObjectsThrowsExceptionIfAGivenObjectIsNotOfTypeObjectInFolderDataInterface(): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->objectInFolderList->setObjects([new \stdClass()]);
+        $this->setExpectedException(CmisInvalidArgumentException::class);
+        $this->objectInFolderList->setObjects([new stdClass()]);
     }
 
     /**
      * @depends testSetObjectsSetsProperty
      */
-    public function testGetObjectsReturnsPropertyValue()
+    public function testGetObjectsReturnsPropertyValue(): void
     {
         $objects = [$this->objectInFolderData];
         $this->objectInFolderList->setObjects($objects);
         $this->assertSame($objects, $this->objectInFolderList->getObjects());
     }
 
-    public function testSetHasMoreItemsSetsHasMoreItems()
+    public function testSetHasMoreItemsSetsHasMoreItems(): void
     {
         $this->objectInFolderList->setHasMoreItems(true);
         $this->assertAttributeSame(true, 'hasMoreItems', $this->objectInFolderList);
@@ -68,7 +71,7 @@ class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(false, 'hasMoreItems', $this->objectInFolderList);
     }
 
-    public function testSetHasMoreItemsCastsValueToBoolean()
+    public function testSetHasMoreItemsCastsValueToBoolean(): void
     {
         $this->setExpectedException('\\PHPUnit_Framework_Error_Notice');
         $this->objectInFolderList->setHasMoreItems(1);
@@ -78,7 +81,7 @@ class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetHasMoreItemsSetsHasMoreItems
      */
-    public function testHasMoreItemsReturnsHasMoreItems()
+    public function testHasMoreItemsReturnsHasMoreItems(): void
     {
         $this->objectInFolderList->setHasMoreItems(true);
         $this->assertTrue($this->objectInFolderList->hasMoreItems());
@@ -86,7 +89,7 @@ class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->objectInFolderList->hasMoreItems());
     }
 
-    public function testSetNumItemsSetsNumItems()
+    public function testSetNumItemsSetsNumItems(): void
     {
         $this->objectInFolderList->setNumItems(2);
         $this->assertAttributeSame(2, 'numItems', $this->objectInFolderList);
@@ -97,7 +100,7 @@ class ObjectInFolderListTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetNumItemsSetsNumItems
      */
-    public function testNumItemsReturnsNumItems()
+    public function testNumItemsReturnsNumItems(): void
     {
         $this->objectInFolderList->setNumItems(2);
         $this->assertEquals(2, $this->objectInFolderList->getNumItems());

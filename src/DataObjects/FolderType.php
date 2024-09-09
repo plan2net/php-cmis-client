@@ -27,7 +27,6 @@ class FolderType extends FolderTypeDefinition implements FolderTypeInterface
      * Constructor of the object type. This constructor MUST set the session property to the given session and
      * call the <code>self::populate</code> method with the given <code>$typeDefinition</code>
      *
-     * @param SessionInterface $session
      * @param FolderTypeDefinitionInterface $typeDefinition
      * @throws CmisInvalidArgumentException Exception is thrown if invalid TypeDefinition is given
      */
@@ -39,7 +38,7 @@ class FolderType extends FolderTypeDefinition implements FolderTypeInterface
             throw new CmisInvalidArgumentException(
                 sprintf(
                     'Type definition must be instance of FolderTypeDefinitionInterface but is "%s"',
-                    get_class($typeDefinition)
+                    $typeDefinition::class
                 )
             );
         }

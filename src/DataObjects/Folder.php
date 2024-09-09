@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Exception;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Data\AceInterface;
@@ -18,7 +18,6 @@ use Dkd\PhpCmis\Data\FailedToDeleteDataInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Data\ItemInterface;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
-use Dkd\PhpCmis\Data\ObjectInFolderContainerInterface;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Data\PolicyInterface;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
@@ -40,7 +39,6 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      *
      * @param array $properties The property values that MUST be applied to the object. The array key is the property
      *     name the value is the property value.
-     * @param StreamInterface $contentStream
      * @param VersioningState $versioningState An enumeration specifying what the versioning state of the newly-created
      *     object MUST be. Valid values are:
      *      <code>none</code>
@@ -72,7 +70,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
         array $addAces = [],
         array $removeAces = [],
         OperationContextInterface $context = null
-    ) {
+    ): ?DocumentInterface {
         $newObjectId = $this->getSession()->createDocument(
             $properties,
             $this,
@@ -84,10 +82,11 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
         );
 
         $document = $this->getNewlyCreatedObject($newObjectId, $context);
-
         if ($document === null) {
             return null;
-        } elseif (!$document instanceof DocumentInterface) {
+        }
+
+        if (!$document instanceof DocumentInterface) {
             throw new CmisRuntimeException('Newly created object is not a document! New id: ' . $document->getId());
         }
 
@@ -131,7 +130,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
         array $addAces = [],
         array $removeAces = [],
         OperationContextInterface $context = null
-    ) {
+    ): ?DocumentInterface {
         $newObjectId = $this->getSession()->createDocumentFromSource(
             $source,
             $properties,
@@ -143,10 +142,11 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
         );
 
         $document = $this->getNewlyCreatedObject($newObjectId, $context);
-
         if ($document === null) {
             return null;
-        } elseif (!$document instanceof DocumentInterface) {
+        }
+
+        if (!$document instanceof DocumentInterface) {
             throw new CmisRuntimeException('Newly created object is not a document! New id: ' . $document->getId());
         }
 
@@ -173,14 +173,15 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
         array $addAces = [],
         array $removeAces = [],
         OperationContextInterface $context = null
-    ) {
+    ): ?FolderInterface {
         $newObjectId = $this->getSession()->createFolder($properties, $this, $policies, $addAces, $removeAces);
 
         $folder = $this->getNewlyCreatedObject($newObjectId, $context);
-
         if ($folder === null) {
             return null;
-        } elseif (!$folder instanceof FolderInterface) {
+        }
+
+        if (!$folder instanceof FolderInterface) {
             throw new CmisRuntimeException('Newly created object is not a folder! New id: ' . $folder->getId());
         }
 
@@ -206,14 +207,15 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
         array $addAces = [],
         array $removeAces = [],
         OperationContextInterface $context = null
-    ) {
+    ): ?ItemInterface {
         $newObjectId = $this->getSession()->createItem($properties, $this, $policies, $addAces, $removeAces);
 
         $item = $this->getNewlyCreatedObject($newObjectId, $context);
-
         if ($item === null) {
             return null;
-        } elseif (!$item instanceof ItemInterface) {
+        }
+
+        if (!$item instanceof ItemInterface) {
             throw new CmisRuntimeException('Newly created object is not a item! New id: ' . $item->getId());
         }
 
@@ -239,14 +241,15 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
         array $addAces = [],
         array $removeAces = [],
         OperationContextInterface $context = null
-    ) {
+    ): ?PolicyInterface {
         $newObjectId = $this->getSession()->createPolicy($properties, $this, $policies, $addAces, $removeAces);
 
         $policy = $this->getNewlyCreatedObject($newObjectId, $context);
-
         if ($policy === null) {
             return null;
-        } elseif (!$policy instanceof PolicyInterface) {
+        }
+
+        if (!$policy instanceof PolicyInterface) {
             throw new CmisRuntimeException('Newly created object is not a policy! New id: ' . $policy->getId());
         }
 
@@ -291,7 +294,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      * @param OperationContextInterface|null $context
      * @return DocumentInterface[] A list of checked out documents.
      */
-    public function getCheckedOutDocs(OperationContextInterface $context = null)
+    public function getCheckedOutDocs(OperationContextInterface $context = null): array
     {
         $context = $this->ensureContext($context);
         $checkedOutDocs = $this->getBinding()->getNavigationService()->getCheckedOutDocs(
@@ -325,7 +328,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      * @param OperationContextInterface|null $context
      * @return CmisObjectInterface[] A list of the child objects for the specified folder.
      */
-    public function getChildren(OperationContextInterface $context = null)
+    public function getChildren(OperationContextInterface $context = null): array
     {
         $context = $this->ensureContext($context);
         $children = $this->getBinding()->getNavigationService()->getChildren(
@@ -361,7 +364,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
     public function getDescendants($depth, OperationContextInterface $context = null)
     {
         $context = $this->ensureContext($context);
-        $containerList = $this->getBinding()->getNavigationService()->getDescendants(
+        $this->getBinding()->getNavigationService()->getDescendants(
             $this->getRepositoryId(),
             $this->getId(),
             (int) $depth,
@@ -372,7 +375,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $context->isIncludePathSegments()
         );
 
-        return $this->convertBindingContainer($containerList, $context);
+        return $this->convertBindingContainer();
     }
 
     /**
@@ -380,7 +383,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      *
      * @return FolderInterface|null the parent folder object or <code>null</code> if the folder is the root folder.
      */
-    public function getFolderParent()
+    public function getFolderParent(): ?FolderInterface
     {
         if ($this->isRootFolder()) {
             return null;
@@ -417,7 +420,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
     public function getFolderTree($depth, OperationContextInterface $context = null)
     {
         $context = $this->ensureContext($context);
-        $containerList = $this->getBinding()->getNavigationService()->getFolderTree(
+        $this->getBinding()->getNavigationService()->getFolderTree(
             $this->getRepositoryId(),
             $this->getId(),
             (int) $depth,
@@ -428,7 +431,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
             $context->isIncludePathSegments()
         );
 
-        return $this->convertBindingContainer($containerList, $context);
+        return $this->convertBindingContainer();
     }
 
     /**
@@ -479,7 +482,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      *
      * @return boolean <code>true</code> if the folder is the root folder, <code>false</code> otherwise
      */
-    public function isRootFolder()
+    public function isRootFolder(): bool
     {
         return $this->getSession()->getRepositoryInfo()->getRootFolderId() === $this->getId();
     }
@@ -491,7 +494,7 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
      * @return ObjectTypeInterface[] the property value or <code>null</code> if the property hasn't been requested,
      *     hasn't been provided by the repository, or the property value isn't set
      */
-    public function getAllowedChildObjectTypes()
+    public function getAllowedChildObjectTypes(): array
     {
         $result = [];
 
@@ -521,14 +524,10 @@ class Folder extends AbstractFileableCmisObject implements FolderInterface
 
     /**
      * Converts a binding container into an API container.
-     *
-     * @param ObjectInFolderContainerInterface[] $bindingContainerList
-     * @param OperationContextInterface $context
-     * @return TreeInterface[]
      */
-    private function convertBindingContainer(array $bindingContainerList, OperationContextInterface $context)
+    private function convertBindingContainer(): never
     {
         // TODO implement when Tree and ObjectInFolderContainer is implemented
-        throw new \Exception('Not yet implemented!');
+        throw new Exception('Not yet implemented!');
     }
 }

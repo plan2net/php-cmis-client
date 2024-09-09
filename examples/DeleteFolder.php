@@ -1,7 +1,7 @@
 <?php
 use Dkd\PhpCmis\Data\FolderInterface;
 
-require_once('CreateFolder.php');
+require_once(__DIR__ . '/CreateFolder.php');
 
 echo "Now trying to delete the folder...\n";
 

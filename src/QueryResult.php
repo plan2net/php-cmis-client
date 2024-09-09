@@ -34,7 +34,7 @@ class QueryResult implements QueryResultInterface
     /**
      * @var AllowableActionsInterface|null
      */
-    protected $allowableActions = null;
+    protected $allowableActions;
 
     /**
      * @var RelationshipInterface[]
@@ -46,10 +46,6 @@ class QueryResult implements QueryResultInterface
      */
     protected $renditions = [];
 
-    /**
-     * @param SessionInterface $session
-     * @param ObjectDataInterface $objectData
-     */
     public function __construct(SessionInterface $session, ObjectDataInterface $objectData)
     {
         $objectFactory = $session->getObjectFactory();
@@ -110,7 +106,7 @@ class QueryResult implements QueryResultInterface
      *
      * @return PropertyDataInterface[] all properties, not <code>null</code>
      */
-    public function getProperties()
+    public function getProperties(): array
     {
         return array_values($this->propertiesById);
     }
@@ -127,7 +123,7 @@ class QueryResult implements QueryResultInterface
      */
     public function getPropertyById($id)
     {
-        return isset($this->propertiesById[$id]) ? $this->propertiesById[$id] : null;
+        return $this->propertiesById[$id] ?? null;
     }
 
     /**
@@ -139,7 +135,7 @@ class QueryResult implements QueryResultInterface
      */
     public function getPropertyByQueryName($queryName)
     {
-        return isset($this->propertiesByQueryName[$queryName]) ? $this->propertiesByQueryName[$queryName] : null;
+        return $this->propertiesByQueryName[$queryName] ?? null;
     }
 
     /**

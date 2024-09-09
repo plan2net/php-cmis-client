@@ -9,27 +9,28 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\DataObjects\ObjectParentData;
 
 /**
  * Class ObjectParentDataTest
  */
-class ObjectParentDataTest extends \PHPUnit_Framework_TestCase
+class ObjectParentDataTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectParentData
      */
     protected $objectParentData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectParentData = new ObjectParentData();
     }
 
-    public function testSetObjectSetsProperty()
+    public function testSetObjectSetsProperty(): void
     {
-        $objectData = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface');
+        $objectData = $this->getMockForAbstractClass(ObjectDataInterface::class);
         $this->objectParentData->setObject($objectData);
         $this->assertAttributeSame($objectData, 'object', $this->objectParentData);
     }
@@ -37,14 +38,14 @@ class ObjectParentDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetObjectSetsProperty
      */
-    public function testGetObjectReturnsPropertyValue()
+    public function testGetObjectReturnsPropertyValue(): void
     {
-        $objectData = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface');
+        $objectData = $this->getMockForAbstractClass(ObjectDataInterface::class);
         $this->objectParentData->setObject($objectData);
         $this->assertSame($objectData, $this->objectParentData->getObject());
     }
 
-    public function testSetRelativePathSegmentSetsProperty()
+    public function testSetRelativePathSegmentSetsProperty(): void
     {
         $this->objectParentData->setRelativePathSegment('foo');
         $this->assertAttributeSame('foo', 'relativePathSegment', $this->objectParentData);
@@ -55,7 +56,7 @@ class ObjectParentDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetRelativePathSegmentSetsProperty
      */
-    public function testGetRelativePathSegmentReturnsPropertyValue()
+    public function testGetRelativePathSegmentReturnsPropertyValue(): void
     {
         $this->objectParentData->setRelativePathSegment('foo');
         $this->assertEquals('foo', $this->objectParentData->getRelativePathSegment());

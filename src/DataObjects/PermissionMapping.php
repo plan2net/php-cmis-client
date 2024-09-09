@@ -38,7 +38,7 @@ class PermissionMapping extends AbstractExtensionData implements PermissionMappi
     /**
      * @param string $key
      */
-    public function setKey($key)
+    public function setKey($key): void
     {
         $this->key = (string) $key;
     }
@@ -54,7 +54,7 @@ class PermissionMapping extends AbstractExtensionData implements PermissionMappi
     /**
      * @param string[] $permissions
      */
-    public function setPermissions(array $permissions)
+    public function setPermissions(array $permissions): void
     {
         // ensure that all array values are of type string
         $permissions = array_map('strval', $permissions);

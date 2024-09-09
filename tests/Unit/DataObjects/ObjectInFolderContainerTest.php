@@ -9,7 +9,10 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Data\ObjectInFolderDataInterface;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use stdClass;
 use Dkd\PhpCmis\Data\ObjectInFolderContainerInterface;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderData;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderContainer;
@@ -17,21 +20,21 @@ use Dkd\PhpCmis\DataObjects\ObjectInFolderContainer;
 /**
  * Class ObjectInFolderContainerTest
  */
-class ObjectInFolderContainerTest extends \PHPUnit_Framework_TestCase
+class ObjectInFolderContainerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectInFolderContainer
      */
     protected $objectInFolderContainer;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectInFolderContainer = new ObjectInFolderContainer(new ObjectInFolderData());
     }
 
-    public function testSetObjectSetsProperty()
+    public function testSetObjectSetsProperty(): void
     {
-        $objectData = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectInFolderDataInterface');
+        $objectData = $this->getMockForAbstractClass(ObjectInFolderDataInterface::class);
         $this->objectInFolderContainer->setObject($objectData);
         $this->assertAttributeSame($objectData, 'object', $this->objectInFolderContainer);
     }
@@ -39,14 +42,14 @@ class ObjectInFolderContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetObjectSetsProperty
      */
-    public function testGetObjectReturnsPropertyValue()
+    public function testGetObjectReturnsPropertyValue(): void
     {
-        $objectData = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectInFolderDataInterface');
+        $objectData = $this->getMockForAbstractClass(ObjectInFolderDataInterface::class);
         $this->objectInFolderContainer->setObject($objectData);
         $this->assertSame($objectData, $this->objectInFolderContainer->getObject());
     }
 
-    public function testSetObjectsSetsProperty()
+    public function testSetObjectsSetsProperty(): void
     {
         $children = [$this->getObjectInFolderContainerMock()];
 
@@ -54,16 +57,16 @@ class ObjectInFolderContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame($children, 'children', $this->objectInFolderContainer);
     }
 
-    public function testSetChildrenThrowsExceptionIfAGivenObjectIsNotOfTypeObjectInFolderContainerInterface()
+    public function testSetChildrenThrowsExceptionIfAGivenObjectIsNotOfTypeObjectInFolderContainerInterface(): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->objectInFolderContainer->setChildren([new \stdClass()]);
+        $this->setExpectedException(CmisInvalidArgumentException::class);
+        $this->objectInFolderContainer->setChildren([new stdClass()]);
     }
 
     /**
      * @depends testSetObjectsSetsProperty
      */
-    public function testGetObjectsReturnsPropertyValue()
+    public function testGetObjectsReturnsPropertyValue(): void
     {
         $children = [$this->getObjectInFolderContainerMock()];
 
@@ -71,7 +74,7 @@ class ObjectInFolderContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($children, $this->objectInFolderContainer->getChildren());
     }
 
-    public function testConstructorSetsObject()
+    public function testConstructorSetsObject(): void
     {
         $expectedObject = new ObjectInFolderData;
         $objectInFolderContainer = new ObjectInFolderContainer($expectedObject);
@@ -84,7 +87,7 @@ class ObjectInFolderContainerTest extends \PHPUnit_Framework_TestCase
     protected function getObjectInFolderContainerMock()
     {
         return $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Data\\ObjectInFolderContainerInterface'
+            ObjectInFolderContainerInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
     }
 }

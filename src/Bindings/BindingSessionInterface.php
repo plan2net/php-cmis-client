@@ -33,18 +33,16 @@ interface BindingSessionInterface
      * Gets a session value or the default value if the key doesn't exist.
      *
      * @param string $key
-     * @param mixed $defaultValue
      * @return mixed
      */
-    public function get($key, $defaultValue = null);
+    public function get($key, mixed $defaultValue = null);
 
     /**
      * Adds a session value.
      *
      * @param string $key
-     * @param mixed $value
      */
-    public function put($key, $value);
+    public function put($key, mixed $value);
 
     /**
      * Removes a session value.

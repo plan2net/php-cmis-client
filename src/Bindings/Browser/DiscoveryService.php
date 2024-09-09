@@ -132,7 +132,7 @@ class DiscoveryService extends AbstractBrowserBindingService implements Discover
             ]
         );
 
-        if ($includeRelationships !== null) {
+        if ($includeRelationships instanceof IncludeRelationships) {
             $url->getQuery()->modify([Constants::PARAM_RELATIONSHIPS => (string) $includeRelationships]);
         }
 

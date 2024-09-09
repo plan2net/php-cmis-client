@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\SessionParameter;
 use Dkd\PhpCmis\Test\Unit\FixtureHelperTrait;
@@ -19,7 +19,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 /**
  * Class AbstractBrowserBindingServiceTestCase
  */
-abstract class AbstractBrowserBindingServiceTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractBrowserBindingServiceTestCase extends PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
     use FixtureHelperTrait;
@@ -44,7 +44,7 @@ abstract class AbstractBrowserBindingServiceTestCase extends \PHPUnit_Framework_
         $map = array_merge($sessionParameterMap, $map);
 
         $sessionMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
+            BindingSessionInterface::class
         )->setMethods(['get'])->getMockForAbstractClass();
 
         $sessionMock->expects($this->any())->method('get')->will($this->returnValueMap($map));

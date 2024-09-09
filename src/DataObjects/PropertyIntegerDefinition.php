@@ -38,7 +38,7 @@ class PropertyIntegerDefinition extends AbstractPropertyDefinition implements Mu
     /**
      * @param integer $minValue the minimum value or <code>null</code> if no limit is specified
      */
-    public function setMinValue($minValue)
+    public function setMinValue($minValue): void
     {
         $this->minValue = $this->castValueToSimpleType('integer', $minValue);
     }
@@ -54,7 +54,7 @@ class PropertyIntegerDefinition extends AbstractPropertyDefinition implements Mu
     /**
      * @param integer $maxValue the maximum value or <code>null</code> if no limit is specified
      */
-    public function setMaxValue($maxValue)
+    public function setMaxValue($maxValue): void
     {
         $this->maxValue = $this->castValueToSimpleType('integer', $maxValue);
     }

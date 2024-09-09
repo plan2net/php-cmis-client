@@ -9,14 +9,15 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\DataObjects\PropertyInteger;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 /**
  * Class PropertyIntegerTest
  */
-class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
+class PropertyIntegerTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -25,7 +26,7 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
      */
     protected $propertyInteger;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->propertyInteger = new PropertyInteger('testId');
     }
@@ -33,16 +34,15 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider integerCastDataProvider
      * @param integer $expected
-     * @param mixed $value
      */
-    public function testSetValuesSetsProperty($expected, $value)
+    public function testSetValuesSetsProperty($expected, mixed $value): void
     {
         if ($value === null) {
             $expected = $value;
         }
 
-        if (!is_integer($value) && $value !== null && !(PHP_INT_SIZE == 4 && is_double($value))) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
+        if (!is_int($value) && $value !== null && !(PHP_INT_SIZE == 4 && is_float($value))) {
+            $this->setExpectedException(CmisInvalidArgumentException::class, '', 1413440336);
         }
 
         $this->propertyInteger->setValues([$value]);
@@ -52,16 +52,15 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider integerCastDataProvider
      * @param integer $expected
-     * @param mixed $value
      */
-    public function testSetValueSetsValuesProperty($expected, $value)
+    public function testSetValueSetsValuesProperty($expected, mixed $value): void
     {
         if ($value === null) {
             $expected = $value;
         }
 
-        if (!is_integer($value) && $value !== null && !(PHP_INT_SIZE == 4 && is_double($value))) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
+        if (!is_int($value) && $value !== null && !(PHP_INT_SIZE == 4 && is_float($value))) {
+            $this->setExpectedException(CmisInvalidArgumentException::class, '', 1413440336);
         }
 
         $this->propertyInteger->setValue($value);

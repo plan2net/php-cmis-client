@@ -9,14 +9,17 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Data\AceInterface;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use stdClass;
 use Dkd\PhpCmis\DataObjects\AccessControlEntry;
 use Dkd\PhpCmis\DataObjects\AccessControlList;
 
 /**
  * Class AccessControlListTest
  */
-class AccessControlListTest extends \PHPUnit_Framework_TestCase
+class AccessControlListTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var AccessControlList
@@ -28,46 +31,46 @@ class AccessControlListTest extends \PHPUnit_Framework_TestCase
      */
     protected $aceMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->aceMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Data\\AceInterface'
+            AceInterface::class
         )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $this->acl = new AccessControlList([$this->aceMock]);
     }
 
-    public function testSetAcesSetsProperty()
+    public function testSetAcesSetsProperty(): void
     {
         $aces = [$this->aceMock];
         $this->acl->setAces($aces);
         $this->assertAttributeSame($aces, 'aces', $this->acl);
     }
 
-    public function testSetAcesThrowsExceptionIfAGivenAceItemIsNotOfTypeAceInterface()
+    public function testSetAcesThrowsExceptionIfAGivenAceItemIsNotOfTypeAceInterface(): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->acl->setAces([new \stdClass()]);
+        $this->setExpectedException(CmisInvalidArgumentException::class);
+        $this->acl->setAces([new stdClass()]);
     }
 
     /**
      * @depends testSetAcesSetsProperty
      */
-    public function testGetAcesReturnsPropertyValue()
+    public function testGetAcesReturnsPropertyValue(): void
     {
         $aces = [$this->aceMock];
         $this->acl->setAces($aces);
         $this->assertSame($aces, $this->acl->getAces());
     }
 
-    public function testConstructorSetsAces()
+    public function testConstructorSetsAces(): void
     {
         $aces = [$this->aceMock];
         $acl = new AccessControlList($aces);
         $this->assertAttributeSame($aces, 'aces', $acl);
     }
 
-    public function testSetIsExactSetsIsExact()
+    public function testSetIsExactSetsIsExact(): void
     {
         $this->acl->setIsExact(true);
         $this->assertAttributeSame(true, 'isExact', $this->acl);
@@ -75,7 +78,7 @@ class AccessControlListTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(false, 'isExact', $this->acl);
     }
 
-    public function testSetIsExactCastsValueToBoolean()
+    public function testSetIsExactCastsValueToBoolean(): void
     {
         $this->setExpectedException('\\PHPUnit_Framework_Error_Notice');
         $this->acl->setIsExact(1);
@@ -85,7 +88,7 @@ class AccessControlListTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsExactSetsIsExact
      */
-    public function testIsExactReturnsIsExact()
+    public function testIsExactReturnsIsExact(): void
     {
         $this->acl->setIsExact(true);
         $this->assertTrue($this->acl->isExact());

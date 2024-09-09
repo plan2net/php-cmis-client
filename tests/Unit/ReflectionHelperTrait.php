@@ -1,6 +1,11 @@
 <?php
 namespace Dkd\PhpCmis\Test\Unit;
 
+use ReflectionClass;
+use ReflectionObject;
+use ReflectionMethod;
+use stdClass;
+
 /*
  * This file is part of php-cmis-lib.
  *
@@ -9,7 +14,6 @@ namespace Dkd\PhpCmis\Test\Unit;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 /**
  * Class ReflectionHelperTrait
  */
@@ -21,11 +25,11 @@ trait ReflectionHelperTrait
      *
      * @param string $class The class to get the method from
      * @param string $method The name of the method to get.
-     * @return \ReflectionMethod
+     * @return ReflectionMethod
      */
     protected function getMethod($class, $method)
     {
-        $class = new \ReflectionClass($class);
+        $class = new ReflectionClass($class);
         $method = $class->getMethod($method);
         $method->setAccessible(true);
 
@@ -35,13 +39,13 @@ trait ReflectionHelperTrait
     /**
      * Helper function that could set protected properties of an object by creating a reflection class.
      *
-     * @param \stdClass $object The object where the property should be set
+     * @param stdClass $object The object where the property should be set
      * @param string $propertyName The property name
      * @param mixed $value The value the property should get assigned to
      */
-    protected function setProtectedProperty(&$object, $propertyName, $value)
+    protected function setProtectedProperty(&$object, $propertyName, mixed $value)
     {
-        $reflection = new \ReflectionObject($object);
+        $reflection = new ReflectionObject($object);
 
         $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);

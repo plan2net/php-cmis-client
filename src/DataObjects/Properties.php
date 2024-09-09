@@ -42,7 +42,7 @@ class Properties extends AbstractExtensionData implements PropertiesInterface
      *
      * @param PropertyDataInterface $property the property
      */
-    public function addProperty(PropertyDataInterface $property)
+    public function addProperty(PropertyDataInterface $property): void
     {
         $this->properties[$property->getId()] = $property;
     }
@@ -52,7 +52,7 @@ class Properties extends AbstractExtensionData implements PropertiesInterface
      *
      * @param PropertyDataInterface[] $properties
      */
-    public function addProperties(array $properties)
+    public function addProperties(array $properties): void
     {
         foreach ($properties as $property) {
             $this->addProperty($property);
@@ -64,7 +64,7 @@ class Properties extends AbstractExtensionData implements PropertiesInterface
      *
      * @param string $id the property ID
      */
-    public function removeProperty($id)
+    public function removeProperty($id): void
     {
         if (isset($this->properties[$id])) {
             unset($this->properties[$id]);

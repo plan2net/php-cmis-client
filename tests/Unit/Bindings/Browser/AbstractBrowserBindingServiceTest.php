@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\Bindings\Browser\AbstractBrowserBindingService;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryUrlCache;
@@ -45,7 +45,6 @@ use Dkd\PhpCmis\Exception\CmisUpdateConflictException;
 use Dkd\PhpCmis\Exception\CmisVersioningException;
 use Dkd\PhpCmis\SessionParameter;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Message\RequestInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Client;
@@ -59,7 +58,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 {
     const CLASS_TO_TEST = AbstractBrowserBindingService::class;
 
-    public function testConstructorSetsSessionAndBindingsHelper()
+    public function testConstructorSetsSessionAndBindingsHelper(): void
     {
         $sessionMock = $this->getMockBuilder(
             BindingSessionInterface::class
@@ -77,7 +76,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $this->assertAttributeInstanceOf('BindingHelperMock', 'cmisBindingsHelper', $binding);
     }
 
-    public function testConstructorSetsSuccinctPropertyBasedOnSessionParameter()
+    public function testConstructorSetsSuccinctPropertyBasedOnSessionParameter(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -96,10 +95,10 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $this->assertAttributeSame(true, 'succinct', $binding);
     }
 
-    public function testConstructorCreatesCmisBindingHelperInstanceIfNoneGiven()
+    public function testConstructorCreatesCmisBindingHelperInstanceIfNoneGiven(): void
     {
         $sessionMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
+            BindingSessionInterface::class
         )->setMethods(['get'])->getMockForAbstractClass();
 
         $binding = $this->getMockBuilder(
@@ -107,13 +106,13 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         )->setConstructorArgs([$sessionMock])->getMockForAbstractClass();
 
         $this->assertAttributeInstanceOf(
-            '\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper',
+            CmisBindingsHelper::class,
             'cmisBindingsHelper',
             $binding
         );
     }
 
-    public function testGetSuccinctReturnsPropertyValue()
+    public function testGetSuccinctReturnsPropertyValue(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -128,7 +127,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetSessionReturnsSession()
+    public function testGetSessionReturnsSession(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -140,7 +139,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $this->assertSame($sessionMock, $binding->getSession());
     }
 
-    public function testGetHttpInvokerGetsHttpInvokerFromCmisBindingsHelper()
+    public function testGetHttpInvokerGetsHttpInvokerFromCmisBindingsHelper(): void
     {
         $httpInvokerDummy = new Client();
         $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
@@ -156,7 +155,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $this->assertSame($httpInvokerDummy, $this->getMethod(self::CLASS_TO_TEST, 'getHttpInvoker')->invoke($binding));
     }
 
-    public function testGetRepositoryUrlThrowsExceptionIfRepositoryDoesNotExist()
+    public function testGetRepositoryUrlThrowsExceptionIfRepositoryDoesNotExist(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -180,7 +179,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $this->getMethod(self::CLASS_TO_TEST, 'getRepositoryUrl')->invokeArgs($binding, ['repository-id']);
     }
 
-    public function testGetRepositoryUrlReturnsUrlFromRepositoryUrlCachet()
+    public function testGetRepositoryUrlReturnsUrlFromRepositoryUrlCachet(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -206,7 +205,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetObjectUrlThrowsExceptionIfRepositoryDoesNotExist()
+    public function testGetObjectUrlThrowsExceptionIfRepositoryDoesNotExist(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -233,7 +232,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetObjectUrlReturnsUrlFromRepositoryUrlCache()
+    public function testGetObjectUrlReturnsUrlFromRepositoryUrlCache(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -262,7 +261,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetPathUrlThrowsExceptionIfRepositoryDoesNotExist()
+    public function testGetPathUrlThrowsExceptionIfRepositoryDoesNotExist(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -286,7 +285,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $this->getMethod(self::CLASS_TO_TEST, 'getPathUrl')->invokeArgs($binding, ['repository-id', 'path']);
     }
 
-    public function testGetPathUrlReturnsUrlFromRepositoryUrlCachet()
+    public function testGetPathUrlReturnsUrlFromRepositoryUrlCachet(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -312,7 +311,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetServiceUrlReturnsServiceUrlStringFromSession()
+    public function testGetServiceUrlReturnsServiceUrlStringFromSession(): void
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -325,7 +324,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetServiceUrlReturnsNullIfNoStringCouldBeFetchedFromSession()
+    public function testGetServiceUrlReturnsNullIfNoStringCouldBeFetchedFromSession(): void
     {
         $map = [
             [SessionParameter::BROWSER_SUCCINCT, null, false],
@@ -352,7 +351,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $expectedException,
         $errorCode,
         $message
-    ) {
+    ): void {
         $sessionMock = $this->getSessionMock();
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
@@ -508,7 +507,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         ];
     }
 
-    public function testReadCallsHttpInvokerAndReturnsRequestResult()
+    public function testReadCallsHttpInvokerAndReturnsRequestResult(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -533,7 +532,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testReadCatchesAllRequestExceptionsAndConvertsThemToACmisException()
+    public function testReadCatchesAllRequestExceptionsAndConvertsThemToACmisException(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -551,7 +550,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             $exceptionMock
         );
 
-        $this->setExpectedException(get_class($exceptionMock));
+        $this->setExpectedException($exceptionMock::class);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -568,7 +567,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testReadCatchesRequestExceptionAndPassesOnlyExceptionIfNoRequestDataExists()
+    public function testReadCatchesRequestExceptionAndPassesOnlyExceptionIfNoRequestDataExists(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -584,7 +583,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             $exceptionMock
         );
 
-        $this->setExpectedException(get_class($exceptionMock));
+        $this->setExpectedException($exceptionMock::class);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -603,7 +602,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testPostCallsHttpInvokerAndReturnsRequestResult()
+    public function testPostCallsHttpInvokerAndReturnsRequestResult(): void
     {
         $testUrl = Url::createFromUrl(self::BROWSER_URL_TEST);
         $content = 'fooBarBaz';
@@ -631,7 +630,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testPostCatchesAllRequestExceptionsAndConvertsThemToACmisException()
+    public function testPostCatchesAllRequestExceptionsAndConvertsThemToACmisException(): void
     {
         $testUrl = Url::createFromUrl('http://foo.bar.baz');
         $content = 'fooBarBaz';
@@ -652,7 +651,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
             $exceptionMock
         );
 
-        $this->setExpectedException(get_class($exceptionMock));
+        $this->setExpectedException($exceptionMock::class);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -669,7 +668,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetRepositoryUrlCacheGetsRepositoryUrlCacheFromSession()
+    public function testGetRepositoryUrlCacheGetsRepositoryUrlCacheFromSession(): void
     {
         $repositoryUrlCache = new RepositoryUrlCache();
         $sessionMock = $this->getSessionMock(
@@ -687,7 +686,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetRepositoryUrlCacheCreatesNewInstanceIfNoInstanceIsDefinedInSession()
+    public function testGetRepositoryUrlCacheCreatesNewInstanceIfNoInstanceIsDefinedInSession(): void
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|AbstractBrowserBindingService $binding */
         $binding = $this->getMockBuilder(
@@ -700,7 +699,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetTypeDefinitionInternalBuildsAndReadsUrlAndConvertsJsonResultToTypeDefinitionObject()
+    public function testGetTypeDefinitionInternalBuildsAndReadsUrlAndConvertsJsonResultToTypeDefinitionObject(): void
     {
         $repositoryId = 'repositoryId';
         $typeId = 'typeId';
@@ -737,7 +736,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetTypeDefinitionInternalThrowsExceptionIfRepositoryIdIsEmpty()
+    public function testGetTypeDefinitionInternalThrowsExceptionIfRepositoryIdIsEmpty(): void
     {
         $repositoryId = null;
         $typeId = 'typeId';
@@ -760,7 +759,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetTypeDefinitionInternalThrowsExceptionIfTypeIdIsEmpty()
+    public function testGetTypeDefinitionInternalThrowsExceptionIfTypeIdIsEmpty(): void
     {
         $repositoryId = 'repositoryId';
         $typeId = null;
@@ -782,7 +781,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetRepositoriesInternalThrowsExceptionIfRequestDoesNotReturnValidJson()
+    public function testGetRepositoriesInternalThrowsExceptionIfRequestDoesNotReturnValidJson(): void
     {
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -810,7 +809,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $this->getMethod(self::CLASS_TO_TEST, 'getRepositoriesInternal')->invoke($binding);
     }
 
-    public function testGetRepositoriesInternalThrowsExceptionIfRequestDoesNotReturnAnItemArray()
+    public function testGetRepositoriesInternalThrowsExceptionIfRequestDoesNotReturnAnItemArray(): void
     {
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -834,7 +833,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $binding->expects($this->any())->method('getServiceUrl')->willReturn(self::BROWSER_URL_TEST);
         $binding->expects($this->any())->method('read')->willReturn($responseMock);
 
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisConnectionException', null, 1415187764);
+        $this->setExpectedException(CmisConnectionException::class, null, 1415187764);
         $this->getMethod(self::CLASS_TO_TEST, 'getRepositoriesInternal')->invoke($binding);
     }
 
@@ -842,7 +841,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
      * @dataProvider incompleteRepositoryInfosDataProvider
      * @param $repositoryInfo
      */
-    public function testGetRepositoriesInternalThrowsExceptionIfRepositoryInfosAreEmpty($repositoryInfo)
+    public function testGetRepositoriesInternalThrowsExceptionIfRepositoryInfosAreEmpty($repositoryInfo): void
     {
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             ['convertRepositoryInfo']
@@ -907,9 +906,8 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
     /**
      * @dataProvider getRepositoriesInternalDataProvider
      * @param string $repositoryId
-     * @param \PHPUnit_Framework_MockObject_MockObject $repositoryUrlCacheMock
      */
-    public function testGetRepositoriesInternalReturnsArrayOfRepositoryInfos($repositoryId, \PHPUnit_Framework_MockObject_MockObject $repositoryUrlCacheMock)
+    public function testGetRepositoriesInternalReturnsArrayOfRepositoryInfos($repositoryId, PHPUnit_Framework_MockObject_MockObject $repositoryUrlCacheMock): void
     {
         $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             ['convertRepositoryInfo']
@@ -978,7 +976,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         ];
     }
 
-    public function testConvertPropertiesToQueryArrayConvertsPropertiesIntoAnArray()
+    public function testConvertPropertiesToQueryArrayConvertsPropertiesIntoAnArray(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -989,7 +987,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
 
         $properties = new Properties();
 
-        $currentTime = new \DateTime('now');
+        $currentTime = new DateTime('now');
 
         $singleValueStringProperty = new PropertyString('stringProp', 'stringValue');
 
@@ -1045,7 +1043,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testConvertAclToQueryArrayConvertsAclIntoAnArrayForRemovingAcls()
+    public function testConvertAclToQueryArrayConvertsAclIntoAnArrayForRemovingAcls(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -1087,7 +1085,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testConvertAclToQueryArrayConvertsAclIntoAnArrayForAddingAcls()
+    public function testConvertAclToQueryArrayConvertsAclIntoAnArrayForAddingAcls(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -1129,7 +1127,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testConvertPolicyIdArrayToQueryArrayConvertsPoliciesArrayIntoAnQueryArray()
+    public function testConvertPolicyIdArrayToQueryArrayConvertsPoliciesArrayIntoAnQueryArray(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -1159,7 +1157,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testGetDateTimeFormatReturnsPropertyValue()
+    public function testGetDateTimeFormatReturnsPropertyValue(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -1175,7 +1173,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testSetDateTimeFormatSetsProperty()
+    public function testSetDateTimeFormatSetsProperty(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -1193,7 +1191,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         );
     }
 
-    public function testConstructorSetsDateTimeFormatPropertyBasedOnSessionParameter()
+    public function testConstructorSetsDateTimeFormatPropertyBasedOnSessionParameter(): void
     {
         $sessionMock = $this->getSessionMock();
 
@@ -1216,7 +1214,7 @@ class AbstractBrowserBindingServiceTest extends AbstractBrowserBindingServiceTes
         $this->assertAttributeEquals(DateTimeFormat::cast(DateTimeFormat::EXTENDED), 'dateTimeFormat', $binding);
     }
 
-    public function testConstructorSetsDateTimeFormatPropertyBasedOnDefaultValue()
+    public function testConstructorSetsDateTimeFormatPropertyBasedOnDefaultValue(): void
     {
         $sessionMock = $this->getSessionMock([[SessionParameter::BROWSER_DATETIME_FORMAT, null, null]]);
 

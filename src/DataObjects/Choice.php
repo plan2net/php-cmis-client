@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\Definitions\ChoiceInterface;
 use Dkd\PhpCmis\Traits\TypeHelperTrait;
 
@@ -26,7 +26,7 @@ class Choice implements ChoiceInterface
     protected $displayName = '';
 
     /**
-     * @var ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|\DateTime[]
+     * @var ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|DateTime[]
      */
     protected $value = [];
 
@@ -46,7 +46,7 @@ class Choice implements ChoiceInterface
     /**
      * @param ChoiceInterface[] $choices
      */
-    public function setChoices(array $choices)
+    public function setChoices(array $choices): void
     {
         foreach ($choices as $value) {
             $this->checkType(ChoiceInterface::class, $value);
@@ -70,7 +70,7 @@ class Choice implements ChoiceInterface
      *
      * @return string $displayName
      */
-    public function setDisplayName($displayName)
+    public function setDisplayName($displayName): void
     {
         $this->checkType('string', $displayName);
         $this->displayName = $displayName;
@@ -79,7 +79,7 @@ class Choice implements ChoiceInterface
     /**
      * Return the value of the choice value.
      *
-     * @return ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|\DateTime[]
+     * @return ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|DateTime[]
      */
     public function getValue()
     {
@@ -89,9 +89,9 @@ class Choice implements ChoiceInterface
     /**
      * Sets the value of the choice value.
      *
-     * @param ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|\DateTime[] $value
+     * @param ChoiceInterface[]|string[]|integer[]|boolean[]|float[]|DateTime[] $value
      */
-    public function setValue(array $value)
+    public function setValue(array $value): void
     {
         $this->value = $value;
     }

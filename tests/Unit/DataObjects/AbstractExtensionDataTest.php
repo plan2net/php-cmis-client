@@ -9,7 +9,9 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Dkd\PhpCmis\Data\CmisExtensionElementInterface;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use stdClass;
 use Dkd\PhpCmis\DataObjects\AbstractExtensionData;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -29,17 +31,17 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
 
     const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\DataObjects\\AbstractExtensionData';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->abstractExtensionData = $this->getMockBuilder(self::CLASS_TO_TEST)->enableProxyingToOriginalMethods(
         )->getMockForAbstractClass();
     }
 
-    public function testSetExtensionsSetsAttributeAndGetExtensionReturnsAttribute()
+    public function testSetExtensionsSetsAttributeAndGetExtensionReturnsAttribute(): void
     {
         $extensions = [
             $this->getMockBuilder(
-                '\\Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface'
+                CmisExtensionElementInterface::class
             )->getMockForAbstractClass()
         ];
 
@@ -48,13 +50,13 @@ class AbstractExtensionDataTest extends PHPUnit_Framework_TestCase
         $this->assertSame($extensions, $this->abstractExtensionData->getExtensions());
     }
 
-    public function testSetExtensionsWithInvalidDataThrowsException()
+    public function testSetExtensionsWithInvalidDataThrowsException(): void
     {
         $this->setExpectedException(
-            '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+            CmisInvalidArgumentException::class,
             'Argument of type "stdClass" given but argument of type '
             . '"Dkd\\PhpCmis\\Data\\CmisExtensionElementInterface" was expected.'
         );
-        $this->abstractExtensionData->setExtensions([new \stdClass()]);
+        $this->abstractExtensionData->setExtensions([new stdClass()]);
     }
 }

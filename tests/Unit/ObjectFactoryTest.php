@@ -9,7 +9,27 @@ namespace Dkd\PhpCmis\Test\Unit;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Bindings\CmisBindingInterface;
+use Dkd\PhpCmis\Data\BindingsObjectFactoryInterface;
+use Dkd\PhpCmis\Data\AclInterface;
+use Dkd\PhpCmis\Data\AceInterface;
+use Dkd\PhpCmis\Exception\CmisRuntimeException;
+use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
+use Dkd\PhpCmis\DataObjects\DocumentType;
+use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
+use Dkd\PhpCmis\DataObjects\FolderType;
+use Dkd\PhpCmis\DataObjects\FolderTypeDefinition;
+use Dkd\PhpCmis\DataObjects\RelationshipType;
+use Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition;
+use Dkd\PhpCmis\DataObjects\PolicyType;
+use Dkd\PhpCmis\DataObjects\PolicyTypeDefinition;
+use Dkd\PhpCmis\DataObjects\ItemType;
+use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
+use Dkd\PhpCmis\DataObjects\SecondaryType;
+use Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use Dkd\PhpCmis\QueryResult;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\ObjectFactory;
 use Dkd\PhpCmis\PropertyIds;
@@ -19,7 +39,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 /**
  * Class ObjectFactoryTest
  */
-class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
+class ObjectFactoryTest extends PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
 
@@ -32,7 +52,7 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
     public function getObjectFactory($session = null)
     {
         if ($session === null) {
-            $session = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
+            $session = $this->getMockBuilder(SessionInterface::class)->getMockForAbstractClass();
         }
         $objectFactory = new ObjectFactory();
         $objectFactory->initialize($session);
@@ -40,24 +60,24 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
         return $objectFactory;
     }
 
-    public function testInitializeSetsGivenSessionAsProperty()
+    public function testInitializeSetsGivenSessionAsProperty(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->getMockForAbstractClass();
         $this->assertAttributeSame($sessionMock, 'session', $this->getObjectFactory($sessionMock));
     }
 
-    public function testGetBindingsObjectFactoryReturnsBindingsObjectFactoryFromSession()
+    public function testGetBindingsObjectFactoryReturnsBindingsObjectFactoryFromSession(): void
     {
-        $bindingMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingInterface')->setMethods(
+        $bindingMock = $this->getMockBuilder(CmisBindingInterface::class)->setMethods(
             ['getObjectFactory']
         )->getMockForAbstractClass();
         $bindingObjectFactoryMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Data\\BindingsObjectFactoryInterface'
+            BindingsObjectFactoryInterface::class
         )->getMockForAbstractClass();
 
         $bindingMock->expects($this->once())->method('getObjectFactory')->willReturn($bindingObjectFactoryMock);
         /** @var SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock */
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getBinding']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->once())->method('getBinding')->willReturn($bindingMock);
@@ -70,26 +90,26 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Dkd\PhpCmis\ObjectFactory::convertAces
      */
-    public function testConvertAcesConvertsAcesToAcl()
+    public function testConvertAcesConvertsAcesToAcl(): void
     {
-        $expectedAcl = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AclInterface');
+        $expectedAcl = $this->getMockForAbstractClass(AclInterface::class);
         $aces = [
-            $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AceInterface'),
-            $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AceInterface')
+            $this->getMockForAbstractClass(AceInterface::class),
+            $this->getMockForAbstractClass(AceInterface::class)
         ];
 
-        $bindingMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingInterface')->setMethods(
+        $bindingMock = $this->getMockBuilder(CmisBindingInterface::class)->setMethods(
             ['getObjectFactory']
         )->getMockForAbstractClass();
         $bindingObjectFactoryMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Data\\BindingsObjectFactoryInterface'
+            BindingsObjectFactoryInterface::class
         )->setMethods(['createAccessControlList'])->getMockForAbstractClass();
         $bindingObjectFactoryMock->expects($this->once())->method('createAccessControlList')->with($aces)->willReturn(
             $expectedAcl
         );
         $bindingMock->expects($this->any())->method('getObjectFactory')->willReturn($bindingObjectFactoryMock);
         /** @var SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock */
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getBinding']
         )->getMockForAbstractClass();
         $sessionMock->expects($this->any())->method('getBinding')->willReturn($bindingMock);
@@ -98,11 +118,11 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedAcl, $objectFactory->convertAces($aces));
     }
 
-    public function testConvertTypeDefinitionThrowsExceptionIfUnknownTypeDefinitionIsGiven()
+    public function testConvertTypeDefinitionThrowsExceptionIfUnknownTypeDefinitionIsGiven(): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisRuntimeException', '', 1422028427);
+        $this->setExpectedException(CmisRuntimeException::class, '', 1422028427);
         $this->getObjectFactory()->convertTypeDefinition(
-            $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Definitions\\TypeDefinitionInterface')
+            $this->getMockForAbstractClass(TypeDefinitionInterface::class)
         );
     }
 
@@ -111,7 +131,7 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
      * @param $expectedInstance
      * @param $typeDefinition
      */
-    public function testConvertTypeDefinitionConvertsTypeDefinitionToAType($expectedInstance, $typeDefinition)
+    public function testConvertTypeDefinitionConvertsTypeDefinitionToAType($expectedInstance, $typeDefinition): void
     {
         $errorReportingLevel = error_reporting(E_ALL & ~E_USER_NOTICE);
         $instance = $this->getObjectFactory()->convertTypeDefinition($typeDefinition);
@@ -126,40 +146,40 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                '\\Dkd\\PhpCmis\\DataObjects\\DocumentType',
-                new \Dkd\PhpCmis\DataObjects\DocumentTypeDefinition('typeId')
+                DocumentType::class,
+                new DocumentTypeDefinition('typeId')
             ],
             [
-                '\\Dkd\\PhpCmis\\DataObjects\\FolderType',
-                new \Dkd\PhpCmis\DataObjects\FolderTypeDefinition('typeId')
+                FolderType::class,
+                new FolderTypeDefinition('typeId')
             ],
             [
-                '\\Dkd\\PhpCmis\\DataObjects\\RelationshipType',
-                new \Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition('typeId')
+                RelationshipType::class,
+                new RelationshipTypeDefinition('typeId')
             ],
             [
-                '\\Dkd\\PhpCmis\\DataObjects\\PolicyType',
-                new \Dkd\PhpCmis\DataObjects\PolicyTypeDefinition('typeId')
+                PolicyType::class,
+                new PolicyTypeDefinition('typeId')
             ],
             [
-                '\\Dkd\\PhpCmis\\DataObjects\\ItemType',
-                new \Dkd\PhpCmis\DataObjects\ItemTypeDefinition('typeId')
+                ItemType::class,
+                new ItemTypeDefinition('typeId')
             ],
             [
-                '\\Dkd\\PhpCmis\\DataObjects\\SecondaryType',
-                new \Dkd\PhpCmis\DataObjects\SecondaryTypeDefinition('typeId')
+                SecondaryType::class,
+                new SecondaryTypeDefinition('typeId')
             ]
         ];
     }
 
-    public function testConvertPropertiesReturnsNullIfNoPropertiesGiven()
+    public function testConvertPropertiesReturnsNullIfNoPropertiesGiven(): void
     {
         $this->assertNull($this->getObjectFactory()->convertProperties([]));
     }
 
-    public function testConvertPropertiesThrowsExceptionIfSecondaryTypesPropertyIsSetButNotAnArray()
+    public function testConvertPropertiesThrowsExceptionIfSecondaryTypesPropertyIsSetButNotAnArray(): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1425473414);
+        $this->setExpectedException(CmisInvalidArgumentException::class, '', 1425473414);
         $this->getObjectFactory()->convertProperties(
             [
                 PropertyIds::OBJECT_TYPE_ID => 'type-id',
@@ -168,11 +188,11 @@ class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testConvertQueryResult()
+    public function testConvertQueryResult(): void
     {
         $objectData = new ObjectData();
         $this->assertInstanceOf(
-            '\\Dkd\\PhpCmis\\QueryResult',
+            QueryResult::class,
             $this->getObjectFactory()->convertQueryResult($objectData)
         );
     }

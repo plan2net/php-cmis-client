@@ -46,7 +46,7 @@ class PropertyDecimalDefinition extends AbstractPropertyDefinition implements Mu
      *
      * @param DecimalPrecision|null $precision the precision or <code>null</code> if the decimal supports any value
      */
-    public function setPrecision(DecimalPrecision $precision = null)
+    public function setPrecision(DecimalPrecision $precision = null): void
     {
         $this->precision = $precision;
     }
@@ -64,7 +64,7 @@ class PropertyDecimalDefinition extends AbstractPropertyDefinition implements Mu
      *
      * @param float $minValue the minimum value or <code>null</code> if no limit is specified
      */
-    public function setMinValue($minValue)
+    public function setMinValue($minValue): void
     {
         $this->minValue = $this->castValueToSimpleType('integer', $minValue);
     }
@@ -82,7 +82,7 @@ class PropertyDecimalDefinition extends AbstractPropertyDefinition implements Mu
      *
      * @param float $maxValue the maximum value or <code>null</code> if no limit is specified
      */
-    public function setMaxValue($maxValue)
+    public function setMaxValue($maxValue): void
     {
         $this->maxValue = $this->castValueToSimpleType('integer', $maxValue);
     }

@@ -27,71 +27,35 @@ use Dkd\PhpCmis\VersioningServiceInterface;
  */
 class CmisBrowserBinding implements CmisInterface
 {
-    /**
-     * @var BindingSessionInterface
-     */
-    protected $session;
+    protected RepositoryService $repositoryService;
 
-    /**
-     * @var RepositoryService
-     */
-    protected $repositoryService;
+    protected NavigationService $navigationService;
 
-    /**
-     * @var NavigationService
-     */
-    protected $navigationService;
+    protected ObjectService $objectService;
 
-    /**
-     * @var ObjectService
-     */
-    protected $objectService;
+    protected VersioningService $versioningService;
 
-    /**
-     * @var VersioningService
-     */
-    protected $versioningService;
+    protected DiscoveryService $discoveryService;
 
-    /**
-     * @var DiscoveryService
-     */
-    protected $discoveryService;
+    protected MultiFilingService $multiFilingService;
 
-    /**
-     * @var MultiFilingService
-     */
-    protected $multiFilingService;
+    protected RelationshipService $relationshipService;
 
-    /**
-     * @var RelationshipService
-     */
-    protected $relationshipService;
+    protected PolicyService $policyService;
 
-    /**
-     * @var PolicyService
-     */
-    protected $policyService;
+    protected AclService $aclService;
 
-    /**
-     * @var AclService
-     */
-    protected $aclService;
-
-    /**
-     * @param BindingSessionInterface $session
-     */
-    public function __construct(BindingSessionInterface $session)
+    public function __construct(protected BindingSessionInterface $session)
     {
-        $this->session = $session;
-        $this->repositoryService = new RepositoryService($session);
-        $this->navigationService = new NavigationService($session);
-        $this->objectService = new ObjectService($session);
-        $this->versioningService = new VersioningService($session);
-        $this->discoveryService = new DiscoveryService($session);
-        $this->multiFilingService = new MultiFilingService($session);
-        $this->relationshipService = new RelationshipService($session);
-        $this->policyService = new PolicyService($session);
-        $this->aclService = new AclService($session);
+        $this->repositoryService = new RepositoryService($this->session);
+        $this->navigationService = new NavigationService($this->session);
+        $this->objectService = new ObjectService($this->session);
+        $this->versioningService = new VersioningService($this->session);
+        $this->discoveryService = new DiscoveryService($this->session);
+        $this->multiFilingService = new MultiFilingService($this->session);
+        $this->relationshipService = new RelationshipService($this->session);
+        $this->policyService = new PolicyService($this->session);
+        $this->aclService = new AclService($this->session);
     }
 
     /**
@@ -187,7 +151,7 @@ class CmisBrowserBinding implements CmisInterface
     /**
      * Clears all caches of the current session.
      */
-    public function clearAllCaches()
+    public function clearAllCaches(): void
     {
         // TODO: Implement clearAllCaches() method.
     }
@@ -198,7 +162,7 @@ class CmisBrowserBinding implements CmisInterface
      *
      * @param string $repositoryId the repository id
      */
-    public function clearRepositoryCache($repositoryId)
+    public function clearRepositoryCache($repositoryId): void
     {
         // TODO: Implement clearRepositoryCache() method.
     }
@@ -206,7 +170,7 @@ class CmisBrowserBinding implements CmisInterface
     /**
      * Releases all resources assigned to this instance.
      */
-    public function close()
+    public function close(): void
     {
         // TODO: Implement close() method.
     }

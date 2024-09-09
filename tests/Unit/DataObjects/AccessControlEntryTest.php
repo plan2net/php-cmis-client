@@ -9,7 +9,9 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use stdClass;
 use Dkd\PhpCmis\DataObjects\AccessControlEntry;
 use Dkd\PhpCmis\PrincipalInterface;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -17,7 +19,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 /**
  * Class AccessControlEntryTest
  */
-class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
+class AccessControlEntryTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -35,31 +37,31 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
      */
     protected $dummyPrincipal;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->dummyPrincipal = $this->getMockBuilder('\\Dkd\\PhpCmis\\PrincipalInterface')->getMockForAbstractClass();
+        $this->dummyPrincipal = $this->getMockBuilder(PrincipalInterface::class)->getMockForAbstractClass();
         $this->ace = new AccessControlEntry(
             $this->dummyPrincipal,
             $this->dummyPermissions
         );
     }
 
-    public function testSetPermissionsSetsPermissions()
+    public function testSetPermissionsSetsPermissions(): void
     {
         $permissions = ['baz', 'bazz'];
         $this->ace->setPermissions($permissions);
         $this->assertAttributeSame($permissions, 'permissions', $this->ace);
     }
 
-    public function testSetPermissionsThrowsExceptionIfPermissionItemIsNotOfTypeString()
+    public function testSetPermissionsThrowsExceptionIfPermissionItemIsNotOfTypeString(): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
-        $this->ace->setPermissions([new \stdClass()]);
+        $this->setExpectedException(CmisInvalidArgumentException::class);
+        $this->ace->setPermissions([new stdClass()]);
     }
 
-    public function testSetPrincipalSetsPrincipal()
+    public function testSetPrincipalSetsPrincipal(): void
     {
-        $principal = $this->getMockBuilder('\\Dkd\\PhpCmis\\PrincipalInterface')->getMockForAbstractClass();
+        $principal = $this->getMockBuilder(PrincipalInterface::class)->getMockForAbstractClass();
         $this->ace->setPrincipal($principal);
         $this->assertAttributeSame($principal, 'principal', $this->ace);
     }
@@ -68,7 +70,7 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
      * @depends testSetPermissionsSetsPermissions
      * @depends testSetPrincipalSetsPrincipal
      */
-    public function testConstructorSetsPermissionAndPrincipalIfGiven()
+    public function testConstructorSetsPermissionAndPrincipalIfGiven(): void
     {
         $this->assertAttributeSame($this->dummyPrincipal, 'principal', $this->ace);
         $this->assertAttributeSame($this->dummyPermissions, 'permissions', $this->ace);
@@ -77,7 +79,7 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetPermissionsSetsPermissions
      */
-    public function testGetPermissionsReturnsPermissions()
+    public function testGetPermissionsReturnsPermissions(): void
     {
         $this->assertSame($this->dummyPermissions, $this->ace->getPermissions());
     }
@@ -85,12 +87,12 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetPrincipalSetsPrincipal
      */
-    public function testGetPrincipalReturnsPrincipal()
+    public function testGetPrincipalReturnsPrincipal(): void
     {
         $this->assertSame($this->dummyPrincipal, $this->ace->getPrincipal());
     }
 
-    public function testSetIsDirectSetsIsDirect()
+    public function testSetIsDirectSetsIsDirect(): void
     {
         $this->ace->setIsDirect(true);
         $this->assertAttributeSame(true, 'isDirect', $this->ace);
@@ -98,7 +100,7 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame(false, 'isDirect', $this->ace);
     }
 
-    public function testSetIsDirectCastsValueToBoolean()
+    public function testSetIsDirectCastsValueToBoolean(): void
     {
         $this->setExpectedException('\\PHPUnit_Framework_Error_Notice');
         $this->ace->setIsDirect(1);
@@ -108,7 +110,7 @@ class AccessControlEntryTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsDirectSetsIsDirect
      */
-    public function testIsDirectReturnsIsDirect()
+    public function testIsDirectReturnsIsDirect(): void
     {
         $this->ace->setIsDirect(true);
         $this->assertTrue($this->ace->isDirect());

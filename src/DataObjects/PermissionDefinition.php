@@ -38,7 +38,7 @@ class PermissionDefinition extends AbstractExtensionData implements PermissionDe
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = (string) $description;
     }
@@ -54,7 +54,7 @@ class PermissionDefinition extends AbstractExtensionData implements PermissionDe
     /**
      * @param string $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = (string) $id;
     }

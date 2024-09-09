@@ -1,6 +1,8 @@
 <?php
 namespace Dkd\PhpCmis;
 
+use Dkd\PhpCmis\Data\ChangeEventInfoInterface;
+
 /*
  * This file is part of php-cmis-client.
  *
@@ -9,11 +11,10 @@ namespace Dkd\PhpCmis;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 /**
  * Change event in the change log.
  */
-interface ChangeEventInterface extends Data\ChangeEventInfoInterface
+interface ChangeEventInterface extends ChangeEventInfoInterface
 {
     /**
      * Returns the ACL.

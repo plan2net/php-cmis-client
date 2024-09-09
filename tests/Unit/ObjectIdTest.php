@@ -9,19 +9,19 @@ namespace Dkd\PhpCmis\Test\Unit;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use stdClass;
 use Dkd\PhpCmis\DataObjects\ObjectId;
 
 /**
  * Class ObjectIdTest
  */
-class ObjectIdTest extends \PHPUnit_Framework_TestCase
+class ObjectIdTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider invalidIdValuesDataProvider
-     * @param mixed $idValue
      */
-    public function testConstructorThrowsExceptionIfNoStringAsIdGiven($idValue)
+    public function testConstructorThrowsExceptionIfNoStringAsIdGiven(mixed $idValue): void
     {
         $this->setExpectedException('\\InvalidArgumentException', 'Id must not be empty!');
         new ObjectId($idValue);
@@ -40,23 +40,23 @@ class ObjectIdTest extends \PHPUnit_Framework_TestCase
             [0],
             [1],
             [['foo']],
-            [new \stdClass()]
+            [new stdClass()]
         ];
     }
 
-    public function testConstructorSetsIdProperty()
+    public function testConstructorSetsIdProperty(): void
     {
         $objectId = new ObjectId('foo');
         $this->assertAttributeSame('foo', 'id', $objectId);
     }
 
-    public function testGetIdReturnsId()
+    public function testGetIdReturnsId(): void
     {
         $objectId = new ObjectId('foo');
         $this->assertSame('foo', $objectId->getId());
     }
 
-    public function testToStringReturnsIdAsString()
+    public function testToStringReturnsIdAsString(): void
     {
         $objectId = new ObjectId('foo');
         $this->assertSame('foo', (string) $objectId);

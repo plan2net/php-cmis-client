@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\DataObjects\RelationshipType;
 use Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition;
@@ -20,7 +20,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 /**
  * Class RelationshipTypeTest
  */
-class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
+class RelationshipTypeTest extends PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
 
@@ -42,13 +42,13 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Dkd\PhpCmis\DataObjects\RelationshipType::__construct
      */
-    public function setUp()
+    public function setUp(): void
     {
-        $this->sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $this->sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getTypeDefinition']
         )->getMockForAbstractClass();
         $this->objectTypeDefinitionMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Data\\ObjectTypeInterface'
+            ObjectTypeInterface::class
         )->getMockForAbstractClass();
         $this->sessionMock->expects($this->any())->method('getTypeDefinition')->willReturn(
             $this->objectTypeDefinitionMock
@@ -59,7 +59,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
         error_reporting($errorReportingLevel);
     }
 
-    public function testConstructorSetsSession()
+    public function testConstructorSetsSession(): void
     {
         $this->assertAttributeSame($this->sessionMock, 'session', $this->relationshipType);
     }
@@ -67,14 +67,14 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Dkd\PhpCmis\DataObjects\RelationshipType::__construct
      */
-    public function testConstructorCallsPopulateMethod()
+    public function testConstructorCallsPopulateMethod(): void
     {
         $relationshipTypeDefinition = new RelationshipTypeDefinition('typeId');
 
         /**
          * @var RelationshipType|PHPUnit_Framework_MockObject_MockObject $relationshipType
          */
-        $relationshipType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\RelationshipType')->setMethods(
+        $relationshipType = $this->getMockBuilder(RelationshipType::class)->setMethods(
             ['populate']
         )->disableOriginalConstructor()->getMock();
 
@@ -84,7 +84,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
         $relationshipType->__construct($this->sessionMock, $relationshipTypeDefinition);
     }
 
-    public function testSetAllowedSourceTypeIdsResetsAllowedSourceTypesParameter()
+    public function testSetAllowedSourceTypeIdsResetsAllowedSourceTypesParameter(): void
     {
         // set the property to a dummy value
         $this->setProtectedProperty($this->relationshipType, 'allowedSourceTypes', ['foo', 'bar']);
@@ -93,7 +93,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals(null, 'allowedSourceTypes', $this->relationshipType);
     }
 
-    public function testSetAllowedTargetTypeIdsResetsAllowedTargetTypesParameter()
+    public function testSetAllowedTargetTypeIdsResetsAllowedTargetTypesParameter(): void
     {
         // set the property to a dummy value
         $this->setProtectedProperty($this->relationshipType, 'allowedTargetTypes', ['foo', 'bar']);
@@ -102,7 +102,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals(null, 'allowedTargetTypes', $this->relationshipType);
     }
 
-    public function testGetAllowedSourceTypesReturnsPropertyValue()
+    public function testGetAllowedSourceTypesReturnsPropertyValue(): void
     {
         $allowedSourceTypes =  ['foo', 'bar'];
         // set the property to a dummy value
@@ -110,13 +110,13 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($allowedSourceTypes, $this->relationshipType->getAllowedSourceTypes());
     }
 
-    public function testGetAllowedSourceTypesSetsAllowedSourceTypesPropertyGeneratedOnIdsAndReturnsResult()
+    public function testGetAllowedSourceTypesSetsAllowedSourceTypesPropertyGeneratedOnIdsAndReturnsResult(): void
     {
         $this->setProtectedProperty($this->relationshipType, 'allowedSourceTypeIds', ['foo']);
         $this->assertSame([$this->objectTypeDefinitionMock], $this->relationshipType->getAllowedSourceTypes());
     }
 
-    public function testGetAllowedTargetTypesReturnsPropertyValue()
+    public function testGetAllowedTargetTypesReturnsPropertyValue(): void
     {
         $allowedTargetTypes =  ['foo', 'bar'];
         // set the property to a dummy value
@@ -124,7 +124,7 @@ class RelationshipTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($allowedTargetTypes, $this->relationshipType->getAllowedTargetTypes());
     }
 
-    public function testGetAllowedTargetTypesSetsAllowedTargetTypesPropertyGeneratedOnIdsAndReturnsResult()
+    public function testGetAllowedTargetTypesSetsAllowedTargetTypesPropertyGeneratedOnIdsAndReturnsResult(): void
     {
         $this->setProtectedProperty($this->relationshipType, 'allowedTargetTypeIds', ['foo']);
         $this->assertSame([$this->objectTypeDefinitionMock], $this->relationshipType->getAllowedTargetTypes());

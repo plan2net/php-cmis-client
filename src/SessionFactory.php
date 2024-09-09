@@ -19,24 +19,20 @@ use Doctrine\Common\Cache\Cache;
 class SessionFactory implements SessionFactoryInterface
 {
     /**
-     * @param array $parameters
      * @param ObjectFactoryInterface|null $objectFactory
      * @param Cache|null $cache
      * @param Cache|null $typeDefinitionCache
-     * @return Session
      */
     public function createSession(
         array $parameters,
         ObjectFactoryInterface $objectFactory = null,
         Cache $cache = null,
         Cache $typeDefinitionCache = null
-    ) {
-        $session = new Session($parameters, $objectFactory, $cache, $typeDefinitionCache);
-        return $session;
+    ): Session {
+        return new Session($parameters, $objectFactory, $cache, $typeDefinitionCache);
     }
 
     /**
-     * @param array $parameters
      * @param ObjectFactoryInterface|null $objectFactory
      * @param Cache|null $cache
      * @param Cache|null $typeDefinitionCache

@@ -26,10 +26,8 @@ class PropertyDateTimeDefinition extends AbstractPropertyDefinition implements
 
     /**
      * Sets which datetime resolution is supported by this property.
-     *
-     * @param DateTimeResolution $dateTimeResolution
      */
-    public function setDateTimeResolution(DateTimeResolution $dateTimeResolution)
+    public function setDateTimeResolution(DateTimeResolution $dateTimeResolution): void
     {
         $this->dateTimeResolution = $dateTimeResolution;
     }

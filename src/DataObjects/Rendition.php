@@ -23,23 +23,11 @@ use GuzzleHttp\Stream\StreamInterface;
 class Rendition extends RenditionData implements RenditionInterface
 {
     /**
-     * @var SessionInterface
-     */
-    protected $session;
-
-    /**
-     * @var string
-     */
-    protected $objectId;
-
-    /**
-     * @param SessionInterface $session
      * @param $objectId
+     * @param string $objectId
      */
-    public function __construct(SessionInterface $session, $objectId)
+    public function __construct(protected SessionInterface $session, protected $objectId)
     {
-        $this->session = $session;
-        $this->objectId = $objectId;
     }
 
     /**
@@ -68,14 +56,14 @@ class Rendition extends RenditionData implements RenditionInterface
      * @param OperationContextInterface|null $context
      * @return DocumentInterface|null the rendition document or <code>null</code> if there is no rendition document
      */
-    public function getRenditionDocument(OperationContextInterface $context = null)
+    public function getRenditionDocument(OperationContextInterface $context = null): ?DocumentInterface
     {
         $renditionDocumentId = $this->getRenditionDocumentId();
         if (empty($renditionDocumentId)) {
             return null;
         }
 
-        if ($context === null) {
+        if (!$context instanceof OperationContextInterface) {
             $context = $this->session->getDefaultContext();
         }
 

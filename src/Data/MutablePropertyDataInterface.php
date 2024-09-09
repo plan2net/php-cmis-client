@@ -61,5 +61,5 @@ interface MutablePropertyDataInterface extends PropertyDataInterface
      *
      * @param mixed $value the property value or <code>null</code> to unset the property
      */
-    public function setValue($value);
+    public function setValue(mixed $value);
 }

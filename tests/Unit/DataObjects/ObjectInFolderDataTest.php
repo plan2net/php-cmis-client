@@ -9,27 +9,28 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\DataObjects\ObjectInFolderData;
 
 /**
  * Class ObjectInFolderDataTest
  */
-class ObjectInFolderDataTest extends \PHPUnit_Framework_TestCase
+class ObjectInFolderDataTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectInFolderData
      */
     protected $objectInFolderData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectInFolderData = new ObjectInFolderData();
     }
 
-    public function testSetObjectSetsProperty()
+    public function testSetObjectSetsProperty(): void
     {
-        $objectData = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface');
+        $objectData = $this->getMockForAbstractClass(ObjectDataInterface::class);
         $this->objectInFolderData->setObject($objectData);
         $this->assertAttributeSame($objectData, 'object', $this->objectInFolderData);
     }
@@ -37,14 +38,14 @@ class ObjectInFolderDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetObjectSetsProperty
      */
-    public function testGetObjectReturnsPropertyValue()
+    public function testGetObjectReturnsPropertyValue(): void
     {
-        $objectData = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface');
+        $objectData = $this->getMockForAbstractClass(ObjectDataInterface::class);
         $this->objectInFolderData->setObject($objectData);
         $this->assertSame($objectData, $this->objectInFolderData->getObject());
     }
 
-    public function testSetPathSegmentSetsProperty()
+    public function testSetPathSegmentSetsProperty(): void
     {
         $this->objectInFolderData->setPathSegment('foo');
         $this->assertAttributeSame('foo', 'pathSegment', $this->objectInFolderData);
@@ -52,7 +53,7 @@ class ObjectInFolderDataTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame('bar', 'pathSegment', $this->objectInFolderData);
     }
 
-    public function testSetPathSegmentSetsPropertyAsNull()
+    public function testSetPathSegmentSetsPropertyAsNull(): void
     {
         $this->objectInFolderData->setPathSegment(null);
         $this->assertAttributeSame(null, 'pathSegment', $this->objectInFolderData);
@@ -61,7 +62,7 @@ class ObjectInFolderDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetPathSegmentSetsProperty
      */
-    public function testGetPathSegmentReturnsPropertyValue()
+    public function testGetPathSegmentReturnsPropertyValue(): void
     {
         $this->objectInFolderData->setPathSegment('foo');
         $this->assertEquals('foo', $this->objectInFolderData->getPathSegment());

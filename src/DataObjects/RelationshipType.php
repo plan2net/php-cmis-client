@@ -38,7 +38,6 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
      * Constructor of the object type. This constructor MUST set the session property to the given session and
      * call the <code>self::populate</code> method with the given <code>$typeDefinition</code>
      *
-     * @param SessionInterface $session
      * @param RelationshipTypeDefinitionInterface $typeDefinition
      * @throws CmisInvalidArgumentException Exception is thrown if invalid TypeDefinition is given
      */
@@ -50,7 +49,7 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
             throw new CmisInvalidArgumentException(
                 sprintf(
                     'Type definition must be instance of RelationshipTypeDefinitionInterface but is "%s"',
-                    get_class($typeDefinition)
+                    $typeDefinition::class
                 )
             );
         }
@@ -65,7 +64,7 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
      *
      * @param string[] $allowedSourceTypeIds
      */
-    public function setAllowedSourceTypeIds(array $allowedSourceTypeIds)
+    public function setAllowedSourceTypeIds(array $allowedSourceTypeIds): void
     {
         $this->allowedSourceTypes = null;
         parent::setAllowedSourceTypeIds($allowedSourceTypeIds);
@@ -92,7 +91,7 @@ class RelationshipType extends RelationshipTypeDefinition implements Relationshi
      *
      * @param string[] $allowedTargetTypeIds
      */
-    public function setAllowedTargetTypeIds(array $allowedTargetTypeIds)
+    public function setAllowedTargetTypeIds(array $allowedTargetTypeIds): void
     {
         $this->allowedTargetTypes = null;
         parent::setAllowedTargetTypeIds($allowedTargetTypeIds);

@@ -36,7 +36,7 @@ class CreatablePropertyTypes extends AbstractExtensionData implements CreatableP
     /**
      * @param PropertyType[] $propertyTypeSet
      */
-    public function setCanCreate(array $propertyTypeSet)
+    public function setCanCreate(array $propertyTypeSet): void
     {
         foreach ($propertyTypeSet as $propertyType) {
             $this->checkType(PropertyType::class, $propertyType);

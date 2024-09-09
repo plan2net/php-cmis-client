@@ -9,16 +9,16 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\DataObjects\Properties;
 use Dkd\PhpCmis\DataObjects\PropertyString;
 
 /**
  * Class PropertiesTest
  */
-class PropertiesTest extends \PHPUnit_Framework_TestCase
+class PropertiesTest extends PHPUnit_Framework_TestCase
 {
-    public function testAddPropertyAddsProperty()
+    public function testAddPropertyAddsProperty(): void
     {
         $properties = new Properties();
         $stringProperty = new PropertyString('stringProp', 'stringPropValue');
@@ -31,7 +31,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testAddPropertyAddsProperty
      */
-    public function testAddPropertyReplacesPropertyWithEqualId()
+    public function testAddPropertyReplacesPropertyWithEqualId(): void
     {
         $properties = new Properties();
         $stringProperty = new PropertyString('stringProp', 'stringPropValue');
@@ -48,7 +48,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testAddPropertyAddsProperty
      */
-    public function testGetPropertiesReturnsAttributeValue()
+    public function testGetPropertiesReturnsAttributeValue(): void
     {
         $properties = new Properties();
         $stringProperty = new PropertyString('stringProp', 'stringPropValue');
@@ -61,7 +61,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testAddPropertyAddsProperty
      */
-    public function testRemovePropertyRemovedPropertyWithGivenId()
+    public function testRemovePropertyRemovedPropertyWithGivenId(): void
     {
 
         $properties = new Properties();
@@ -79,7 +79,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testAddPropertyAddsProperty
      */
-    public function testAddPropertiesAddsAListOfProperties()
+    public function testAddPropertiesAddsAListOfProperties(): void
     {
         $properties = new Properties();
 

@@ -34,13 +34,13 @@ class AbstractCmisObjectTest extends PHPUnit_Framework_TestCase
 
     const CLASS_TO_TEST = '\\Dkd\\PhpCmis\\DataObjects\\AbstractCmisObject';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->abstractCmisObject = $this->getMockBuilder(self::CLASS_TO_TEST)->enableProxyingToOriginalMethods(
         )->getMockForAbstractClass();
     }
 
-    public function testGetMissingBasePropertiesReturnsAllBaseKeysIfNullGiven()
+    public function testGetMissingBasePropertiesReturnsAllBaseKeysIfNullGiven(): void
     {
         $this->assertEquals(
             PropertyIds::getBasePropertyKeys(),
@@ -51,7 +51,7 @@ class AbstractCmisObjectTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetMissingBasePropertiesReturnsAllBaseKeysIfEmptyArrayGiven()
+    public function testGetMissingBasePropertiesReturnsAllBaseKeysIfEmptyArrayGiven(): void
     {
         $this->assertEquals(
             PropertyIds::getBasePropertyKeys(),
@@ -62,7 +62,7 @@ class AbstractCmisObjectTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetMissingBasePropertiesReturnsEmptyArrayIfAllKeysExist()
+    public function testGetMissingBasePropertiesReturnsEmptyArrayIfAllKeysExist(): void
     {
         $properties = [
             new PropertyIdDefinition(PropertyIds::OBJECT_ID),
@@ -84,7 +84,7 @@ class AbstractCmisObjectTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetMissingBasePropertiesReturnsArrayOfMissingKeys()
+    public function testGetMissingBasePropertiesReturnsArrayOfMissingKeys(): void
     {
         $properties = [
             new PropertyIdDefinition(PropertyIds::OBJECT_ID),

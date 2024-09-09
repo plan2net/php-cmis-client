@@ -9,7 +9,13 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Data\AclInterface;
+use Dkd\PhpCmis\Data\AllowableActionsInterface;
+use Dkd\PhpCmis\Data\ChangeEventInfoInterface;
+use Dkd\PhpCmis\Data\PolicyIdListInterface;
+use Dkd\PhpCmis\Data\PropertiesInterface;
+use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\DataObjects\Properties;
 use Dkd\PhpCmis\DataObjects\PropertyId;
@@ -19,21 +25,21 @@ use Dkd\PhpCmis\PropertyIds;
 /**
  * Class ObjectDataTest
  */
-class ObjectDataTest extends \PHPUnit_Framework_TestCase
+class ObjectDataTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectData
      */
     protected $objectData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectData = new ObjectData();
     }
 
-    public function testSetAclSetsProperty()
+    public function testSetAclSetsProperty(): void
     {
-        $acl = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AclInterface');
+        $acl = $this->getMockForAbstractClass(AclInterface::class);
         $this->objectData->setAcl($acl);
         $this->assertAttributeSame($acl, 'acl', $this->objectData);
     }
@@ -41,16 +47,16 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetAclSetsProperty
      */
-    public function testGetAclReturnsPropertyValue()
+    public function testGetAclReturnsPropertyValue(): void
     {
-        $acl = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AclInterface');
+        $acl = $this->getMockForAbstractClass(AclInterface::class);
         $this->objectData->setAcl($acl);
         $this->assertSame($acl, $this->objectData->getAcl());
     }
 
-    public function testSetAllowableActionsSetsProperty()
+    public function testSetAllowableActionsSetsProperty(): void
     {
-        $allowableActions = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AllowableActionsInterface');
+        $allowableActions = $this->getMockForAbstractClass(AllowableActionsInterface::class);
         $this->objectData->setAllowableActions($allowableActions);
         $this->assertAttributeSame($allowableActions, 'allowableActions', $this->objectData);
     }
@@ -58,16 +64,16 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetAllowableActionsSetsProperty
      */
-    public function testGetAllowableActionsReturnsPropertyValue()
+    public function testGetAllowableActionsReturnsPropertyValue(): void
     {
-        $allowableActions = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\AllowableActionsInterface');
+        $allowableActions = $this->getMockForAbstractClass(AllowableActionsInterface::class);
         $this->objectData->setAllowableActions($allowableActions);
         $this->assertSame($allowableActions, $this->objectData->getAllowableActions());
     }
 
-    public function testSetChangeEventInfoSetsProperty()
+    public function testSetChangeEventInfoSetsProperty(): void
     {
-        $changeEventInfo = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ChangeEventInfoInterface');
+        $changeEventInfo = $this->getMockForAbstractClass(ChangeEventInfoInterface::class);
         $this->objectData->setChangeEventInfo($changeEventInfo);
         $this->assertAttributeSame($changeEventInfo, 'changeEventInfo', $this->objectData);
     }
@@ -75,14 +81,14 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetChangeEventInfoSetsProperty
      */
-    public function testGetChangeEventInfoReturnsPropertyValue()
+    public function testGetChangeEventInfoReturnsPropertyValue(): void
     {
-        $changeEventInfo = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ChangeEventInfoInterface');
+        $changeEventInfo = $this->getMockForAbstractClass(ChangeEventInfoInterface::class);
         $this->objectData->setChangeEventInfo($changeEventInfo);
         $this->assertSame($changeEventInfo, $this->objectData->getChangeEventInfo());
     }
 
-    public function testSetIsExactAclSetsProperty()
+    public function testSetIsExactAclSetsProperty(): void
     {
         $this->objectData->setIsExactAcl(true);
         $this->assertAttributeSame(true, 'isExactAcl', $this->objectData);
@@ -93,16 +99,16 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsExactAclSetsProperty
      */
-    public function testGetIsExactAclReturnsPropertyValue()
+    public function testGetIsExactAclReturnsPropertyValue(): void
     {
         $this->objectData->setIsExactAcl(true);
         $this->assertTrue($this->objectData->isExactAcl());
     }
 
 
-    public function testSetPolicyIdsSetsProperty()
+    public function testSetPolicyIdsSetsProperty(): void
     {
-        $policyIds = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\PolicyIdListInterface');
+        $policyIds = $this->getMockForAbstractClass(PolicyIdListInterface::class);
         $this->objectData->setPolicyIds($policyIds);
         $this->assertAttributeSame($policyIds, 'policyIds', $this->objectData);
     }
@@ -110,16 +116,16 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetPolicyIdsSetsProperty
      */
-    public function testGetPolicyIdsReturnsPropertyValue()
+    public function testGetPolicyIdsReturnsPropertyValue(): void
     {
-        $policyIds = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\PolicyIdListInterface');
+        $policyIds = $this->getMockForAbstractClass(PolicyIdListInterface::class);
         $this->objectData->setPolicyIds($policyIds);
         $this->assertSame($policyIds, $this->objectData->getPolicyIds());
     }
 
-    public function testSetPropertiesSetsProperty()
+    public function testSetPropertiesSetsProperty(): void
     {
-        $properties = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\PropertiesInterface');
+        $properties = $this->getMockForAbstractClass(PropertiesInterface::class);
         $this->objectData->setProperties($properties);
         $this->assertAttributeSame($properties, 'properties', $this->objectData);
     }
@@ -127,16 +133,16 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetPropertiesSetsProperty
      */
-    public function testGetPropertiesReturnsPropertyValue()
+    public function testGetPropertiesReturnsPropertyValue(): void
     {
-        $properties = $this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\PropertiesInterface');
+        $properties = $this->getMockForAbstractClass(PropertiesInterface::class);
         $this->objectData->setProperties($properties);
         $this->assertSame($properties, $this->objectData->getProperties());
     }
 
-    public function testSetRelationshipsSetsProperty()
+    public function testSetRelationshipsSetsProperty(): void
     {
-        $relationships = [$this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface')];
+        $relationships = [$this->getMockForAbstractClass(ObjectDataInterface::class)];
         $this->objectData->setRelationships($relationships);
         $this->assertAttributeSame($relationships, 'relationships', $this->objectData);
     }
@@ -144,16 +150,16 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetRelationshipsSetsProperty
      */
-    public function testGetRelationshipsReturnsPropertyValue()
+    public function testGetRelationshipsReturnsPropertyValue(): void
     {
-        $relationships = [$this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface')];
+        $relationships = [$this->getMockForAbstractClass(ObjectDataInterface::class)];
         $this->objectData->setRelationships($relationships);
         $this->assertSame($relationships, $this->objectData->getRelationships());
     }
 
-    public function testSetRenditionsSetsProperty()
+    public function testSetRenditionsSetsProperty(): void
     {
-        $renditions = [$this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface')];
+        $renditions = [$this->getMockForAbstractClass(ObjectDataInterface::class)];
         $this->objectData->setRenditions($renditions);
         $this->assertAttributeSame($renditions, 'renditions', $this->objectData);
     }
@@ -161,19 +167,19 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetRenditionsSetsProperty
      */
-    public function testGetRenditionsReturnsPropertyValue()
+    public function testGetRenditionsReturnsPropertyValue(): void
     {
-        $renditions = [$this->getMockForAbstractClass('\\Dkd\\PhpCmis\\Data\\ObjectDataInterface')];
+        $renditions = [$this->getMockForAbstractClass(ObjectDataInterface::class)];
         $this->objectData->setRenditions($renditions);
         $this->assertSame($renditions, $this->objectData->getRenditions());
     }
 
-    public function testGetIdReturnsNullIfPropertyDoesNotExist()
+    public function testGetIdReturnsNullIfPropertyDoesNotExist(): void
     {
         $this->assertNull($this->objectData->getId());
     }
 
-    public function testGetIdReturnsIdPropertyValue()
+    public function testGetIdReturnsIdPropertyValue(): void
     {
         $idProperty = new PropertyId(PropertyIds::OBJECT_ID, 'fooPropertyId');
         $properties = new Properties();
@@ -183,7 +189,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('fooPropertyId', $this->objectData->getId());
     }
 
-    public function testGetIdReturnsFirstValueOfIdMultiValuePropertyValue()
+    public function testGetIdReturnsFirstValueOfIdMultiValuePropertyValue(): void
     {
         $idProperty = new PropertyId(PropertyIds::OBJECT_ID, ['fooPropertyId', 'secondValue']);
         $properties = new Properties();
@@ -193,12 +199,12 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('fooPropertyId', $this->objectData->getId());
     }
 
-    public function testGetBaseTypeIdReturnsNullIfPropertyDoesNotExist()
+    public function testGetBaseTypeIdReturnsNullIfPropertyDoesNotExist(): void
     {
         $this->assertNull($this->objectData->getBaseTypeId());
     }
 
-    public function testGetBaseTypeIdReturnsNullIfRequestedPropertyDoesNotExist()
+    public function testGetBaseTypeIdReturnsNullIfRequestedPropertyDoesNotExist(): void
     {
         $idProperty = new PropertyId(PropertyIds::OBJECT_ID, ['fooPropertyId', 'secondValue']);
         $properties = new Properties();
@@ -208,7 +214,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->objectData->getBaseTypeId());
     }
 
-    public function testGetBaseTypeIdReturnsNullIfBaseTypeIdValueIsInvalid()
+    public function testGetBaseTypeIdReturnsNullIfBaseTypeIdValueIsInvalid(): void
     {
         $idProperty = new PropertyId(PropertyIds::BASE_TYPE_ID, 'invalidBaseTypeId');
         $properties = new Properties();
@@ -218,7 +224,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->objectData->getBaseTypeId());
     }
 
-    public function testGetBaseTypeIdReturnsIdPropertyValue()
+    public function testGetBaseTypeIdReturnsIdPropertyValue(): void
     {
         $idProperty = new PropertyId(PropertyIds::BASE_TYPE_ID, 'cmis:item');
         $properties = new Properties();
@@ -228,7 +234,7 @@ class ObjectDataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(BaseTypeId::cast(BaseTypeId::CMIS_ITEM), $this->objectData->getBaseTypeId());
     }
 
-    public function testGetBaseTypeIdReturnsFirstValueOfIdMultiValuePropertyValue()
+    public function testGetBaseTypeIdReturnsFirstValueOfIdMultiValuePropertyValue(): void
     {
         $idProperty = new PropertyId(PropertyIds::BASE_TYPE_ID, ['cmis:item', 'cmis:document']);
         $properties = new Properties();

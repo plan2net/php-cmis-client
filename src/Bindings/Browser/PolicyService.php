@@ -27,7 +27,7 @@ class PolicyService extends AbstractBrowserBindingService implements PolicyServi
      * @param string $objectId The identifier of the object.
      * @param ExtensionDataInterface|null $extension
      */
-    public function applyPolicy($repositoryId, $policyId, $objectId, ExtensionDataInterface $extension = null)
+    public function applyPolicy($repositoryId, $policyId, $objectId, ExtensionDataInterface $extension = null): void
     {
         // TODO: Implement applyPolicy() method.
     }
@@ -47,7 +47,7 @@ class PolicyService extends AbstractBrowserBindingService implements PolicyServi
         $objectId,
         $filter = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         // TODO: Implement getAppliedPolicies() method.
     }
 
@@ -59,7 +59,7 @@ class PolicyService extends AbstractBrowserBindingService implements PolicyServi
      * @param string $objectId The identifier of the object.
      * @param ExtensionDataInterface|null $extension
      */
-    public function removePolicy($repositoryId, $policyId, $objectId, ExtensionDataInterface $extension = null)
+    public function removePolicy($repositoryId, $policyId, $objectId, ExtensionDataInterface $extension = null): void
     {
         // TODO: Implement removePolicy() method.
     }

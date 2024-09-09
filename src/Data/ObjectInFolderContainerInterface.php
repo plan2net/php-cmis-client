@@ -17,8 +17,6 @@ interface ObjectInFolderContainerInterface extends ExtensionDataInterface
 {
     /**
      * Creates new ObjectInFolderContainerInterface object
-     *
-     * @param ObjectInFolderDataInterface $object
      */
     public function __construct(ObjectInFolderDataInterface $object);
 

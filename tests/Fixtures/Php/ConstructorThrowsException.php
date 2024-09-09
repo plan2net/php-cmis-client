@@ -1,6 +1,8 @@
 <?php
 namespace Dkd\PhpCmis\Test\Fixtures\Php;
 
+use Exception;
+
 /*
  * This file is part of php-cmis-lib.
  *
@@ -9,7 +11,6 @@ namespace Dkd\PhpCmis\Test\Fixtures\Php;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 /**
  * This class simply throws an exception when initiated
  */
@@ -17,6 +18,6 @@ class ConstructorThrowsException
 {
     public function __construct()
     {
-        throw new \Exception('This class can not be instantiated!');
+        throw new Exception('This class can not be instantiated!');
     }
 }

@@ -9,7 +9,8 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryUrlCache;
 use Dkd\PhpCmis\Constants;
 use League\Url\Url;
@@ -17,7 +18,7 @@ use League\Url\Url;
 /**
  * Class RepositoryUrlCacheTest
  */
-class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
+class RepositoryUrlCacheTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var RepositoryUrlCache
@@ -40,7 +41,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
         ],
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->repositoryUrlCache = new RepositoryUrlCache();
     }
@@ -51,9 +52,9 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @param $repositoryUrl
      * @param $rootUrl
      */
-    public function testAddRepositoryThrowsExceptionIfEmptyParameterGiven($repositoryId, $repositoryUrl, $rootUrl)
+    public function testAddRepositoryThrowsExceptionIfEmptyParameterGiven($repositoryId, $repositoryUrl, $rootUrl): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
+        $this->setExpectedException(CmisInvalidArgumentException::class);
         $this->repositoryUrlCache->addRepository($repositoryId, $repositoryUrl, $rootUrl);
     }
 
@@ -127,7 +128,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @depends testAddRepositoryAddsGivenUrlsToArrayCache
      * @param $repositoryUrlCache RepositoryUrlCache
      */
-    public function testRemoveRepositoryRemovesRepositoryFromCache($repositoryUrlCache)
+    public function testRemoveRepositoryRemovesRepositoryFromCache($repositoryUrlCache): void
     {
         $repositoryUrlCache = clone $repositoryUrlCache;
         $repositoryUrlCache->removeRepository($this->dummyData[1]['id']);
@@ -148,7 +149,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @depends testAddRepositoryAddsGivenUrlsToArrayCache
      * @param $repositoryUrlCache RepositoryUrlCache
      */
-    public function testGetRepositoryBaseUrlReturnsUrlForGivenRepositoryId($repositoryUrlCache)
+    public function testGetRepositoryBaseUrlReturnsUrlForGivenRepositoryId($repositoryUrlCache): void
     {
         $this->assertSame(
             $this->dummyData[0]['repositoryUrl'],
@@ -164,7 +165,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @depends testAddRepositoryAddsGivenUrlsToArrayCache
      * @param $repositoryUrlCache RepositoryUrlCache
      */
-    public function testGetRepositoryUrlReturnsNullIfNoBaseUrlForIdIsFoundInCache($repositoryUrlCache)
+    public function testGetRepositoryUrlReturnsNullIfNoBaseUrlForIdIsFoundInCache($repositoryUrlCache): void
     {
         $this->assertNull($repositoryUrlCache->getRepositoryUrl('invalid-id'));
     }
@@ -173,7 +174,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @depends testAddRepositoryAddsGivenUrlsToArrayCache
      * @param $repositoryUrlCache RepositoryUrlCache
      */
-    public function testGetRepositoryUrlReturnsInstanceOfUrlBasedOnBaseUrlString($repositoryUrlCache)
+    public function testGetRepositoryUrlReturnsInstanceOfUrlBasedOnBaseUrlString($repositoryUrlCache): void
     {
         $expectedUrl = Url::createFromUrl($this->dummyData[0]['repositoryUrl']);
         $this->assertEquals($expectedUrl, $repositoryUrlCache->getRepositoryUrl($this->dummyData[0]['id']));
@@ -185,7 +186,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRepositoryUrlWithSelectorReturnsInstanceOfUrlBasedOnBaseUrlStringWithSelector(
         $repositoryUrlCache
-    ) {
+    ): void {
         $selector = 'fooSelector';
         $expectedUrl = Url::createFromUrl(
             $this->dummyData[0]['repositoryUrl'] . '?' . Constants::PARAM_SELECTOR . '=' . $selector
@@ -197,7 +198,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @depends testAddRepositoryAddsGivenUrlsToArrayCache
      * @param $repositoryUrlCache RepositoryUrlCache
      */
-    public function testGetRootUrlReturnsNullIfNoUrlForIdIsFoundInCache($repositoryUrlCache)
+    public function testGetRootUrlReturnsNullIfNoUrlForIdIsFoundInCache($repositoryUrlCache): void
     {
         $this->assertNull($repositoryUrlCache->getRootUrl('invalid-id'));
     }
@@ -206,7 +207,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @depends testAddRepositoryAddsGivenUrlsToArrayCache
      * @param $repositoryUrlCache RepositoryUrlCache
      */
-    public function testGetRootUrlReturnsInstanceOfUrlBasedOnBaseUrlString($repositoryUrlCache)
+    public function testGetRootUrlReturnsInstanceOfUrlBasedOnBaseUrlString($repositoryUrlCache): void
     {
         $expectedUrl = Url::createFromUrl($this->dummyData[0]['rootUrl']);
         $this->assertEquals($expectedUrl, $repositoryUrlCache->getRootUrl($this->dummyData[0]['id']));
@@ -216,7 +217,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @depends testAddRepositoryAddsGivenUrlsToArrayCache
      * @param $repositoryUrlCache RepositoryUrlCache
      */
-    public function testGetObjectUrlReturnsNullIfNoRootUrlForIdIsFoundInCache($repositoryUrlCache)
+    public function testGetObjectUrlReturnsNullIfNoRootUrlForIdIsFoundInCache($repositoryUrlCache): void
     {
         $this->assertNull($repositoryUrlCache->getObjectUrl('invalid-id', 'foo-id'));
     }
@@ -225,7 +226,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @depends testAddRepositoryAddsGivenUrlsToArrayCache
      * @param $repositoryUrlCache RepositoryUrlCache
      */
-    public function testGetObjectUrlReturnsInstanceOfUrlBasedOnBaseUrlStringWithObjectIdSelector($repositoryUrlCache)
+    public function testGetObjectUrlReturnsInstanceOfUrlBasedOnBaseUrlStringWithObjectIdSelector($repositoryUrlCache): void
     {
         $objectId = 'object-id';
         $expectedUrl = Url::createFromUrl(
@@ -240,7 +241,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetObjectUrlWithSelectorReturnsInstanceOfUrlBasedOnBaseUrlStringWithObjectIdSelectorAndSelector(
         $repositoryUrlCache
-    ) {
+    ): void {
         $selector = 'fooSelector';
         $objectId = 'object-id';
         $expectedUrl = Url::createFromUrl(
@@ -258,7 +259,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @depends testAddRepositoryAddsGivenUrlsToArrayCache
      * @param $repositoryUrlCache RepositoryUrlCache
      */
-    public function testGetPathUrlReturnsNullIfNoRootUrlForIdIsFoundInCache($repositoryUrlCache)
+    public function testGetPathUrlReturnsNullIfNoRootUrlForIdIsFoundInCache($repositoryUrlCache): void
     {
         $this->assertNull($repositoryUrlCache->getPathUrl('invalid-id', 'foo-path'));
     }
@@ -267,7 +268,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      * @depends testAddRepositoryAddsGivenUrlsToArrayCache
      * @param $repositoryUrlCache RepositoryUrlCache
      */
-    public function testGetPathUrlReturnsInstanceOfUrlBasedOnBaseUrlStringWithObjectIdSelector($repositoryUrlCache)
+    public function testGetPathUrlReturnsInstanceOfUrlBasedOnBaseUrlStringWithObjectIdSelector($repositoryUrlCache): void
     {
         $path = '/foo/bar/baz';
         $expectedUrl = Url::createFromUrl(
@@ -282,7 +283,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPathUrlWithSelectorReturnsInstanceOfUrlBasedOnBaseUrlStringWithObjectIdSelectorAndSelector(
         $repositoryUrlCache
-    ) {
+    ): void {
         $selector = 'fooSelector';
         $path = '/foo/bar/baz';
         $expectedUrl = Url::createFromUrl(
@@ -294,7 +295,7 @@ class RepositoryUrlCacheTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testBuildUrlReturnsUrlInstanceBasedOnGivenUrlString()
+    public function testBuildUrlReturnsUrlInstanceBasedOnGivenUrlString(): void
     {
         $urlString = 'http://foo.bar.baz';
         $url = Url::createFromUrl($urlString);

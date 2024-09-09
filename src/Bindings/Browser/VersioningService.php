@@ -31,7 +31,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
      * @param string $objectId the identifier for the PWC
      * @param ExtensionDataInterface|null $extension
      */
-    public function cancelCheckOut($repositoryId, & $objectId, ExtensionDataInterface $extension = null)
+    public function cancelCheckOut($repositoryId, & $objectId, ExtensionDataInterface $extension = null): void
     {
         $objectId = $this->getJsonConverter()->convertObject(
             (array) $this->postJson(
@@ -74,7 +74,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         $queryArray = $this->createQueryArray(
             Constants::CMISACTION_CHECK_IN,
             [
@@ -82,7 +82,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
             ],
             $extension
         );
-        if ($properties) {
+        if ($properties instanceof PropertiesInterface) {
             $queryArray = array_replace(
                 $queryArray,
                 $this->convertPropertiesToQueryArray($properties)
@@ -91,27 +91,27 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         if ($checkinComment) {
             $queryArray[Constants::PARAM_CHECKIN_COMMENT] = $checkinComment;
         }
-        if (!empty($policies)) {
+        if ($policies !== []) {
             $queryArray = array_replace(
                 $queryArray,
                 $this->convertPolicyIdArrayToQueryArray($policies)
             );
         }
-        if (!empty($removeAces)) {
+        if ($removeAces instanceof AclInterface) {
             $queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
                 $removeAces,
                 Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
                 Constants::CONTROL_REMOVE_ACE_PERMISSION
             ));
         }
-        if (!empty($addAces)) {
+        if ($addAces instanceof AclInterface) {
             $queryArray = array_replace($queryArray, $this->convertAclToQueryArray(
                 $addAces,
                 Constants::CONTROL_ADD_ACE_PRINCIPAL,
                 Constants::CONTROL_ADD_ACE_PERMISSION
             ));
         }
-        if ($contentStream) {
+        if ($contentStream instanceof StreamInterface) {
             $queryArray['content'] = $contentStream;
         }
         $objectId = $this->getJsonConverter()->convertObject(
@@ -137,7 +137,7 @@ class VersioningService extends AbstractBrowserBindingService implements Version
         & $objectId,
         ExtensionDataInterface $extension = null,
         $contentCopied = null
-    ) {
+    ): void {
         $objectData = $this->getJsonConverter()->convertObject(
             (array) $this->postJson(
                 $this->getObjectUrl($repositoryId, $objectId),
@@ -257,23 +257,19 @@ class VersioningService extends AbstractBrowserBindingService implements Version
 
     /**
      * @param string $action
-     * @param array $parameters
-     * @param ExtensionDataInterface $extension
-     * @return array
      */
     protected function createQueryArray(
         $action,
         array $parameters = [],
         ExtensionDataInterface $extension = null
-    ) {
-        $queryArray = array_replace(
+    ): array {
+        return array_replace(
             $parameters,
             [
                 Constants::CONTROL_CMISACTION => $action,
                 Constants::PARAM_SUCCINCT => $this->getSuccinct() ? 'true' : 'false',
             ]
         );
-        return $queryArray;
     }
 
 }

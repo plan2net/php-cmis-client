@@ -43,7 +43,7 @@ abstract class AbstractExtensionData implements ExtensionDataInterface
      *
      * @param CmisExtensionElementInterface[] $extensions
      */
-    public function setExtensions(array $extensions)
+    public function setExtensions(array $extensions): void
     {
         foreach ($extensions as $extension) {
             $this->checkType(CmisExtensionElementInterface::class, $extension);

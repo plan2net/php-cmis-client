@@ -9,7 +9,8 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\SessionInterface;
 use Dkd\PhpCmis\DataObjects\DocumentType;
 use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
 use Dkd\PhpCmis\Definitions\DocumentTypeDefinitionInterface;
@@ -18,14 +19,14 @@ use PHPUnit_Framework_MockObject_MockObject;
 /**
  * Class DocumentTypeTest
  */
-class DocumentTypeTest extends \PHPUnit_Framework_TestCase
+class DocumentTypeTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstructorSetsSession()
+    public function testConstructorSetsSession(): void
     {
         /**
-         * @var \Dkd\PhpCmis\SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock
+         * @var SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock
          */
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->getMockForAbstractClass();
 
         /**
          * @var DocumentTypeDefinitionInterface|PHPUnit_Framework_MockObject_MockObject $documentTypeDefinition
@@ -38,19 +39,19 @@ class DocumentTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame($sessionMock, 'session', $documentType);
     }
 
-    public function testConstructorCallsPopulateMethod()
+    public function testConstructorCallsPopulateMethod(): void
     {
         /**
-         * @var \Dkd\PhpCmis\SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock
+         * @var SessionInterface|PHPUnit_Framework_MockObject_MockObject $sessionMock
          */
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->getMockForAbstractClass();
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->getMockForAbstractClass();
 
         $documentTypeDefinition = new DocumentTypeDefinition('typeId');
 
         /**
          * @var DocumentType|PHPUnit_Framework_MockObject_MockObject $documentType
          */
-        $documentType = $this->getMockBuilder('\\Dkd\\PhpCmis\\DataObjects\\DocumentType')->setMethods(
+        $documentType = $this->getMockBuilder(DocumentType::class)->setMethods(
             ['populate']
         )->disableOriginalConstructor()->getMock();
         $documentType->expects($this->once())->method('populate')->with(

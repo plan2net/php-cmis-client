@@ -22,11 +22,11 @@ class PropertyInteger extends AbstractPropertyData implements MutablePropertyInt
      *
      * @param integer[] $values
      */
-    public function setValues(array $values)
+    public function setValues(array $values): void
     {
 
         foreach ($values as & $value) {
-            if (PHP_INT_SIZE == 4 && is_double($value)) {
+            if (PHP_INT_SIZE == 4 && is_float($value)) {
                 //TODO: 32bit - handle this specially?
                 $value = $this->castValueToSimpleType('integer', $value);
             }

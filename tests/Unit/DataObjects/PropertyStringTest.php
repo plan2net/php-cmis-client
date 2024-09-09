@@ -9,14 +9,15 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\DataObjects\PropertyString;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 /**
  * Class PropertyStringTest
  */
-class PropertyStringTest extends \PHPUnit_Framework_TestCase
+class PropertyStringTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -25,7 +26,7 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
      */
     protected $subjectUnderTest;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->subjectUnderTest = new PropertyString('testId');
     }
@@ -33,9 +34,8 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider stringCastDataProvider
      * @param string $expected
-     * @param mixed $value
      */
-    public function testSetValuesSetsProperty($expected, $value)
+    public function testSetValuesSetsProperty($expected, mixed $value): void
     {
         if ($value === null) {
             $expected = null;
@@ -43,7 +43,7 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
 
         $values = ['foo', $value, null];
         if (!is_string($value) && $value !== null) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
+            $this->setExpectedException(CmisInvalidArgumentException::class, '', 1413440336);
         }
         $this->subjectUnderTest->setValues($values);
         $this->assertAttributeSame(['foo', $expected, null], 'values', $this->subjectUnderTest);
@@ -52,16 +52,15 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider stringCastDataProvider
      * @param string $expected
-     * @param mixed $value
      */
-    public function testSetValueSetsValuesProperty($expected, $value)
+    public function testSetValueSetsValuesProperty($expected, mixed $value): void
     {
         if ($value === null) {
             $expected = null;
         }
 
         if (!is_string($value) && $value !== null) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
+            $this->setExpectedException(CmisInvalidArgumentException::class, '', 1413440336);
         }
         $this->subjectUnderTest->setValue($value);
         $this->assertAttributeSame([$expected], 'values', $this->subjectUnderTest);

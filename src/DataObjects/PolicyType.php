@@ -27,7 +27,6 @@ class PolicyType extends PolicyTypeDefinition implements PolicyTypeInterface
      * Constructor of the object type. This constructor MUST set the session property to the given session and
      * call the <code>self::populate</code> method with the given <code>$typeDefinition</code>
      *
-     * @param SessionInterface $session
      * @param PolicyTypeDefinitionInterface $typeDefinition
      * @throws CmisInvalidArgumentException Exception is thrown if invalid TypeDefinition is given
      */
@@ -39,7 +38,7 @@ class PolicyType extends PolicyTypeDefinition implements PolicyTypeInterface
             throw new CmisInvalidArgumentException(
                 sprintf(
                     'Type definition must be instance of PolicyTypeDefinitionInterface but is "%s"',
-                    get_class($typeDefinition)
+                    $typeDefinition::class
                 )
             );
         }

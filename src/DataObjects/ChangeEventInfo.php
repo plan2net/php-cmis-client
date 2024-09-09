@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\Data\ChangeEventInfoInterface;
 use Dkd\PhpCmis\Enum\ChangeType;
 
@@ -20,7 +20,7 @@ class ChangeEventInfo extends AbstractExtensionData implements ChangeEventInfoIn
 {
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $changeTime;
 
@@ -30,17 +30,14 @@ class ChangeEventInfo extends AbstractExtensionData implements ChangeEventInfoIn
     protected $changeType;
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getChangeTime()
     {
         return $this->changeTime;
     }
 
-    /**
-     * @param \DateTime $changeTime
-     */
-    public function setChangeTime(\DateTime $changeTime)
+    public function setChangeTime(DateTime $changeTime): void
     {
         $this->changeTime = $changeTime;
     }
@@ -53,10 +50,7 @@ class ChangeEventInfo extends AbstractExtensionData implements ChangeEventInfoIn
         return $this->changeType;
     }
 
-    /**
-     * @param ChangeType $changeType
-     */
-    public function setChangeType(ChangeType $changeType)
+    public function setChangeType(ChangeType $changeType): void
     {
         $this->changeType = $changeType;
     }

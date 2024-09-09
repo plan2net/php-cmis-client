@@ -27,7 +27,6 @@ class SecondaryType extends SecondaryTypeDefinition implements SecondaryTypeInte
      * Constructor of the object type. This constructor MUST set the session property to the given session and
      * call the <code>self::populate</code> method with the given <code>$typeDefinition</code>
      *
-     * @param SessionInterface $session
      * @param SecondaryTypeDefinitionInterface $typeDefinition
      * @throws CmisInvalidArgumentException Exception is thrown if invalid TypeDefinition is given
      */
@@ -39,7 +38,7 @@ class SecondaryType extends SecondaryTypeDefinition implements SecondaryTypeInte
             throw new CmisInvalidArgumentException(
                 sprintf(
                     'Type definition must be instance of SecondaryTypeDefinitionInterface but is "%s"',
-                    get_class($typeDefinition)
+                    $typeDefinition::class
                 )
             );
         }

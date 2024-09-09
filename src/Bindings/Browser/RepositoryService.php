@@ -53,7 +53,7 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
      * @param string $typeId The typeId of an object-type specified in the repository.
      * @param ExtensionDataInterface|null $extension
      */
-    public function deleteType($repositoryId, $typeId, ExtensionDataInterface $extension = null)
+    public function deleteType($repositoryId, $typeId, ExtensionDataInterface $extension = null): void
     {
         $url = $this->getRepositoryUrl($repositoryId);
 
@@ -163,7 +163,7 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
         $cacheKey = $repositoryId . '-' . $typeId;
 
         // if the cache should be used and the extension is not set, check the cache first
-        if ($useCache === true && empty($extension)) {
+        if ($useCache === true && !$extension instanceof ExtensionDataInterface) {
             $cache = $this->cmisBindingsHelper->getTypeDefinitionCache($this->getSession());
 
             if ($cache->contains($cacheKey)) {
@@ -172,7 +172,7 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
         }
         $typeDefinition = $this->getTypeDefinitionInternal($repositoryId, $typeId);
 
-        if ($useCache === true && empty($extension)) {
+        if ($useCache === true && !$extension instanceof ExtensionDataInterface) {
             $cache->save($cacheKey, $typeDefinition);
         }
 

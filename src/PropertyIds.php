@@ -105,7 +105,7 @@ final class PropertyIds
      */
     const SECONDARY_OBJECT_TYPE_IDS = 'cmis:secondaryObjectTypeIds';
 
-    protected static $BASE_PROPERTY_KEYS = [
+    private static array $BASE_PROPERTY_KEYS = [
         self::NAME,
         self::OBJECT_ID,
         self::OBJECT_TYPE_ID,

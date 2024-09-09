@@ -31,7 +31,7 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
     /**
      * @var integer
      */
-    protected $numItems = null;
+    protected $numItems;
 
     /**
      * Returns the total number of the objects in the folder from repository.
@@ -50,7 +50,7 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
      *
      * @param integer $numItems
      */
-    public function setNumItems($numItems)
+    public function setNumItems($numItems): void
     {
         $this->numItems = $this->castValueToSimpleType('integer', $numItems);
     }
@@ -70,7 +70,7 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
      *
      * @param ObjectInFolderDataInterface[] $objects
      */
-    public function setObjects(array $objects)
+    public function setObjects(array $objects): void
     {
         foreach ($objects as $object) {
             $this->checkType(ObjectInFolderDataInterface::class, $object);
@@ -96,7 +96,7 @@ class ObjectInFolderList extends AbstractExtensionData implements ObjectInFolder
      *
      * @param boolean
      */
-    public function setHasMoreItems($hasMoreItems)
+    public function setHasMoreItems($hasMoreItems): void
     {
         $this->hasMoreItems = $this->castValueToSimpleType('boolean', $hasMoreItems);
     }

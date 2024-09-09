@@ -9,13 +9,15 @@ namespace Dkd\PhpCmis;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use RuntimeException;
+use Exception;
+use InvalidArgumentException;
+use Locale;
 use Dkd\PhpCmis\Bindings\CmisBindingInterface;
 use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\AclInterface;
-use Dkd\PhpCmis\Data\BulkUpdateObjectIdAndChangeTokenInterface;
 use Dkd\PhpCmis\Data\DocumentInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
@@ -60,15 +62,9 @@ class Session implements SessionInterface
      */
     protected $cache;
 
-    /**
-     * @var OperationContextInterface
-     */
-    private $defaultContext;
+    private OperationContext|OperationContextInterface $defaultContext;
 
-    /**
-     * @var CmisBindingsHelper
-     */
-    protected $cmisBindingHelper;
+    protected CmisBindingsHelper $cmisBindingHelper;
 
     /**
      * @var ObjectFactoryInterface
@@ -80,10 +76,7 @@ class Session implements SessionInterface
      */
     protected $repositoryInfo;
 
-    /**
-     * @var array
-     */
-    protected $parameters = [];
+    protected array $parameters;
 
     /**
      * @var Cache
@@ -98,15 +91,14 @@ class Session implements SessionInterface
     /**
      * @var Updatability[]
      */
-    protected static $createUpdatability = [];
+    protected static array $createUpdatability;
 
     /**
      * @var Updatability[]
      */
-    protected static $createAndCheckoutUpdatability = [];
+    protected static array $createAndCheckoutUpdatability;
 
     /**
-     * @param array $parameters
      * @param ObjectFactoryInterface|null $objectFactory
      * @param Cache|null $cache
      * @param Cache|null $typeDefinitionCache
@@ -123,16 +115,16 @@ class Session implements SessionInterface
         Cache $objectTypeCache = null,
         CmisBindingsHelper $cmisBindingHelper = null
     ) {
-        if (empty($parameters)) {
+        if ($parameters === []) {
             throw new CmisInvalidArgumentException('No parameters provided!', 1408115280);
         }
 
         $this->parameters = $parameters;
-        $this->objectFactory = $objectFactory === null ? $this->createObjectFactory() : $objectFactory;
-        $this->cache = $cache === null ? $this->createCache() : $cache;
-        $this->typeDefinitionCache = $typeDefinitionCache === null ? $this->createCache() : $typeDefinitionCache;
-        $this->objectTypeCache = $objectTypeCache === null ? $this->createCache() : $objectTypeCache;
-        $this->cmisBindingHelper = $cmisBindingHelper === null ? new CmisBindingsHelper() : $cmisBindingHelper;
+        $this->objectFactory = $objectFactory ?? $this->createObjectFactory();
+        $this->cache = $cache ?? $this->createCache();
+        $this->typeDefinitionCache = $typeDefinitionCache ?? $this->createCache();
+        $this->objectTypeCache = $objectTypeCache ?? $this->createCache();
+        $this->cmisBindingHelper = $cmisBindingHelper ?? new CmisBindingsHelper();
 
         $this->defaultContext = new OperationContext();
         $this->defaultContext->setCacheEnabled(true);
@@ -167,7 +159,7 @@ class Session implements SessionInterface
      * of ObjectFactory.
      *
      * @return ObjectFactoryInterface
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function createObjectFactory()
     {
@@ -179,27 +171,22 @@ class Session implements SessionInterface
             }
 
             if (!($objectFactoryClass instanceof ObjectFactoryInterface)) {
-                throw new \RuntimeException('Class does not implement ObjectFactoryInterface!', 1408354119);
+                throw new RuntimeException('Class does not implement ObjectFactoryInterface!', 1408354119);
             }
 
             $objectFactoryClass->initialize($this, $this->parameters);
 
             return $objectFactoryClass;
-        } catch (\Exception $exception) {
-            throw new \RuntimeException(
-                'Unable to create object factory: ' . $exception,
-                1408354120
-            );
+        } catch (Exception $exception) {
+            throw new RuntimeException('Unable to create object factory: ' . $exception, 1408354120, $exception);
         }
     }
 
     /**
      * Returns an instance of the ObjectFactory.
      * This methods is primarily required for unit testing.
-     *
-     * @return ObjectFactory
      */
-    protected function createDefaultObjectFactoryInstance()
+    protected function createDefaultObjectFactoryInstance(): ObjectFactory
     {
         return new ObjectFactory();
     }
@@ -209,7 +196,7 @@ class Session implements SessionInterface
      * If no session parameter SessionParameter::CACHE_CLASS is defined, the default Cache implementation will be used.
      *
      * @return Cache
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function createCache()
     {
@@ -221,10 +208,10 @@ class Session implements SessionInterface
             }
 
             if (!($cache instanceof CacheProvider)) {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     sprintf(
                         'Class %s does not subclass %s!',
-                        get_class($cache),
+                        $cache::class,
                         CacheProvider::class
                     ),
                     1408354124
@@ -232,7 +219,7 @@ class Session implements SessionInterface
             }
 
             return $cache;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new CmisInvalidArgumentException(
                 'Unable to create cache: ' . $exception,
                 1408354123
@@ -276,7 +263,7 @@ class Session implements SessionInterface
         $addAces = [],
         $removeAces = [],
         AclPropagation $aclPropagation = null
-    ) {
+    ): void {
         // TODO: Implement applyAcl() method.
     }
 
@@ -285,9 +272,8 @@ class Session implements SessionInterface
      *
      * @param ObjectIdInterface $objectId the ID the object
      * @param ObjectIdInterface[] $policyIds the IDs of the policies to be applied
-     * @return mixed
      */
-    public function applyPolicies(ObjectIdInterface $objectId, array $policyIds)
+    public function applyPolicies(ObjectIdInterface $objectId, array $policyIds): void
     {
         // TODO: Implement applyPolicy() method.
     }
@@ -299,21 +285,20 @@ class Session implements SessionInterface
      * @param mixed[] $properties
      * @param string[] $addSecondaryTypeIds
      * @param string[] $removeSecondaryTypeIds
-     * @return BulkUpdateObjectIdAndChangeTokenInterface[]
      */
     public function bulkUpdateProperties(
         array $objects,
         array $properties,
         array $addSecondaryTypeIds,
         array $removeSecondaryTypeIds
-    ) {
+    ): void {
         // TODO: Implement bulkUpdateProperties() method.
     }
 
     /**
      * Clears all cached data.
      */
-    public function clear()
+    public function clear(): void
     {
         $this->getCache()->flushAll();
     }
@@ -360,7 +345,7 @@ class Session implements SessionInterface
         array $addAces = [],
         array $removeAces = []
     ) {
-        if (empty($properties)) {
+        if ($properties === []) {
             throw new CmisInvalidArgumentException('Properties must not be empty!');
         }
 
@@ -372,7 +357,7 @@ class Session implements SessionInterface
                 [],
                 self::$createAndCheckoutUpdatability
             ),
-            $folderId === null ? null : $folderId->getId(),
+            $folderId instanceof ObjectIdInterface ? $folderId->getId() : null,
             $contentStream,
             $versioningState,
             $this->getObjectFactory()->convertPolicies($policies),
@@ -429,11 +414,7 @@ class Session implements SessionInterface
         array $addAces = [],
         array $removeAces = []
     ) {
-        if (!$source instanceof CmisObjectInterface) {
-            $sourceObject = $this->getObject($source);
-        } else {
-            $sourceObject = $source;
-        }
+        $sourceObject = $source instanceof CmisObjectInterface ? $source : $this->getObject($source);
 
         $type = $sourceObject->getType();
         $secondaryTypes = $sourceObject->getSecondaryTypes();
@@ -455,7 +436,7 @@ class Session implements SessionInterface
                 $secondaryTypes,
                 self::$createAndCheckoutUpdatability
             ),
-            $folderId === null ? null : $folderId->getId(),
+            $folderId instanceof ObjectIdInterface ? $folderId->getId() : null,
             $versioningState,
             $this->getObjectFactory()->convertPolicies($policies),
             $this->getObjectFactory()->convertAces($addAces),
@@ -474,7 +455,6 @@ class Session implements SessionInterface
      * Creates a new folder.
      *
      * @param string[] $properties
-     * @param ObjectIdInterface $folderId
      * @param PolicyInterface[] $policies
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
@@ -489,7 +469,7 @@ class Session implements SessionInterface
         array $addAces = [],
         array $removeAces = []
     ) {
-        if (empty($properties)) {
+        if ($properties === []) {
             throw new CmisInvalidArgumentException('Properties must not be empty!');
         }
 
@@ -510,7 +490,6 @@ class Session implements SessionInterface
      * Creates a new item.
      *
      * @param string[] $properties
-     * @param ObjectIdInterface $folderId
      * @param PolicyInterface[] $policies
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
@@ -525,7 +504,7 @@ class Session implements SessionInterface
         array $addAces = [],
         array $removeAces = []
     ) {
-        if (empty($properties)) {
+        if ($properties === []) {
             throw new CmisInvalidArgumentException('Properties must not be empty!');
         }
 
@@ -548,7 +527,7 @@ class Session implements SessionInterface
      * @param string $id
      * @return ObjectIdInterface the object ID object
      */
-    public function createObjectId($id)
+    public function createObjectId($id): ObjectId
     {
         return new ObjectId($id);
     }
@@ -583,13 +562,13 @@ class Session implements SessionInterface
         $orderBy = null,
         $cacheEnabled = false,
         $maxItemsPerPage = 100
-    ) {
+    ): OperationContext {
         $operationContext = new OperationContext();
         $operationContext->setFilter($filter);
         $operationContext->setIncludeAcls($includeAcls);
         $operationContext->setIncludeAllowableActions($includeAllowableActions);
         $operationContext->setIncludePolicies($includePolicies);
-        if ($includeRelationships !== null) {
+        if ($includeRelationships instanceof IncludeRelationships) {
             $operationContext->setIncludeRelationships($includeRelationships);
         }
         $operationContext->setRenditionFilter($renditionFilter);
@@ -607,7 +586,6 @@ class Session implements SessionInterface
      * Creates a new policy.
      *
      * @param string[] $properties
-     * @param ObjectIdInterface $folderId
      * @param PolicyInterface[] $policies
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
@@ -619,7 +597,7 @@ class Session implements SessionInterface
         array $policies = [],
         array $addAces = [],
         array $removeAces = []
-    ) {
+    ): void {
         // TODO: Implement createPolicy() method.
     }
 
@@ -644,11 +622,11 @@ class Session implements SessionInterface
         array $fromTypes,
         $whereClause = null,
         array $orderByPropertyIds = []
-    ) {
-        if (empty($selectPropertyIds)) {
+    ): QueryStatement {
+        if ($selectPropertyIds === []) {
             throw new CmisInvalidArgumentException('Select property IDs must not be empty');
         }
-        if (empty($fromTypes)) {
+        if ($fromTypes === []) {
             throw new CmisInvalidArgumentException('From types must not be empty');
         }
 
@@ -671,7 +649,7 @@ class Session implements SessionInterface
         array $addAces = [],
         array $removeAces = []
     ) {
-        if (empty($properties)) {
+        if ($properties === []) {
             throw new CmisInvalidArgumentException('Properties must not be empty!');
         }
 
@@ -693,7 +671,6 @@ class Session implements SessionInterface
     /**
      * Creates a new type.
      *
-     * @param TypeDefinitionInterface $type
      * @return ObjectTypeInterface the new type definition
      * @throws CmisNotSupportedException If repository version 1.0
      */
@@ -715,7 +692,7 @@ class Session implements SessionInterface
      * @param boolean $allVersions if this object is a document this parameter defines
      *      if only this version or all versions should be deleted
      */
-    public function delete(ObjectIdInterface $objectId, $allVersions = true)
+    public function delete(ObjectIdInterface $objectId, $allVersions = true): void
     {
         $this->getBinding()->getObjectService()->deleteObject(
             $this->getRepositoryId(),
@@ -731,7 +708,7 @@ class Session implements SessionInterface
      * @param string $typeId the ID of the type to delete
      * @throws CmisNotSupportedException If repository version 1.0
      */
-    public function deleteType($typeId)
+    public function deleteType($typeId): void
     {
         if ($this->getRepositoryInfo()->getCmisVersion() == CmisVersion::cast(CmisVersion::CMIS_1_0)) {
             throw new CmisNotSupportedException('This method is not supported for CMIS 1.0 repositories.');
@@ -750,7 +727,7 @@ class Session implements SessionInterface
      *      ACL with basic and repository specific permissions
      * @return AclInterface the ACL of the object
      */
-    public function getAcl(ObjectIdInterface $objectId, $onlyBasicPermissions)
+    public function getAcl(ObjectIdInterface $objectId, $onlyBasicPermissions): void
     {
         // TODO: Implement getAcl() method.
     }
@@ -769,9 +746,8 @@ class Session implements SessionInterface
      * Returns all checked out documents with the given OperationContext.
      *
      * @param OperationContextInterface|null $context
-     * @return DocumentInterface[]
      */
-    public function getCheckedOutDocs(OperationContextInterface $context = null)
+    public function getCheckedOutDocs(OperationContextInterface $context = null): void
     {
         // TODO: Implement getCheckedOutDocs() method.
     }
@@ -800,7 +776,7 @@ class Session implements SessionInterface
         $maxNumItems = null,
         OperationContextInterface $context = null
     ) {
-        if ($context === null) {
+        if (!$context instanceof OperationContextInterface) {
             $context = $this->getDefaultContext();
         }
 
@@ -856,7 +832,7 @@ class Session implements SessionInterface
      *
      * @return string|null the latest change log token or <code>null</code> if the repository doesn't provide one
      */
-    public function getLatestChangeLogToken()
+    public function getLatestChangeLogToken(): void
     {
         // TODO: Implement getLatestChangeLogToken() method.
     }
@@ -874,16 +850,16 @@ class Session implements SessionInterface
         ObjectIdInterface $objectId,
         $major = false,
         OperationContextInterface $context = null
-    ) {
+    ): void {
         // TODO: Implement getLatestDocumentVersion() method.
     }
 
     /**
      * Get the current locale to be used for this session.
      *
-     * @return \Locale the current locale, may be <code>null</code>
+     * @return Locale the current locale, may be <code>null</code>
      */
-    public function getLocale()
+    public function getLocale(): void
     {
         // TODO: Implement getLocale() method.
     }
@@ -896,7 +872,7 @@ class Session implements SessionInterface
      */
     public function getObject(ObjectIdInterface $objectId, OperationContextInterface $context = null)
     {
-        if ($context === null) {
+        if (!$context instanceof OperationContextInterface) {
             $context = $this->getDefaultContext();
         }
 
@@ -948,7 +924,7 @@ class Session implements SessionInterface
             throw new CmisInvalidArgumentException('Path must not be empty.');
         }
 
-        if ($context === null) {
+        if (!$context instanceof OperationContextInterface) {
             $context = $this->getDefaultContext();
         }
 
@@ -985,10 +961,7 @@ class Session implements SessionInterface
     /**
      * Fetches the relationships from or to an object from the repository.
      *
-     * @param ObjectIdInterface $objectId
      * @param boolean $includeSubRelationshipTypes
-     * @param RelationshipDirection $relationshipDirection
-     * @param ObjectTypeInterface $type
      * @param OperationContextInterface|null $context
      * @return RelationshipInterface[]
      */
@@ -1000,7 +973,7 @@ class Session implements SessionInterface
         OperationContextInterface $context = null
     ) {
 
-        if ($context === null) {
+        if (!$context instanceof OperationContextInterface) {
             $context = $this->getDefaultContext();
         }
 
@@ -1048,7 +1021,7 @@ class Session implements SessionInterface
 
         $rootFolder = $this->getObject(
             $this->createObjectId($rootFolderId),
-            $context === null ? $this->getDefaultContext() : $context
+            $context ?? $this->getDefaultContext()
         );
 
         if (!($rootFolder instanceof FolderInterface)) {
@@ -1128,13 +1101,13 @@ class Session implements SessionInterface
      * @return QueryResultInterface[]
      * @throws CmisInvalidArgumentException If statement is empty
      */
-    public function query($statement, $searchAllVersions = false, OperationContextInterface $context = null)
+    public function query($statement, $searchAllVersions = false, OperationContextInterface $context = null): array
     {
         if (empty($statement)) {
             throw new CmisInvalidArgumentException('Statement must not be empty.');
         }
 
-        if ($context === null) {
+        if (!$context instanceof OperationContextInterface) {
             $context = $this->getDefaultContext();
         }
 
@@ -1180,21 +1153,17 @@ class Session implements SessionInterface
         $where = null,
         $searchAllVersions = false,
         OperationContextInterface $context = null
-    ) {
+    ): array {
         if (empty($typeId)) {
             throw new CmisInvalidArgumentException('Type id must not be empty.');
         }
 
-        if ($context === null) {
+        if (!$context instanceof OperationContextInterface) {
             $context = $this->getDefaultContext();
         }
 
         $queryFilterString = $context->getQueryFilterString();
-        if (!empty($queryFilterString)) {
-            $querySelect = $queryFilterString;
-        } else {
-            $querySelect = '*';
-        }
+        $querySelect = empty($queryFilterString) ? '*' : $queryFilterString;
 
         $whereClause = '';
         if (!empty($where)) {
@@ -1245,10 +1214,8 @@ class Session implements SessionInterface
      * are added to the cache with a secondary identification; the context - and
      * the context is not available here when removing a single object from the
      * cache. Instead, we opt to simply flush the entire cache and let it refill.
-     *
-     * @param ObjectIdInterface $objectId
      */
-    public function removeObjectFromCache(ObjectIdInterface $objectId)
+    public function removeObjectFromCache(ObjectIdInterface $objectId): void
     {
         $this->clear();
     }
@@ -1260,7 +1227,7 @@ class Session implements SessionInterface
      * @param ObjectIdInterface $objectId the ID the object
      * @param ObjectIdInterface[] $policyIds the IDs of the policies to be removed
      */
-    public function removePolicy(ObjectIdInterface $objectId, array $policyIds)
+    public function removePolicy(ObjectIdInterface $objectId, array $policyIds): void
     {
         // TODO: Implement removePolicy() method.
     }
@@ -1269,11 +1236,10 @@ class Session implements SessionInterface
      * Removes the direct ACEs of an object and sets the provided ACEs.
      * The changes are local to the given object and are not propagated to dependent objects.
      *
-     * @param ObjectIdInterface $objectId
      * @param AceInterface[] $aces
      * @return AclInterface the new ACL of the object
      */
-    public function setAcl(ObjectIdInterface $objectId, array $aces)
+    public function setAcl(ObjectIdInterface $objectId, array $aces): void
     {
         // TODO: Implement setAcl() method.
     }
@@ -1284,7 +1250,7 @@ class Session implements SessionInterface
      * @param OperationContextInterface $context the OperationContext to be used for the session;
      *      if null, a default context is used
      */
-    public function setDefaultContext(OperationContextInterface $context)
+    public function setDefaultContext(OperationContextInterface $context): void
     {
         $this->defaultContext = $context;
     }
@@ -1295,7 +1261,7 @@ class Session implements SessionInterface
      * @param TypeDefinitionInterface $type the type definition updates
      * @return ObjectTypeInterface the updated type definition
      */
-    public function updateType(TypeDefinitionInterface $type)
+    public function updateType(TypeDefinitionInterface $type): void
     {
         // TODO: Implement updateType() method.
     }
@@ -1305,7 +1271,6 @@ class Session implements SessionInterface
      * cached, it returns the cached object. Otherwise it creates an object type
      * object and puts it into the cache.
      *
-     * @param TypeDefinitionInterface $typeDefinition
      * @return ObjectTypeInterface
      */
     private function convertTypeDefinition(TypeDefinitionInterface $typeDefinition)

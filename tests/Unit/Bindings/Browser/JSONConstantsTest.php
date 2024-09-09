@@ -9,264 +9,264 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\Bindings\Browser\JSONConstants;
 
 /**
  * Class JSONConstantsTest
  */
-class JSONConstantsTest extends \PHPUnit_Framework_TestCase
+class JSONConstantsTest extends PHPUnit_Framework_TestCase
 {
 
-    public function testGetRepositoryInfoKeysReturnsContentOfStaticArray()
+    public function testGetRepositoryInfoKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'REPOSITORY_INFO_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'REPOSITORY_INFO_KEYS'),
             JSONConstants::getRepositoryInfoKeys()
         );
     }
 
-    public function testGetCapabilityKeysReturnsContentOfStaticArray()
+    public function testGetCapabilityKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'CAPABILITY_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'CAPABILITY_KEYS'),
             JSONConstants::getCapabilityKeys()
         );
     }
 
-    public function testGetCapabilityCreatablePropertyKeysReturnsContentOfStaticArray()
+    public function testGetCapabilityCreatablePropertyKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'CAPABILITY_CREATABLE_PROPERTY_KEYS'
             ),
             JSONConstants::getCapabilityCreatablePropertyKeys()
         );
     }
 
-    public function testGetCapabilityNewTypeSettableAttributeKeysReturnsContentOfStaticArray()
+    public function testGetCapabilityNewTypeSettableAttributeKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'CAP_NEW_TYPE_SETTABLE_ATTRIBUTES_KEYS'
             ),
             JSONConstants::getCapabilityNewTypeSettableAttributeKeys()
         );
     }
 
-    public function testGetAclCapabilityKeysReturnsContentOfStaticArray()
+    public function testGetAclCapabilityKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'ACL_CAPABILITY_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'ACL_CAPABILITY_KEYS'),
             JSONConstants::getAclCapabilityKeys()
         );
     }
 
-    public function testGetAclCapabilityPermissionKeysReturnsContentOfStaticArray()
+    public function testGetAclCapabilityPermissionKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'ACL_CAPABILITY_PERMISSION_KEYS'
             ),
             JSONConstants::getAclCapabilityPermissionKeys()
         );
     }
 
-    public function testGetAclCapabilityMappingKeysReturnsContentOfStaticArray()
+    public function testGetAclCapabilityMappingKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'ACL_CAPABILITY_MAPPING_KEYS'
             ),
             JSONConstants::getAclCapabilityMappingKeys()
         );
     }
 
-    public function testGetObjectKeysReturnsContentOfStaticArray()
+    public function testGetObjectKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'OBJECT_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'OBJECT_KEYS'),
             JSONConstants::getObjectKeys()
         );
     }
 
-    public function testGetPropertyKeysReturnsContentOfStaticArray()
+    public function testGetPropertyKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'PROPERTY_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'PROPERTY_KEYS'),
             JSONConstants::getPropertyKeys()
         );
     }
 
-    public function testGetChangeEventKeysReturnsContentOfStaticArray()
+    public function testGetChangeEventKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'CHANGE_EVENT_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'CHANGE_EVENT_KEYS'),
             JSONConstants::getChangeEventKeys()
         );
     }
 
-    public function testGetRenditionKeysReturnsContentOfStaticArray()
+    public function testGetRenditionKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'RENDITION_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'RENDITION_KEYS'),
             JSONConstants::getRenditionKeys()
         );
     }
 
-    public function testGetFeatureKeysReturnsContentOfStaticArray()
+    public function testGetFeatureKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'FEATURE_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'FEATURE_KEYS'),
             JSONConstants::getFeatureKeys()
         );
     }
 
-    public function testGetPolicyIdsKeysReturnsContentOfStaticArray()
+    public function testGetPolicyIdsKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'POLICY_IDS_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'POLICY_IDS_KEYS'),
             JSONConstants::getPolicyIdsKeys()
         );
     }
 
-    public function testGetAclKeysReturnsContentOfStaticArray()
+    public function testGetAclKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'ACL_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'ACL_KEYS'),
             JSONConstants::getAclKeys()
         );
     }
 
-    public function testGetPrincipalKeysReturnsContentOfStaticArray()
+    public function testGetPrincipalKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'ACE_PRINCIPAL_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'ACE_PRINCIPAL_KEYS'),
             JSONConstants::getAcePrincipalKeys()
         );
     }
 
-    public function testGetAceKeysReturnsContentOfStaticArray()
+    public function testGetAceKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'ACE_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'ACE_KEYS'),
             JSONConstants::getAceKeys()
         );
     }
 
-    public function testGetTypeKeysReturnsContentOfStaticArray()
+    public function testGetTypeKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'TYPE_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'TYPE_KEYS'),
             JSONConstants::getTypeKeys()
         );
     }
 
-    public function testGetPropertyTypeKeysReturnsContentOfStaticArray()
+    public function testGetPropertyTypeKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
-            $this->getStaticAttribute('\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants', 'PROPERTY_TYPE_KEYS'),
+            $this->getStaticAttribute(JSONConstants::class, 'PROPERTY_TYPE_KEYS'),
             JSONConstants::getPropertyTypeKeys()
         );
     }
 
-    public function testGetTypeTypeMutabilityKeysReturnsContentOfStaticArray()
+    public function testGetTypeTypeMutabilityKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'TYPE_TYPE_MUTABILITY_KEYS'
             ),
             JSONConstants::getTypeTypeMutabilityKeys()
         );
     }
 
-    public function testGetObjectInFolderKeysReturnsContentOfStaticArray()
+    public function testGetObjectInFolderKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'OBJECTINFOLDER_KEYS'
             ),
             JSONConstants::getObjectInFolderKeys()
         );
     }
 
-    public function testGetObjectInFolderListKeysReturnsContentOfStaticArray()
+    public function testGetObjectInFolderListKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'OBJECTINFOLDERLIST_KEYS'
             ),
             JSONConstants::getObjectInFolderListKeys()
         );
     }
 
-    public function testGetObjectInFolderContainerKeysReturnsContentOfStaticArray()
+    public function testGetObjectInFolderContainerKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'OBJECTINFOLDERCONTAINER_KEYS'
             ),
             JSONConstants::getObjectInFolderContainerKeys()
         );
     }
 
-    public function testGetObjectParentsKeysReturnsContentOfStaticArray()
+    public function testGetObjectParentsKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'OBJECTPARENTS_KEYS'
             ),
             JSONConstants::getObjectParentsKeys()
         );
     }
 
-    public function testGetQueryResultListKeysReturnsContentOfStaticArray()
+    public function testGetQueryResultListKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'QUERYRESULTLIST_KEYS'
             ),
             JSONConstants::getQueryResultListKeys()
         );
     }
 
-    public function testGetFailedToDeleteKeysReturnsContentOfStaticArray()
+    public function testGetFailedToDeleteKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'FAILEDTODELETE_KEYS'
             ),
             JSONConstants::getFailedToDeleteKeys()
         );
     }
 
-    public function testGetTypesContainerKeysReturnsContentOfStaticArray()
+    public function testGetTypesContainerKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'TYPESCONTAINER_KEYS'
             ),
             JSONConstants::getTypesContainerKeys()
         );
     }
 
-    public function testGetTypesListKeysReturnsContentOfStaticArray()
+    public function testGetTypesListKeysReturnsContentOfStaticArray(): void
     {
         $this->assertSame(
             $this->getStaticAttribute(
-                '\\Dkd\\PhpCmis\\Bindings\\Browser\\JSONConstants',
+                JSONConstants::class,
                 'TYPESLIST_KEYS'
             ),
             JSONConstants::getTypesListKeys()

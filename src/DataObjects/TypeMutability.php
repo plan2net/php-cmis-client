@@ -43,7 +43,7 @@ class TypeMutability extends AbstractExtensionData implements TypeMutabilityInte
     /**
      * @param boolean $canCreate
      */
-    public function setCanCreate($canCreate)
+    public function setCanCreate($canCreate): void
     {
         $this->canCreate = $this->castValueToSimpleType('boolean', $canCreate);
     }
@@ -59,7 +59,7 @@ class TypeMutability extends AbstractExtensionData implements TypeMutabilityInte
     /**
      * @param boolean $canUpdate
      */
-    public function setCanUpdate($canUpdate)
+    public function setCanUpdate($canUpdate): void
     {
         $this->canUpdate = $this->castValueToSimpleType('boolean', $canUpdate);
     }
@@ -75,7 +75,7 @@ class TypeMutability extends AbstractExtensionData implements TypeMutabilityInte
     /**
      * @param boolean $canDelete
      */
-    public function setCanDelete($canDelete)
+    public function setCanDelete($canDelete): void
     {
         $this->canDelete = $this->castValueToSimpleType('boolean', $canDelete);
     }

@@ -54,7 +54,7 @@ class DocumentTypeDefinition extends AbstractTypeDefinition implements MutableDo
      *
      * @param boolean $isVersionable
      */
-    public function setIsVersionable($isVersionable)
+    public function setIsVersionable($isVersionable): void
     {
         $this->isVersionable = $this->castValueToSimpleType('boolean', $isVersionable);
     }
@@ -71,10 +71,8 @@ class DocumentTypeDefinition extends AbstractTypeDefinition implements MutableDo
 
     /**
      * Sets if a content stream is allowed, not allowed or is required.
-     *
-     * @param ContentStreamAllowed $contentStreamAllowed
      */
-    public function setContentStreamAllowed(ContentStreamAllowed $contentStreamAllowed)
+    public function setContentStreamAllowed(ContentStreamAllowed $contentStreamAllowed): void
     {
         $this->contentStreamAllowed = $contentStreamAllowed;
     }

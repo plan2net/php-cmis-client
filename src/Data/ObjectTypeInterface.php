@@ -21,9 +21,6 @@ interface ObjectTypeInterface extends TypeDefinitionInterface
 {
     /**
      * Constructor of the object type.
-     *
-     * @param SessionInterface $session
-     * @param TypeDefinitionInterface $typeDefinition
      */
     public function __construct(SessionInterface $session, TypeDefinitionInterface $typeDefinition);
 

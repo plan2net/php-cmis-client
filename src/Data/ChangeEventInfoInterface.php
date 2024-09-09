@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Data;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\Enum\ChangeType;
 
 /**
@@ -20,7 +20,7 @@ interface ChangeEventInfoInterface extends ExtensionDataInterface
     /**
      * Returns when the change took place.
      *
-     * @return \DateTime the timespamp of the change, not <code>null</code>
+     * @return DateTime the timespamp of the change, not <code>null</code>
      */
     public function getChangeTime();
 

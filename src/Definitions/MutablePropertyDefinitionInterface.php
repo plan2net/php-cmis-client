@@ -35,8 +35,6 @@ interface MutablePropertyDefinitionInterface extends PropertyDefinitionInterface
 
     /**
      * Sets the default value.
-     *
-     * @param array $defaultValue
      */
     public function setDefaultValue(array $defaultValue);
 
@@ -77,8 +75,6 @@ interface MutablePropertyDefinitionInterface extends PropertyDefinitionInterface
 
     /**
      * Sets the property type.
-     *
-     * @param PropertyType $propertyType
      */
     public function setPropertyType(PropertyType $propertyType);
 
@@ -91,8 +87,6 @@ interface MutablePropertyDefinitionInterface extends PropertyDefinitionInterface
 
     /**
      * Sets the updatability.
-     *
-     * @param Updatability $updatability
      */
     public function setUpdatability(Updatability $updatability);
 

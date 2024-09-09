@@ -9,16 +9,15 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
-use Dkd\PhpCmis\DataObjects\RelationshipTypeDefinition;
 use Dkd\PhpCmis\Enum\ContentStreamAllowed;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 /**
  * Class DocumentTypeDefinitionTest
  */
-class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
+class DocumentTypeDefinitionTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -27,12 +26,12 @@ class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     protected $documentTypeDefinition;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->documentTypeDefinition = new DocumentTypeDefinition('typeId');
     }
 
-    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinition()
+    public function testPopulateWithClonesMethodCopiesPropertyValuesFromGivenTypeDefinition(): void
     {
         $dummyTypeDefinition = new DocumentTypeDefinition('typeId');
         $dummyTypeDefinition->setIsVersionable(true);
@@ -45,7 +44,7 @@ class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($dummyTypeDefinition, $this->documentTypeDefinition);
     }
 
-    public function testDefaultValueForContentStreamAllowedIsSet()
+    public function testDefaultValueForContentStreamAllowedIsSet(): void
     {
         $this->assertAttributeEquals(
             ContentStreamAllowed::cast(ContentStreamAllowed::NOTALLOWED),
@@ -54,7 +53,7 @@ class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSetIsVersionableSetsProperty()
+    public function testSetIsVersionableSetsProperty(): void
     {
         $this->documentTypeDefinition->setIsVersionable(true);
         $this->assertAttributeSame(true, 'isVersionable', $this->documentTypeDefinition);
@@ -65,7 +64,7 @@ class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetIsVersionableSetsProperty
      */
-    public function testIsVersionableReturnsPropertyValue()
+    public function testIsVersionableReturnsPropertyValue(): void
     {
         $this->documentTypeDefinition->setIsVersionable(true);
         $this->assertTrue($this->documentTypeDefinition->isVersionable());
@@ -73,7 +72,7 @@ class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->documentTypeDefinition->isVersionable());
     }
 
-    public function testSetContentStreamAllowedSetsProperty()
+    public function testSetContentStreamAllowedSetsProperty(): void
     {
         $contentStreamAllowed = ContentStreamAllowed::cast(ContentStreamAllowed::ALLOWED);
         $this->documentTypeDefinition->setContentStreamAllowed($contentStreamAllowed);
@@ -83,10 +82,10 @@ class DocumentTypeDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testDefaultValueForContentStreamAllowedIsSet
      */
-    public function testGetContentStreamAllowedGetsPropertyValue()
+    public function testGetContentStreamAllowedGetsPropertyValue(): void
     {
         $this->assertInstanceOf(
-            '\\Dkd\\PhpCmis\\Enum\\ContentStreamAllowed',
+            ContentStreamAllowed::class,
             $this->documentTypeDefinition->getContentStreamAllowed()
         );
     }

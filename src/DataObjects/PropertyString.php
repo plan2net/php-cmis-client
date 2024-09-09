@@ -22,7 +22,7 @@ class PropertyString extends AbstractPropertyData implements PropertyStringInter
      *
      * @param string[] $values
      */
-    public function setValues(array $values)
+    public function setValues(array $values): void
     {
         foreach ($values as $value) {
             $this->checkType('string', $value, true);

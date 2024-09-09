@@ -51,14 +51,12 @@ interface ObjectFactoryInterface
     public function convertAces(array $aces);
 
     /**
-     * @param ObjectDataInterface $objectData
      * @return ChangeEventInfoInterface
      */
     public function convertChangeEvent(ObjectDataInterface $objectData);
 
     /**
      * @param string $changeLogToken
-     * @param ObjectListInterface $objectList
      * @return ChangeEventsInterface
      */
     public function convertChangeEvents($changeLogToken, ObjectListInterface $objectList);
@@ -72,8 +70,6 @@ interface ObjectFactoryInterface
     public function convertContentStream(StreamInterface $contentStream);
 
     /**
-     * @param ObjectDataInterface $objectData
-     * @param OperationContextInterface $context
      * @return CmisObjectInterface
      */
     public function convertObject(ObjectDataInterface $objectData, OperationContextInterface $context);
@@ -89,9 +85,7 @@ interface ObjectFactoryInterface
     /**
      * Convert Properties in Properties instance to a list of PropertyInterface objects
      *
-     * @param ObjectTypeInterface $objectType
      * @param SecondaryTypeInterface[] $secondaryTypes
-     * @param PropertiesInterface $properties
      * @return PropertyInterface[]
      */
     public function convertPropertiesDataToPropertyList(
@@ -117,32 +111,27 @@ interface ObjectFactoryInterface
     );
 
     /**
-     * @param PropertiesInterface $properties
      * @return PropertyDataInterface[]
      */
     public function convertQueryProperties(PropertiesInterface $properties);
 
     /**
-     * @param ObjectDataInterface $objectData
      * @return QueryResultInterface
      */
     public function convertQueryResult(ObjectDataInterface $objectData);
 
     /**
      * @param string $objectId
-     * @param RenditionDataInterface $renditionData
      * @return RenditionInterface
      */
     public function convertRendition($objectId, RenditionDataInterface $renditionData);
 
     /**
-     * @param RepositoryInfoInterface $repositoryInfo
      * @return RepositoryInfoInterface
      */
     public function convertRepositoryInfo(RepositoryInfoInterface $repositoryInfo);
 
     /**
-     * @param TypeDefinitionInterface $typeDefinition
      * @return ObjectTypeInterface
      */
     public function convertTypeDefinition(TypeDefinitionInterface $typeDefinition);
@@ -170,23 +159,19 @@ interface ObjectFactoryInterface
      * @param boolean $partial
      * @return StreamInterface
      */
-    public function createContentStream($filename, $length, $mimeType, $stream, $partial = false);
+    public function createContentStream($filename, $length, $mimeType, mixed $stream, $partial = false);
 
     /**
-     * @param PropertyDefinitionInterface $type
-     * @param array $values
      * @return PropertyInterface
      */
     public function createProperty(PropertyDefinitionInterface $type, array $values);
 
     /**
-     * @param ObjectDataInterface $objectData
      * @return ObjectTypeInterface|null
      */
     public function getTypeFromObjectData(ObjectDataInterface $objectData);
 
     /**
-     * @param SessionInterface $session
      * @param string[] $parameters
      */
     public function initialize(SessionInterface $session, $parameters = []);

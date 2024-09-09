@@ -40,10 +40,8 @@ class ObjectParentData extends AbstractExtensionData implements ObjectParentData
 
     /**
      * Sets the object
-     *
-     * @param ObjectDataInterface $object
      */
-    public function setObject(ObjectDataInterface $object)
+    public function setObject(ObjectDataInterface $object): void
     {
         $this->object = $object;
     }
@@ -63,7 +61,7 @@ class ObjectParentData extends AbstractExtensionData implements ObjectParentData
      *
      * @param string|null
      */
-    public function setRelativePathSegment($relativePathSegment)
+    public function setRelativePathSegment($relativePathSegment): void
     {
         $this->relativePathSegment = $this->castValueToSimpleType('string', $relativePathSegment);
     }

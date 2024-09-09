@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Bindings;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Exception;
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
 use Dkd\PhpCmis\AclServiceInterface;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryService;
@@ -34,42 +34,27 @@ use Doctrine\Common\Cache\Cache;
  */
 class CmisBinding implements CmisBindingInterface
 {
-    /**
-     * @var BindingSessionInterface
-     */
-    protected $session;
+    protected RepositoryService $repositoryService;
+
+    protected BindingsObjectFactoryInterface $objectFactory;
 
     /**
-     * @var RepositoryService
-     */
-    protected $repositoryService;
-
-    /**
-     * @var BindingsObjectFactoryInterface
-     */
-    protected $objectFactory;
-
-    /**
-     * @param BindingSessionInterface $session
-     * @param array $sessionParameters
      * @param Cache|null $typeDefinitionCache
      * @param BindingsObjectFactoryInterface|null $objectFactory
      */
     public function __construct(
-        BindingSessionInterface $session,
+        protected BindingSessionInterface $session,
         array $sessionParameters,
         Cache $typeDefinitionCache = null,
         BindingsObjectFactoryInterface $objectFactory = null
     ) {
-        if (count($sessionParameters) === 0) {
+        if ($sessionParameters === []) {
             throw new CmisRuntimeException('Session parameters must be set!');
         }
 
         if (!isset($sessionParameters[SessionParameter::BINDING_CLASS])) {
             throw new CmisInvalidArgumentException('Session parameters do not contain a binding class name!');
         }
-
-        $this->session = $session;
 
         foreach ($sessionParameters as $key => $value) {
             $this->session->put($key, $value);
@@ -86,9 +71,9 @@ class CmisBinding implements CmisBindingInterface
     /**
      * Clears all caches of the current CMIS binding session.
      */
-    public function clearAllCaches()
+    public function clearAllCaches(): never
     {
-        throw new \Exception('Not yet implemented!');
+        throw new Exception('Not yet implemented!');
         // TODO: Implement clearAllCaches() method.
     }
 
@@ -97,16 +82,16 @@ class CmisBinding implements CmisBindingInterface
      *
      * @param string $repositoryId
      */
-    public function clearRepositoryCache($repositoryId)
+    public function clearRepositoryCache($repositoryId): never
     {
-        throw new \Exception('Not yet implemented!');
+        throw new Exception('Not yet implemented!');
         // TODO: Implement clearRepositoryCache() method.
     }
 
     /**
      * Releases all resources assigned to this binding instance.
      */
-    public function close()
+    public function close(): void
     {
         $this->getCmisBindingsHelper()->getSpi($this->session)->close();
     }
@@ -136,7 +121,7 @@ class CmisBinding implements CmisBindingInterface
 
         try {
             return BindingType::cast($bindingType);
-        } catch (InvalidEnumerationValueException $exception) {
+        } catch (InvalidEnumerationValueException) {
             return BindingType::cast(BindingType::CUSTOM);
         }
     }
@@ -241,10 +226,7 @@ class CmisBinding implements CmisBindingInterface
         return $this->getCmisBindingsHelper()->getSpi($this->session)->getVersioningService();
     }
 
-    /**
-     * @return CmisBindingsHelper
-     */
-    public function getCmisBindingsHelper()
+    public function getCmisBindingsHelper(): CmisBindingsHelper
     {
         return new CmisBindingsHelper();
     }

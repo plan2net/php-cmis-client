@@ -9,7 +9,9 @@ namespace Dkd\PhpCmis\Bindings\Browser;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Exception;
+use DateTime;
+use Dkd\PhpCmis\Converter\JsonConverter;
 use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\Bindings\LinkAccessInterface;
@@ -69,7 +71,6 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     protected $dateTimeFormat;
 
     /**
-     * @param BindingSessionInterface $session
      * @param CmisBindingsHelper|null $cmisBindingsHelper
      */
     public function __construct(BindingSessionInterface $session, $cmisBindingsHelper = null)
@@ -86,7 +87,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      */
     protected function setCmisBindingsHelper($cmisBindingsHelper = null)
     {
-        $this->cmisBindingsHelper = ($cmisBindingsHelper === null) ? new CmisBindingsHelper() : $cmisBindingsHelper;
+        $this->cmisBindingsHelper = $cmisBindingsHelper ?? new CmisBindingsHelper();
     }
 
     /**
@@ -151,8 +152,6 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
 
     /**
      * Sets the current session.
-     *
-     * @param BindingSessionInterface $session
      */
     protected function setSession(BindingSessionInterface $session)
     {
@@ -214,8 +213,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
             } else {
                 throw new CmisConnectionException(
                     sprintf(
-                        'Found invalid repository info! Value of type "array" was expected'
-                        . 'but value of type "%s" was given.',
+                        'Found invalid repository info! Value of type "array" was expectedbut value of type "%s" was given.',
                         gettype($item)
                     ),
                     1415187764
@@ -239,7 +237,6 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Wrapper to read URL response as JSON as is the general use case.
      *
-     * @param Url $url
      * @return mixed
      */
     protected function readJson(Url $url)
@@ -250,7 +247,6 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Do a get request for the given url
      *
-     * @param Url $url
      * @return Response
      * @throws CmisBaseException an more specific exception of this type could be thrown. For more details see
      * @see AbstractBrowserBindingService::convertStatusCode()
@@ -263,7 +259,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
         } catch (RequestException $exception) {
             $code = 0;
             $message = null;
-            if ($exception->getResponse()) {
+            if ($exception->getResponse() instanceof ResponseInterface) {
                 $code = $exception->getResponse()->getStatusCode();
                 $message = $exception->getResponse()->getBody();
             }
@@ -294,10 +290,10 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
      *
      * @param integer $code
      * @param string $message
-     * @param null|\Exception $exception
+     * @param null|Exception $exception
      * @return CmisBaseException
      */
-    protected function convertStatusCode($code, $message, \Exception $exception = null)
+    protected function convertStatusCode($code, $message, Exception $exception = null)
     {
         $messageData = json_decode($message, true);
 
@@ -310,53 +306,40 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
                 $message = $messageData[JSONConstants::ERROR_MESSAGE];
             }
 
-            $exceptionName = '\\Dkd\\PhpCmis\\Exception\\Cmis' . ucfirst($jsonError) . 'Exception';
+            $exceptionName = '\\Dkd\\PhpCmis\\Exception\\Cmis' . ucfirst((string) $jsonError) . 'Exception';
 
             if (class_exists($exceptionName)) {
                 return new $exceptionName($message, null, $exception);
             }
         }
 
-        if (empty($message) && $exception !== null) {
+        if (empty($message) && $exception instanceof Exception) {
             $message = $exception->getMessage();
         }
 
         // fall back to status code
-        switch ($code) {
-            case 301:
-            case 302:
-            case 303:
-            case 307:
-                return new CmisConnectionException(
-                    'Redirects are not supported (HTTP status code ' . $code . '): ' . $message,
-                    null,
-                    $exception
-                );
-            case 400:
-                return new CmisInvalidArgumentException($message, null, $exception);
-            case 401:
-                return new CmisUnauthorizedException($message, null, $exception);
-            case 403:
-                return new CmisPermissionDeniedException($message, null, $exception);
-            case 404:
-                return new CmisObjectNotFoundException($message, null, $exception);
-            case 405:
-                return new CmisNotSupportedException($message, null, $exception);
-            case 407:
-                return new CmisProxyAuthenticationException($message, null, $exception);
-            case 409:
-                return new CmisConstraintException($message, null, $exception);
-            default:
-                return new CmisRuntimeException($message, null, $exception);
-        }
+        return match ($code) {
+            301, 302, 303, 307 => new CmisConnectionException(
+                'Redirects are not supported (HTTP status code ' . $code . '): ' . $message,
+                null,
+                $exception
+            ),
+            400 => new CmisInvalidArgumentException($message, null, $exception),
+            401 => new CmisUnauthorizedException($message, null, $exception),
+            403 => new CmisPermissionDeniedException($message, null, $exception),
+            404 => new CmisObjectNotFoundException($message, null, $exception),
+            405 => new CmisNotSupportedException($message, null, $exception),
+            407 => new CmisProxyAuthenticationException($message, null, $exception),
+            409 => new CmisConstraintException($message, null, $exception),
+            default => new CmisRuntimeException($message, null, $exception),
+        };
     }
 
     // ---- helpers ----
-
     /**
      * Returns JSON Converter instance
      *
-     * @return \Dkd\PhpCmis\Converter\JsonConverter
+     * @return JsonConverter
      */
     protected function getJsonConverter()
     {
@@ -411,9 +394,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Wrapper for calling post() and reading response as JSON, as is the general use case.
      *
-     * @param Url $url
      * @param array $content
-     * @param array $headers
      * @return mixed
      */
     protected function postJson(Url $url, $content = [], array $headers = [])
@@ -452,8 +433,6 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     }
 
     /**
-     * @param array $queryArray
-     * @param null $prefix
      * @return array
      */
     protected function convertQueryArrayToMultiPart(array $queryArray, $prefix = null)
@@ -467,7 +446,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
                 $streamPart = [
                     'name' => '',
                     'contents' => $value,
-                    'filename' => basename( $value->getMetadata('uri'))
+                    'filename' => basename( (string) $value->getMetadata('uri'))
                 ];
                 $mimetype = $value->getMetadata('mimetype');
                 if ($mimetype) {
@@ -545,7 +524,6 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Converts a Properties list into an array that can be used for the CMIS request.
      *
-     * @param PropertiesInterface $properties
      * @return array Example <code>
      * array('propertyId' => array(0 => 'myId'), 'propertyValue' => array(0 => 'valueOfMyId'))
      * </code>
@@ -588,12 +566,11 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Converts values to a format that can be used for the CMIS Browser binding request.
      *
-     * @param mixed $value
      * @return mixed
      */
-    protected function convertPropertyValueToSimpleType($value)
+    protected function convertPropertyValueToSimpleType(mixed $value)
     {
-        if ($value instanceof \DateTime) {
+        if ($value instanceof DateTime) {
             // CMIS expects a timestamp in milliseconds
             $value = $value->getTimestamp() * 1000;
         } elseif (is_bool($value)) {
@@ -607,7 +584,6 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Converts a Access Control list into an array that can be used for the CMIS request
      *
-     * @param AclInterface $acl
      * @param string $principalControl one of principal ace constants
      * CONTROL_ADD_ACE_PRINCIPAL or CONTROL_REMOVE_ACE_PRINCIPAL
      * @param string $permissionControl one of permission ace constants
@@ -672,10 +648,8 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
 
     /**
      * Sets the date time format
-     *
-     * @param DateTimeFormat $dateTimeFormat
      */
-    public function setDateTimeFormat(DateTimeFormat $dateTimeFormat)
+    public function setDateTimeFormat(DateTimeFormat $dateTimeFormat): void
     {
         $this->dateTimeFormat = $dateTimeFormat;
     }
@@ -683,12 +657,11 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Appends policies parameters to url
      *
-     * @param Url $url
      * @param string[] $policies A list of policy IDs that must be applied to the newly created document object
      */
     protected function appendPoliciesToUrl(Url $url, array $policies)
     {
-        if (!empty($policies)) {
+        if ($policies !== []) {
             $url->getQuery()->modify($this->convertPolicyIdArrayToQueryArray($policies));
         }
     }
@@ -696,12 +669,11 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Appends addAces parameters to url
      *
-     * @param Url $url
      * @param AclInterface|null $addAces A list of ACEs
      */
     protected function appendAddAcesToUrl(Url $url, AclInterface $addAces = null)
     {
-        if ($addAces !== null) {
+        if ($addAces instanceof AclInterface) {
             $url->getQuery()->modify(
                 $this->convertAclToQueryArray(
                     $addAces,
@@ -715,12 +687,11 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     /**
      * Appends removeAces parameters to url
      *
-     * @param Url $url
      * @param AclInterface|null $removeAces A list of ACEs
      */
     protected function appendRemoveAcesToUrl(Url $url, AclInterface $removeAces = null)
     {
-        if ($removeAces !== null) {
+        if ($removeAces instanceof AclInterface) {
             $url->getQuery()->modify(
                 $this->convertAclToQueryArray(
                     $removeAces,

@@ -31,7 +31,7 @@ class ObjectList extends AbstractExtensionData implements ObjectListInterface
     /**
      * @var integer|null
      */
-    protected $numItems = null;
+    protected $numItems;
 
     /**
      * Returns the total number of the objects in the list.
@@ -49,7 +49,7 @@ class ObjectList extends AbstractExtensionData implements ObjectListInterface
      *
      * @param integer $numItems
      */
-    public function setNumItems($numItems)
+    public function setNumItems($numItems): void
     {
         $this->numItems = $this->castValueToSimpleType('integer', $numItems);
     }
@@ -69,7 +69,7 @@ class ObjectList extends AbstractExtensionData implements ObjectListInterface
      *
      * @param ObjectDataInterface[] $objects
      */
-    public function setObjects(array $objects)
+    public function setObjects(array $objects): void
     {
         foreach ($objects as $object) {
             $this->checkType(ObjectDataInterface::class, $object);
@@ -95,7 +95,7 @@ class ObjectList extends AbstractExtensionData implements ObjectListInterface
      *
      * @param boolean
      */
-    public function setHasMoreItems($hasMoreItems)
+    public function setHasMoreItems($hasMoreItems): void
     {
         $this->hasMoreItems = $this->castValueToSimpleType('boolean', $hasMoreItems);
     }

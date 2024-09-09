@@ -58,7 +58,7 @@ class ExtensionFeature extends AbstractExtensionData implements ExtensionFeature
     /**
      * @param string $commonName
      */
-    public function setCommonName($commonName)
+    public function setCommonName($commonName): void
     {
         $this->commonName = (string) $commonName;
     }
@@ -74,7 +74,7 @@ class ExtensionFeature extends AbstractExtensionData implements ExtensionFeature
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = (string) $description;
     }
@@ -90,7 +90,7 @@ class ExtensionFeature extends AbstractExtensionData implements ExtensionFeature
     /**
      * @param string[] $featureData
      */
-    public function setFeatureData(array $featureData)
+    public function setFeatureData(array $featureData): void
     {
         $featureData = array_map('strval', $featureData);
         $this->featureData = $featureData;
@@ -107,7 +107,7 @@ class ExtensionFeature extends AbstractExtensionData implements ExtensionFeature
     /**
      * @param string $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = (string) $id;
     }
@@ -123,7 +123,7 @@ class ExtensionFeature extends AbstractExtensionData implements ExtensionFeature
     /**
      * @param string $url
      */
-    public function setUrl($url)
+    public function setUrl($url): void
     {
         $this->url = (string) $url;
     }
@@ -139,7 +139,7 @@ class ExtensionFeature extends AbstractExtensionData implements ExtensionFeature
     /**
      * @param string $versionLabel
      */
-    public function setVersionLabel($versionLabel)
+    public function setVersionLabel($versionLabel): void
     {
         $this->versionLabel = (string) $versionLabel;
     }

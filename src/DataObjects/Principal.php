@@ -41,7 +41,7 @@ class Principal extends AbstractExtensionData implements PrincipalInterface
     /**
      * @param string $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $this->castValueToSimpleType('string', $id, true);
     }

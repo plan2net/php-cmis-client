@@ -9,32 +9,33 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\DataObjects\AllowableActions;
 use Dkd\PhpCmis\Enum\Action;
 
 /**
  * Class AllowableActionsTest
  */
-class AllowableActionsTest extends \PHPUnit_Framework_TestCase
+class AllowableActionsTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var AllowableActions
      */
     protected $allowableActions;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->allowableActions = new AllowableActions();
     }
 
-    public function testSetAllowableActionsThrowsExceptionIfGivenListContainsInvalidValue()
+    public function testSetAllowableActionsThrowsExceptionIfGivenListContainsInvalidValue(): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException');
+        $this->setExpectedException(CmisInvalidArgumentException::class);
         $this->allowableActions->setAllowableActions(['foo']);
     }
 
-    public function testSetAllowableActionsAssignsActionsToAttribute()
+    public function testSetAllowableActionsAssignsActionsToAttribute(): void
     {
         $actions = [Action::cast(Action::CAN_ADD_OBJECT_TO_FOLDER), Action::cast(Action::CAN_APPLY_ACL)];
         $this->allowableActions->setAllowableActions($actions);
@@ -45,7 +46,7 @@ class AllowableActionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetAllowableActionsAssignsActionsToAttribute
      */
-    public function testGetAllowableActionsReturnsArrayWithActions()
+    public function testGetAllowableActionsReturnsArrayWithActions(): void
     {
         $actions = [Action::cast(Action::CAN_ADD_OBJECT_TO_FOLDER), Action::cast(Action::CAN_APPLY_ACL)];
         $this->allowableActions->setAllowableActions($actions);

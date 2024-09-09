@@ -21,7 +21,6 @@ interface FileableCmisObjectInterface extends CmisObjectInterface
     /**
      * Adds this object to a folder.
      *
-     * @param ObjectIdInterface $folderId
      * @param boolean $allVersions
      */
     public function addToFolder(ObjectIdInterface $folderId, $allVersions);

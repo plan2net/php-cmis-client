@@ -21,23 +21,16 @@ use Dkd\PhpCmis\Enum\PropertyType;
 class Property extends AbstractPropertyData implements PropertyInterface
 {
     /**
-     * @var PropertyDefinitionInterface
-     */
-    protected $propertyDefinition;
-
-    /**
      * Initialize the property with its definition and values
      *
-     * @param PropertyDefinitionInterface $propertyDefinition
      * @param mixed[] $values
      */
-    public function __construct(PropertyDefinitionInterface $propertyDefinition, array $values)
+    public function __construct(protected PropertyDefinitionInterface $propertyDefinition, array $values)
     {
-        $this->propertyDefinition = $propertyDefinition;
-        $this->setId($propertyDefinition->getId());
-        $this->setDisplayName($propertyDefinition->getDisplayName());
-        $this->setLocalName($propertyDefinition->getLocalName());
-        $this->setQueryName($propertyDefinition->getQueryName());
+        $this->setId($this->propertyDefinition->getId());
+        $this->setDisplayName($this->propertyDefinition->getDisplayName());
+        $this->setLocalName($this->propertyDefinition->getLocalName());
+        $this->setQueryName($this->propertyDefinition->getQueryName());
         $this->setValues($values);
     }
 

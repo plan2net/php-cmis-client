@@ -9,31 +9,41 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\Bindings\BindingSessionInterface;
+use Dkd\PhpCmis\AclServiceInterface;
+use Dkd\PhpCmis\DiscoveryServiceInterface;
+use Dkd\PhpCmis\MultiFilingServiceInterface;
+use Dkd\PhpCmis\NavigationServiceInterface;
+use Dkd\PhpCmis\ObjectServiceInterface;
+use Dkd\PhpCmis\PolicyServiceInterface;
+use Dkd\PhpCmis\RelationshipServiceInterface;
+use Dkd\PhpCmis\RepositoryServiceInterface;
+use Dkd\PhpCmis\VersioningServiceInterface;
 use Dkd\PhpCmis\Bindings\Browser\CmisBrowserBinding;
 
 /**
  * Class CmisBrowserBindingTest
  */
-class CmisBrowserBindingTest extends \PHPUnit_Framework_TestCase
+class CmisBrowserBindingTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var CmisBrowserBinding
      */
     protected $cmisBrowserBinding;
 
-    public function setUp()
+    public function setUp(): void
     {
         $sessionMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
+            BindingSessionInterface::class
         )->getMockForAbstractClass();
         $this->cmisBrowserBinding = new CmisBrowserBinding($sessionMock);
     }
 
-    public function testConstructorSetsSessionAsSessionProperty()
+    public function testConstructorSetsSessionAsSessionProperty(): void
     {
         $sessionMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Bindings\\BindingSessionInterface'
+            BindingSessionInterface::class
         )->getMockForAbstractClass();
         $cmisBrowserBinding = new CmisBrowserBinding($sessionMock);
         $this->assertAttributeSame($sessionMock, 'session', $cmisBrowserBinding);
@@ -44,7 +54,7 @@ class CmisBrowserBindingTest extends \PHPUnit_Framework_TestCase
      * @param $expectedInstance
      * @param $propertyName
      */
-    public function testConstructorInitializesServiceProperties($expectedInstance, $propertyName)
+    public function testConstructorInitializesServiceProperties($expectedInstance, $propertyName): void
     {
         $this->assertAttributeInstanceOf($expectedInstance, $propertyName, $this->cmisBrowserBinding);
     }
@@ -54,9 +64,9 @@ class CmisBrowserBindingTest extends \PHPUnit_Framework_TestCase
      * @param $expectedInstance
      * @param $propertyName
      */
-    public function testServiceGetterReturnsServiceInstance($expectedInstance, $propertyName)
+    public function testServiceGetterReturnsServiceInstance($expectedInstance, $propertyName): void
     {
-        $getterName = 'get' . ucfirst($propertyName);
+        $getterName = 'get' . ucfirst((string) $propertyName);
         $this->assertInstanceOf($expectedInstance, $this->cmisBrowserBinding->$getterName());
     }
 
@@ -64,39 +74,39 @@ class CmisBrowserBindingTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                '\\Dkd\\PhpCmis\\AclServiceInterface',
+                AclServiceInterface::class,
                 'aclService'
             ],
             [
-                '\\Dkd\\PhpCmis\\DiscoveryServiceInterface',
+                DiscoveryServiceInterface::class,
                 'discoveryService'
             ],
             [
-                '\\Dkd\\PhpCmis\\MultiFilingServiceInterface',
+                MultiFilingServiceInterface::class,
                 'multiFilingService'
             ],
             [
-                '\\Dkd\\PhpCmis\\NavigationServiceInterface',
+                NavigationServiceInterface::class,
                 'navigationService'
             ],
             [
-                '\\Dkd\\PhpCmis\\ObjectServiceInterface',
+                ObjectServiceInterface::class,
                 'objectService'
             ],
             [
-                '\\Dkd\\PhpCmis\\PolicyServiceInterface',
+                PolicyServiceInterface::class,
                 'policyService'
             ],
             [
-                '\\Dkd\\PhpCmis\\RelationshipServiceInterface',
+                RelationshipServiceInterface::class,
                 'relationshipService'
             ],
             [
-                '\\Dkd\\PhpCmis\\RepositoryServiceInterface',
+                RepositoryServiceInterface::class,
                 'repositoryService'
             ],
             [
-                '\\Dkd\\PhpCmis\\VersioningServiceInterface',
+                VersioningServiceInterface::class,
                 'versioningService'
             ]
         ];

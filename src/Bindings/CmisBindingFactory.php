@@ -26,11 +26,9 @@ class CmisBindingFactory
     /**
      * Create a browser binding
      *
-     * @param array $sessionParameters
      * @param Cache|null $typeDefinitionCache
-     * @return CmisBinding
      */
-    public function createCmisBrowserBinding(array $sessionParameters, Cache $typeDefinitionCache = null)
+    public function createCmisBrowserBinding(array $sessionParameters, Cache $typeDefinitionCache = null): CmisBinding
     {
         $this->validateCmisBrowserBindingParameters($sessionParameters);
 
@@ -39,37 +37,33 @@ class CmisBindingFactory
 
     protected function validateCmisBrowserBindingParameters(array &$sessionParameters)
     {
-        $sessionParameters[SessionParameter::BINDING_CLASS] = $sessionParameters[SessionParameter::BINDING_CLASS] ?? CmisBrowserBinding::class;
-        $sessionParameters[SessionParameter::BROWSER_SUCCINCT] = $sessionParameters[SessionParameter::BROWSER_SUCCINCT] ?? true;
+        $sessionParameters[SessionParameter::BINDING_CLASS] ??= CmisBrowserBinding::class;
+        $sessionParameters[SessionParameter::BROWSER_SUCCINCT] ??= true;
         $this->addDefaultSessionParameters($sessionParameters);
         $this->check($sessionParameters, SessionParameter::BROWSER_URL);
     }
 
     /**
      * Sets some parameters to a default value if they are not already set
-     *
-     * @param array $sessionParameters
      */
     protected function addDefaultSessionParameters(array &$sessionParameters)
     {
-        $sessionParameters[SessionParameter::CACHE_SIZE_REPOSITORIES] = $sessionParameters[SessionParameter::CACHE_SIZE_REPOSITORIES] ?? 10;
-        $sessionParameters[SessionParameter::CACHE_SIZE_TYPES] = $sessionParameters[SessionParameter::CACHE_SIZE_TYPES] ?? 100;
-        $sessionParameters[SessionParameter::CACHE_SIZE_LINKS] = $sessionParameters[SessionParameter::CACHE_SIZE_LINKS] ?? 400;
-        $sessionParameters[SessionParameter::HTTP_INVOKER_CLASS] = $sessionParameters[SessionParameter::HTTP_INVOKER_CLASS] ?? Client::class;
-        $sessionParameters[SessionParameter::JSON_CONVERTER_CLASS] = $sessionParameters[SessionParameter::JSON_CONVERTER_CLASS] ?? JsonConverter::class;
-        $sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS] = $sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS] ?? ArrayCache::class;
+        $sessionParameters[SessionParameter::CACHE_SIZE_REPOSITORIES] ??= 10;
+        $sessionParameters[SessionParameter::CACHE_SIZE_TYPES] ??= 100;
+        $sessionParameters[SessionParameter::CACHE_SIZE_LINKS] ??= 400;
+        $sessionParameters[SessionParameter::HTTP_INVOKER_CLASS] ??= Client::class;
+        $sessionParameters[SessionParameter::JSON_CONVERTER_CLASS] ??= JsonConverter::class;
+        $sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS] ??= ArrayCache::class;
     }
 
     /**
      * Checks if the given parameter is present. If not, throw an
      * <code>IllegalArgumentException</code>.
      *
-     * @param array $sessionParameters
      * @param string $parameter
      * @throws CmisInvalidArgumentException
-     * @return boolean
      */
-    protected function check(array $sessionParameters, $parameter)
+    protected function check(array $sessionParameters, $parameter): bool
     {
         if (empty($sessionParameters[$parameter])) {
             throw new CmisInvalidArgumentException(sprintf('Parameter "%s" is missing!', $parameter));

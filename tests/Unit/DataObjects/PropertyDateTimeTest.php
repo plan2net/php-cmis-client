@@ -9,14 +9,16 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use DateTime;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\DataObjects\PropertyDateTime;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 /**
  * Class PropertyDateTimeTest
  */
-class PropertyDateTimeTest extends \PHPUnit_Framework_TestCase
+class PropertyDateTimeTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -25,34 +27,34 @@ class PropertyDateTimeTest extends \PHPUnit_Framework_TestCase
      */
     protected $propertyDateTime;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->propertyDateTime = new PropertyDateTime('testId');
     }
 
-    public function testSetValuesSetsProperty()
+    public function testSetValuesSetsProperty(): void
     {
-        $values = [new \DateTime()];
+        $values = [new DateTime()];
         $this->propertyDateTime->setValues($values);
         $this->assertAttributeSame($values, 'values', $this->propertyDateTime);
     }
 
-    public function testSetValuesThrowsExceptionIfInvalidValuesGiven()
+    public function testSetValuesThrowsExceptionIfInvalidValuesGiven(): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
+        $this->setExpectedException(CmisInvalidArgumentException::class, '', 1413440336);
         $this->propertyDateTime->setValues(['now']);
     }
 
-    public function testSetValueSetsValuesProperty()
+    public function testSetValueSetsValuesProperty(): void
     {
-        $date = new \DateTime();
+        $date = new DateTime();
         $this->propertyDateTime->setValue($date);
         $this->assertAttributeSame([$date], 'values', $this->propertyDateTime);
     }
 
-    public function testSetValueThrowsExceptionIfInvalidValueGiven()
+    public function testSetValueThrowsExceptionIfInvalidValueGiven(): void
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
+        $this->setExpectedException(CmisInvalidArgumentException::class, '', 1413440336);
         $this->propertyDateTime->setValue('now');
     }
 }

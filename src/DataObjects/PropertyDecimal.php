@@ -22,10 +22,10 @@ class PropertyDecimal extends AbstractPropertyData implements MutablePropertyDec
      *
      * @param float[] $values
      */
-    public function setValues(array $values)
+    public function setValues(array $values): void
     {
         foreach ($values as $key => $value) {
-            if (is_integer($value)) {
+            if (is_int($value)) {
                 // cast integer values silenty to a double value.
                 $values[$key] = $value = (double) $value;
             }

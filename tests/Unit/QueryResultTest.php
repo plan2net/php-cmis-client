@@ -9,7 +9,11 @@ namespace Dkd\PhpCmis\Test\Unit;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\SessionInterface;
+use Dkd\PhpCmis\DataObjects\Relationship;
+use Dkd\PhpCmis\DataObjects\RenditionData;
+use Dkd\PhpCmis\DataObjects\Rendition;
 use Dkd\PhpCmis\DataObjects\AllowableActions;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\DataObjects\Properties;
@@ -23,13 +27,13 @@ use PHPUnit_Framework_MockObject_MockObject;
 /**
  * Class QueryResultTest
  */
-class QueryResultTest extends \PHPUnit_Framework_TestCase
+class QueryResultTest extends PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
 
-    public function testConstructorSetsPropertiesByIdFromGivenObjectData()
+    public function testConstructorSetsPropertiesByIdFromGivenObjectData(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -62,9 +66,9 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals($expectedPropertiesById, 'propertiesById', $queryResult);
     }
 
-    public function testConstructorSetsPropertiesByQueryNameFromGivenObjectData()
+    public function testConstructorSetsPropertiesByQueryNameFromGivenObjectData(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -97,33 +101,33 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals($expectedPropertiesByQueryName, 'propertiesByQueryName', $queryResult);
     }
 
-    public function testConstructorSetsRelationshipsFromGivenObjectData()
+    public function testConstructorSetsRelationshipsFromGivenObjectData(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         /** @var ObjectFactory|PHPUnit_Framework_MockObject_MockObject $objectFactoryMock */
-        $objectFactoryMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectFactory')->setMethods(
+        $objectFactoryMock = $this->getMockBuilder(ObjectFactory::class)->setMethods(
             ['convertObject']
         )->getMock();
         $objectFactoryMock->initialize($sessionMock);
         $operationContext = new OperationContext();
 
         $relationshipObjectData1 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\ObjectData'
+            ObjectData::class
         )->disableOriginalConstructor()->getMock();
 
         $relationshipObjectData2 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\ObjectData'
+            ObjectData::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRelationship1 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\Relationship'
+            Relationship::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRelationship2 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\Relationship'
+            Relationship::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRelationships = [$expectedRelationship1, $expectedRelationship2];
@@ -148,33 +152,33 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals($expectedRelationships, 'relationships', $queryResult);
     }
 
-    public function testConstructorSetsRenditionsFromGivenObjectData()
+    public function testConstructorSetsRenditionsFromGivenObjectData(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         /** @var ObjectFactory|PHPUnit_Framework_MockObject_MockObject $objectFactoryMock */
-        $objectFactoryMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectFactory')->setMethods(
+        $objectFactoryMock = $this->getMockBuilder(ObjectFactory::class)->setMethods(
             ['convertRendition']
         )->getMock();
         $objectFactoryMock->initialize($sessionMock);
         $operationContext = new OperationContext();
 
         $renditionData1 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\RenditionData'
+            RenditionData::class
         )->disableOriginalConstructor()->getMock();
 
         $renditionData2 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\RenditionData'
+            RenditionData::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRendition1 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\Rendition'
+            Rendition::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRendition2 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\Rendition'
+            Rendition::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRenditions = [$expectedRendition1, $expectedRendition2];
@@ -199,9 +203,9 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals($expectedRenditions, 'renditions', $queryResult);
     }
 
-    public function testConstructorSetsAllowableActionsFromGivenObjectData()
+    public function testConstructorSetsAllowableActionsFromGivenObjectData(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -220,9 +224,9 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals($allowableActions, 'allowableActions', $queryResult);
     }
 
-    public function testGetAllowableActionsReturnsAllowableActions()
+    public function testGetAllowableActionsReturnsAllowableActions(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -241,9 +245,9 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($allowableActions, $queryResult->getAllowableActions());
     }
 
-    public function testGetPropertiesReturnsProperties()
+    public function testGetPropertiesReturnsProperties(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -273,9 +277,9 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedProperties, $queryResult->getProperties());
     }
 
-    public function testGetPropertyByIdReturnsSelectedProperty()
+    public function testGetPropertyByIdReturnsSelectedProperty(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -305,9 +309,9 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $queryResult->getPropertyById('notExists'));
     }
 
-    public function testGetPropertyByQueryNameReturnsSelectedProperty()
+    public function testGetPropertyByQueryNameReturnsSelectedProperty(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -337,9 +341,9 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $queryResult->getPropertyByQueryName('not:exists'));
     }
 
-    public function testGetPropertyMultivalueByIdReturnsPropertyValuesFromSelectedProperty()
+    public function testGetPropertyMultivalueByIdReturnsPropertyValuesFromSelectedProperty(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -371,9 +375,9 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $queryResult->getPropertyMultivalueById('not:exists'));
     }
 
-    public function testGetPropertyMultivalueByQueryNameReturnsPropertyValuesFromSelectedProperty()
+    public function testGetPropertyMultivalueByQueryNameReturnsPropertyValuesFromSelectedProperty(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -405,9 +409,9 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $queryResult->getPropertyMultivalueByQueryName('not:exists'));
     }
 
-    public function testGetPropertyValueByIdReturnsFirstPropertyValueFromSelectedProperty()
+    public function testGetPropertyValueByIdReturnsFirstPropertyValueFromSelectedProperty(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -439,9 +443,9 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $queryResult->getPropertyValueById('not:exists'));
     }
 
-    public function testGetPropertyValueByQueryNameReturnsFirstPropertyValueFromSelectedProperty()
+    public function testGetPropertyValueByQueryNameReturnsFirstPropertyValueFromSelectedProperty(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
@@ -473,33 +477,33 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $queryResult->getPropertyValueByQueryName('not:exists'));
     }
 
-    public function testGetRelationshipsReturnsRelationships()
+    public function testGetRelationshipsReturnsRelationships(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         /** @var ObjectFactory|PHPUnit_Framework_MockObject_MockObject $objectFactoryMock */
-        $objectFactoryMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectFactory')->setMethods(
+        $objectFactoryMock = $this->getMockBuilder(ObjectFactory::class)->setMethods(
             ['convertObject']
         )->getMock();
         $objectFactoryMock->initialize($sessionMock);
         $operationContext = new OperationContext();
 
         $relationshipObjectData1 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\ObjectData'
+            ObjectData::class
         )->disableOriginalConstructor()->getMock();
 
         $relationshipObjectData2 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\ObjectData'
+            ObjectData::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRelationship1 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\Relationship'
+            Relationship::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRelationship2 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\Relationship'
+            Relationship::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRelationships = [$expectedRelationship1, $expectedRelationship2];
@@ -524,33 +528,33 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedRelationships, $queryResult->getRelationships());
     }
 
-    public function testGetRenditionsReturnsRenditions()
+    public function testGetRenditionsReturnsRenditions(): void
     {
-        $sessionMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\SessionInterface')->setMethods(
+        $sessionMock = $this->getMockBuilder(SessionInterface::class)->setMethods(
             ['getObjectFactory', 'getDefaultContext']
         )->getMockForAbstractClass();
 
         /** @var ObjectFactory|PHPUnit_Framework_MockObject_MockObject $objectFactoryMock */
-        $objectFactoryMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\ObjectFactory')->setMethods(
+        $objectFactoryMock = $this->getMockBuilder(ObjectFactory::class)->setMethods(
             ['convertRendition']
         )->getMock();
         $objectFactoryMock->initialize($sessionMock);
         $operationContext = new OperationContext();
 
         $renditionData1 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\RenditionData'
+            RenditionData::class
         )->disableOriginalConstructor()->getMock();
 
         $renditionData2 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\RenditionData'
+            RenditionData::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRendition1 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\Rendition'
+            Rendition::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRendition2 = $documentTypeMock = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\DataObjects\\Rendition'
+            Rendition::class
         )->disableOriginalConstructor()->getMock();
 
         $expectedRenditions = [$expectedRendition1, $expectedRendition2];

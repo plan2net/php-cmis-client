@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use GuzzleHttp\Stream\LimitStream;
 use Dkd\PhpCmis\Bindings\Browser\ObjectService;
 use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\Constants;
@@ -64,21 +64,21 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $renditionFilter = null,
         $includePolicyIds = false,
         $includeAcl = false
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder('\\GuzzleHttp\\Message\\Response')->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
         $dummyObjectData = new ObjectData();
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             ['convertObject']
         )->getMock();
         $jsonConverterMock->expects($this->once())->method('convertObject')->with($responseData)->willReturn(
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
@@ -168,7 +168,6 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      * @dataProvider createDocumentDataProvider
      * @param string $expectedUrl
      * @param string $repositoryId
-     * @param PropertiesInterface $properties
      * @param string|null $folderId
      * @param StreamInterface|null $contentStream
      * @param VersioningState|null $versioningState
@@ -180,7 +179,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     public function testCreateDocumentCallsPostFunctionWithParameterizedQuery(
         Url $expectedUrl,
         array $expectedPostData,
-        $expectedContentStream,
+        mixed $expectedContentStream,
         $repositoryId,
         PropertiesInterface $properties,
         $folderId = null,
@@ -189,7 +188,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -262,21 +261,21 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $property = new PropertyString('cmis:name', 'name.jpg');
         $properties = new Properties();
         $properties->addProperty($property);
-        $streamWithFileExtension = $this->getMockBuilder('\\GuzzleHttp\\Stream\\StreamInterface')->setMethods(
+        $streamWithFileExtension = $this->getMockBuilder(StreamInterface::class)->setMethods(
             ['getMetadata']
         )->getMockForAbstractClass();
         $streamWithFileExtension->expects($this->any())->method('getMetadata')->with('uri')->willReturn(
             '/foo/bar/baz.jpg'
         );
 
-        $streamWithoutFileExtension = $this->getMockBuilder('\\GuzzleHttp\\Stream\\StreamInterface')->setMethods(
+        $streamWithoutFileExtension = $this->getMockBuilder(StreamInterface::class)->setMethods(
             ['getMetadata']
         )->getMockForAbstractClass();
         $streamWithoutFileExtension->expects($this->any())->method('getMetadata')->with('uri')->willReturn(
             '/foo/bar/baz'
         );
 
-        $expectedPostStream = $this->getMockBuilder(StreamInterface::class)->disableOriginalConstructor()->getMock();
+        $this->getMockBuilder(StreamInterface::class)->disableOriginalConstructor()->getMock();
 
         $principal1 = new Principal('principalId1');
         $ace1 = new AccessControlEntry($principal1, ['permissionValue1', 'permissionValue2']);
@@ -403,13 +402,9 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     /**
      * @dataProvider createFolderDataProvider
      * @param string $expectedUrl
-     * @param array $expectedPostData
      * @param string $repositoryId
-     * @param PropertiesInterface $properties
      * @param string $folderId
      * @param string[] $policies
-     * @param AclInterface $addAces
-     * @param AclInterface $removeAces
      */
     public function testCreateFolderCallsPostFunctionWithParameterizedQuery(
         $expectedUrl,
@@ -420,7 +415,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         array $policies = [],
         AclInterface $addAces = null,
         AclInterface $removeAces = null
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -589,7 +584,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $repositoryId,
         $objectId,
         $allVersions = true
-    ) {
+    ): void {
         $responseMock = $this->getMockBuilder(
             Response::class
         )->disableOriginalConstructor()->getMock();
@@ -666,7 +661,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $targetFolderId,
         $sourceFolderId,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -756,7 +751,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $objectId,
         $filter = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -829,9 +824,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     /**
      * @dataProvider createItemDataProvider
      * @param string $expectedUrl
-     * @param array $expectedPostData
      * @param string $repositoryId
-     * @param PropertiesInterface $properties
      * @param string|null $folderId
      * @param string[] $policies
      * @param AclInterface|null $addAces
@@ -848,7 +841,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -1006,10 +999,8 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
     /**
      * @dataProvider createDocumentFromSourceDataProvider
      * @param string $expectedUrl
-     * @param array $expectedPostData
      * @param string $repositoryId
      * @param string $sourceId
-     * @param PropertiesInterface $properties
      * @param string|null $folderId
      * @param VersioningState|null $versioningState
      * @param string[] $policies
@@ -1029,7 +1020,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         AclInterface $addAces = null,
         AclInterface $removeAces = null,
         ExtensionDataInterface $extension = null
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -1206,7 +1197,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $renditionFilter = null,
         $includePolicyIds = false,
         $includeAcl = false
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -1312,7 +1303,6 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param string $expectedUrl
      * @param string $repositoryId
      * @param string $objectId
-     * @param PropertiesInterface $properties
      * @param string|null $changeToken
      * @param array $sessionParameterMap
      */
@@ -1324,7 +1314,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         PropertiesInterface $properties,
         $changeToken = null,
         $sessionParameterMap = []
-    ) {
+    ): void {
         $expectedUrl->setQuery($expectedPostData);
 
         $responseData = ['foo' => 'bar'];
@@ -1471,7 +1461,6 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param string $expectedUrl
      * @param string $repositoryId
      * @param string $objectId
-     * @param StreamInterface $contentStream
      * @param boolean $overwriteFlag
      * @param string|null $changeToken
      * @param array $sessionParameterMap
@@ -1484,7 +1473,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $overwriteFlag = true,
         $changeToken = null,
         $sessionParameterMap = []
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -1622,7 +1611,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $objectId,
         $changeToken = null,
         $sessionParameterMap = []
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -1748,7 +1737,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $streamId = null,
         $offset = null,
         $length = null
-    ) {
+    ): void {
         $contentStream = $stream = $this->getMockForAbstractClass(StreamInterface::class);
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -1787,7 +1776,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         );
 
         if ($offset !== null) {
-            $this->assertInstanceOf('\\GuzzleHttp\\Stream\\LimitStream', $responseContentStream);
+            $this->assertInstanceOf(LimitStream::class, $responseContentStream);
         } else {
             $this->assertSame($contentStream, $responseContentStream);
         }
@@ -1837,7 +1826,6 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
      * @param string $repositoryId
      * @param string $folderId
      * @param boolean $allVersions
-     * @param UnfileObject $unfileObjects
      * @param boolean $continueOnFailure
      */
     public function testDeleteTreeCallsPostFunctionWithParameterizedQuery(
@@ -1847,7 +1835,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $allVersions = true,
         UnfileObject $unfileObjects = null,
         $continueOnFailure = false
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();
@@ -1857,7 +1845,6 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
             ['convertFailedToDelete']
         )->getMock();
 
-        /** @var  ObjectData|PHPUnit_Framework_MockObject_MockObject $dummyObjectData */
         $dummyFailedToDeleteData = $this->getMock(FailedToDeleteData::class);
 
         $jsonConverterMock->expects($this->atLeastOnce())->method(
@@ -1963,7 +1950,7 @@ class ObjectServiceTest extends AbstractBrowserBindingServiceTestCase
         $renditionFilter = Constants::RENDITION_NONE,
         $maxItems = null,
         $skipCount = 0
-    ) {
+    ): void {
         $responseData = ['foo' => 'bar'];
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor(
         )->setMethods(['getBody'])->getMock();

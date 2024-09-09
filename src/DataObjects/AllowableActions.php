@@ -34,7 +34,7 @@ class AllowableActions extends AbstractExtensionData implements AllowableActions
     /**
      * @param Action[] $allowableActions
      */
-    public function setAllowableActions(array $allowableActions)
+    public function setAllowableActions(array $allowableActions): void
     {
         foreach ($allowableActions as $action) {
             $this->checkType(Action::class, $action);

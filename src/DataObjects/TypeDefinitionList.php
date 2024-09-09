@@ -48,7 +48,7 @@ class TypeDefinitionList extends AbstractExtensionData implements TypeDefinition
      *
      * @param TypeDefinitionInterface[] $list
      */
-    public function setList(array $list)
+    public function setList(array $list): void
     {
         foreach ($list as $item) {
             $this->checkType(TypeDefinitionInterface::class, $item);
@@ -71,7 +71,7 @@ class TypeDefinitionList extends AbstractExtensionData implements TypeDefinition
      *
      * @param $numItems
      */
-    public function setNumItems($numItems)
+    public function setNumItems($numItems): void
     {
         $this->checkType('integer', $numItems);
         $this->numItems = $numItems;
@@ -94,7 +94,7 @@ class TypeDefinitionList extends AbstractExtensionData implements TypeDefinition
      *
      * @param boolean $hasMoreItems
      */
-    public function setHasMoreItems($hasMoreItems)
+    public function setHasMoreItems($hasMoreItems): void
     {
         $this->checkType('boolean', $hasMoreItems);
         $this->hasMoreItems = $hasMoreItems;

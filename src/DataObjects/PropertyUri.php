@@ -22,7 +22,7 @@ class PropertyUri extends PropertyString implements MutablePropertyUriInterface
      *
      * @param string[] $values
      */
-    public function setValues(array $values)
+    public function setValues(array $values): void
     {
         // currently no special behavior here. It's just a string value.
         parent::setValues($values);

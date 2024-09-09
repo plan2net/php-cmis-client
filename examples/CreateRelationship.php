@@ -1,16 +1,19 @@
 <?php
 
-require_once('CreateDocument.php');
+use Dkd\PhpCmis\PropertyIds;
+use Dkd\PhpCmis\DataObjects\Document;
+
+require_once(__DIR__ . '/CreateDocument.php');
 
 if ($document !== null) {
     echo "Create a second document...\n";
 
-    /** @var Dkd\PhpCmis\DataObjects\Document $documentObject */
+    /** @var Document $documentObject */
     $documentObject = $session->getObject($document);
 
     $secondDocument = $session->createDocumentFromSource(
         $documentObject,
-        [\Dkd\PhpCmis\PropertyIds::NAME => 'Demo Object 2'],
+        [PropertyIds::NAME => 'Demo Object 2'],
         $documentObject->getParents()[0]
     );
 
@@ -19,9 +22,9 @@ if ($document !== null) {
     echo "Create relationship for " . $document->getId() . " -> " . $secondDocument->getId() . "\n";
 
     $properties = [
-        \Dkd\PhpCmis\PropertyIds::SOURCE_ID => $document->getId(),
-        \Dkd\PhpCmis\PropertyIds::TARGET_ID => $secondDocument->getId(),
-        \Dkd\PhpCmis\PropertyIds::OBJECT_TYPE_ID => 'R:cm:basis'
+        PropertyIds::SOURCE_ID => $document->getId(),
+        PropertyIds::TARGET_ID => $secondDocument->getId(),
+        PropertyIds::OBJECT_TYPE_ID => 'R:cm:basis'
     ];
 
     $relationshipId = $session->createRelationship($properties);

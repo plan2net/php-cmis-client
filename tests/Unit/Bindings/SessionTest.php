@@ -10,15 +10,15 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis;
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\Bindings\Session;
 
 /**
  * Class SessionTest
  */
-class SessionTest extends \PHPUnit_Framework_TestCase
+class SessionTest extends PHPUnit_Framework_TestCase
 {
-    public function testConstructorCreatesUniqueSessionId()
+    public function testConstructorCreatesUniqueSessionId(): void
     {
         $session = new Session();
         $this->assertNotEmpty($session->getSessionId());
@@ -27,7 +27,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals($session->getSessionId(), $session2->getSessionId());
     }
 
-    public function testGetSessionIdReturnsSessionId()
+    public function testGetSessionIdReturnsSessionId(): void
     {
         $session = new Session();
         $this->assertAttributeEquals($session->getSessionId(), 'sessionId', $session);
@@ -46,7 +46,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testPutAddsAValueToTheSession
      */
-    public function testGetKeysReturnsAnArrayWithAllSessionDataKeys()
+    public function testGetKeysReturnsAnArrayWithAllSessionDataKeys(): void
     {
         $session = new Session();
         $session->put('bar', 'foo');
@@ -57,7 +57,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testPutAddsAValueToTheSession
      */
-    public function testRemoveRemovesAValueFromTheSession()
+    public function testRemoveRemovesAValueFromTheSession(): void
     {
         $session = new Session();
         $session->put('bar1', 'foobar');
@@ -73,10 +73,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      * @depends testPutAddsAValueToTheSession
      * @dataProvider getFunctionDataProvider
      * @param string $key
-     * @param mixed $defaultValue
-     * @param mixed $expected
      */
-    public function testGetReturnsSessionValueForAGivenKey($key, $defaultValue, $expected)
+    public function testGetReturnsSessionValueForAGivenKey($key, mixed $defaultValue, mixed $expected): void
     {
         $session = new Session();
         $session->put('int-1', 1);

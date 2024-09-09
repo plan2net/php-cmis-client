@@ -9,30 +9,29 @@ namespace Dkd\PhpCmis\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Stringable;
+use InvalidArgumentException;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
 
 /**
  * ObjectId
  */
-class ObjectId implements ObjectIdInterface
+class ObjectId implements ObjectIdInterface, Stringable
 {
     /**
      * @var string
      */
     protected $id;
-
     /**
      * @param string $id The Object ID as string
      */
     public function __construct($id)
     {
         if (empty($id) || !is_string($id)) {
-            throw new \InvalidArgumentException('Id must not be empty!');
+            throw new InvalidArgumentException('Id must not be empty!');
         }
         $this->id = $id;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -40,13 +39,10 @@ class ObjectId implements ObjectIdInterface
     {
         return $this->id;
     }
-
     /**
      * Returns the object ID as string
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getId();
     }

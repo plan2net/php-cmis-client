@@ -9,14 +9,14 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\DataObjects\PermissionMapping;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 /**
  * Class PermissionMappingTest
  */
-class PermissionMappingTest extends \PHPUnit_Framework_TestCase
+class PermissionMappingTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -25,7 +25,7 @@ class PermissionMappingTest extends \PHPUnit_Framework_TestCase
      */
     protected $permissionMapping;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->permissionMapping = new PermissionMapping();
     }
@@ -33,9 +33,8 @@ class PermissionMappingTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider stringCastDataProvider
      * @param string $expected
-     * @param mixed $value
      */
-    public function testSetPermissionsSetsProperty($expected, $value)
+    public function testSetPermissionsSetsProperty($expected, mixed $value): void
     {
         $this->permissionMapping->setPermissions([$value]);
         $this->assertAttributeSame([$expected], 'permissions', $this->permissionMapping);
@@ -44,7 +43,7 @@ class PermissionMappingTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetPermissionsSetsProperty
      */
-    public function testGetPermissionsReturnsPropertyValue()
+    public function testGetPermissionsReturnsPropertyValue(): void
     {
         $this->permissionMapping->setPermissions(['foo']);
         $this->assertSame(['foo'], $this->permissionMapping->getPermissions());
@@ -53,9 +52,8 @@ class PermissionMappingTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider stringCastDataProvider
      * @param string $expected
-     * @param mixed $value
      */
-    public function testSetKeySetsProperty($expected, $value)
+    public function testSetKeySetsProperty($expected, mixed $value): void
     {
         $this->permissionMapping->setKey($value);
         $this->assertAttributeSame($expected, 'key', $this->permissionMapping);
@@ -64,7 +62,7 @@ class PermissionMappingTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetKeySetsProperty
      */
-    public function testGetKeyReturnsPropertyValue()
+    public function testGetKeyReturnsPropertyValue(): void
     {
         $this->permissionMapping->setKey('foo');
         $this->assertSame('foo', $this->permissionMapping->getKey());

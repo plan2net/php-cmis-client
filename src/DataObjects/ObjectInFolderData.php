@@ -40,10 +40,8 @@ class ObjectInFolderData extends AbstractExtensionData implements ObjectInFolder
 
     /**
      * Sets the object
-     *
-     * @param ObjectDataInterface $object
      */
-    public function setObject(ObjectDataInterface $object)
+    public function setObject(ObjectDataInterface $object): void
     {
         $this->object = $object;
     }
@@ -63,7 +61,7 @@ class ObjectInFolderData extends AbstractExtensionData implements ObjectInFolder
      *
      * @param string|null
      */
-    public function setPathSegment($pathSegment)
+    public function setPathSegment($pathSegment): void
     {
         $this->pathSegment = $this->castValueToSimpleType('string', $pathSegment, true);
     }

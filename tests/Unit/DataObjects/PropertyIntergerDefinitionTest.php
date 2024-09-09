@@ -9,14 +9,15 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\DataObjects\AbstractPropertyDefinition;
 use Dkd\PhpCmis\DataObjects\PropertyIntegerDefinition;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 
 /**
  * Class PropertyIntegerDefinitionTest
  */
-class PropertyIntegerDefinitionTest extends \PHPUnit_Framework_TestCase
+class PropertyIntegerDefinitionTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -25,15 +26,15 @@ class PropertyIntegerDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     protected $propertyIntegerDefinition;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->propertyIntegerDefinition = new PropertyIntegerDefinition('testId');
     }
 
-    public function testAssertIsInstanceOfAbstractPropertyDefinition()
+    public function testAssertIsInstanceOfAbstractPropertyDefinition(): void
     {
         $this->assertInstanceOf(
-            '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyDefinition',
+            AbstractPropertyDefinition::class,
             $this->propertyIntegerDefinition
         );
     }
@@ -41,9 +42,8 @@ class PropertyIntegerDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider integerCastDataProvider
      * @param integer $expected
-     * @param mixed $value
      */
-    public function testSetMaxValueCastsValueToIntegerAndSetsProperty($expected, $value)
+    public function testSetMaxValueCastsValueToIntegerAndSetsProperty($expected, mixed $value): void
     {
         @$this->propertyIntegerDefinition->setMaxValue($value);
         $this->assertAttributeSame($expected, 'maxValue', $this->propertyIntegerDefinition);
@@ -52,7 +52,7 @@ class PropertyIntegerDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetMaxValueCastsValueToIntegerAndSetsProperty
      */
-    public function testGetMaxValueReturnsPropertyValue()
+    public function testGetMaxValueReturnsPropertyValue(): void
     {
         $this->propertyIntegerDefinition->setMaxValue(100);
         $this->assertSame(100, $this->propertyIntegerDefinition->getMaxValue());
@@ -61,9 +61,8 @@ class PropertyIntegerDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider integerCastDataProvider
      * @param integer $expected
-     * @param mixed $value
      */
-    public function testSetMinValueCastsValueToIntegerAndSetsProperty($expected, $value)
+    public function testSetMinValueCastsValueToIntegerAndSetsProperty($expected, mixed $value): void
     {
         @$this->propertyIntegerDefinition->setMinValue($value);
         $this->assertAttributeSame($expected, 'minValue', $this->propertyIntegerDefinition);
@@ -72,7 +71,7 @@ class PropertyIntegerDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetMinValueCastsValueToIntegerAndSetsProperty
      */
-    public function testGetMinValueReturnsPropertyValue()
+    public function testGetMinValueReturnsPropertyValue(): void
     {
         $this->propertyIntegerDefinition->setMinValue(100);
         $this->assertSame(100, $this->propertyIntegerDefinition->getMinValue());

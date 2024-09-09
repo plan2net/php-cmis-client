@@ -37,7 +37,7 @@ class PolicyIdList extends AbstractExtensionData implements PolicyIdListInterfac
      *
      * @param string[] list of policy ids
      */
-    public function setPolicyIds(array $policyIds)
+    public function setPolicyIds(array $policyIds): void
     {
         foreach ($policyIds as $key => $policyId) {
             $policyIds[$key] = $this->castValueToSimpleType('string', $policyId);

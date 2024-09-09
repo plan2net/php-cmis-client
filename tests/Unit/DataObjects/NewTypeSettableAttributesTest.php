@@ -9,20 +9,21 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_Error_Notice;
 use Dkd\PhpCmis\DataObjects\NewTypeSettableAttributes;
 
 /**
  * Class NewTypeSettableAttributesTest
  */
-class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
+class NewTypeSettableAttributesTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var NewTypeSettableAttributes
      */
     protected $newTypeSettableAttributes;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->newTypeSettableAttributes = new NewTypeSettableAttributes();
     }
@@ -83,7 +84,7 @@ class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
      * @dataProvider propertiesOfSutDataProvider
      * @param string $propertyName Name of the class property
      */
-    public function testPropertySetterSetsProperty($propertyName)
+    public function testPropertySetterSetsProperty($propertyName): void
     {
         $setterName = 'set' . ucfirst($propertyName);
         $this->newTypeSettableAttributes->$setterName(true);
@@ -98,12 +99,12 @@ class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
      * @dataProvider propertiesOfSutDataProvider
      * @param string $propertyName Name of the class property
      */
-    public function testPropertySetterCastsValueToBoolean($propertyName)
+    public function testPropertySetterCastsValueToBoolean($propertyName): void
     {
         $setterName = 'set' . ucfirst($propertyName);
         try {
             $this->newTypeSettableAttributes->$setterName(1);
-        } catch (\PHPUnit_Framework_Error_Notice $exception) {
+        } catch (PHPUnit_Framework_Error_Notice) {
         }
         $this->assertAttributeInternalType('boolean', $propertyName, $this->newTypeSettableAttributes);
     }
@@ -114,7 +115,7 @@ class NewTypeSettableAttributesTest extends \PHPUnit_Framework_TestCase
      * @dataProvider propertiesOfSutDataProvider
      * @param string $propertyName Name of the class property
      */
-    public function testPropertyGetterReturnsPropertyValue($propertyName)
+    public function testPropertyGetterReturnsPropertyValue($propertyName): void
     {
         $setterName = 'set' . ucfirst($propertyName);
         $getterName = $propertyName;

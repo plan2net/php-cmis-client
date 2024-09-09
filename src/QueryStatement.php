@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\Data\ObjectIdInterface;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
@@ -49,11 +49,6 @@ use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 class QueryStatement implements QueryStatementInterface
 {
     /**
-     * @var SessionInterface
-     */
-    protected $session;
-
-    /**
      * @var string
      */
     protected $statement;
@@ -92,24 +87,23 @@ class QueryStatement implements QueryStatementInterface
      * @throws CmisInvalidArgumentException
      */
     public function __construct(
-        SessionInterface $session,
+        protected SessionInterface $session,
         $statement = null,
         array $selectPropertyIds = [],
         array $fromTypes = [],
         $whereClause = null,
         array $orderByPropertyIds = []
     ) {
-        $this->session = $session;
         $statementString = trim((string) $statement);
 
-        if (empty($statementString)) {
-            if (empty($selectPropertyIds)) {
+        if ($statementString === '' || $statementString === '0') {
+            if ($selectPropertyIds === []) {
                 throw new CmisInvalidArgumentException(
                     'Statement was empty so property list must not be empty!',
                     1441286811
                 );
             }
-            if (empty($fromTypes)) {
+            if ($fromTypes === []) {
                 throw new CmisInvalidArgumentException(
                     'Statement was empty so types list must not be empty!',
                     1441286812
@@ -122,13 +116,13 @@ class QueryStatement implements QueryStatementInterface
                 $orderByPropertyIds
             );
         } else {
-            if (!empty($selectPropertyIds)) {
+            if ($selectPropertyIds !== []) {
                 throw new CmisInvalidArgumentException(
                     'Manual statement cannot be used when properties are used',
                     1441286813
                 );
             }
-            if (!empty($fromTypes)) {
+            if ($fromTypes !== []) {
                 throw new CmisInvalidArgumentException(
                     'Manual statement cannot be used when types are used',
                     1441286814
@@ -140,7 +134,7 @@ class QueryStatement implements QueryStatementInterface
                     1441286815
                 );
             }
-            if (!empty($orderByPropertyIds)) {
+            if ($orderByPropertyIds !== []) {
                 throw new CmisInvalidArgumentException(
                     'Manual statement cannot be used when orderings are used',
                     1441286816
@@ -170,22 +164,21 @@ class QueryStatement implements QueryStatementInterface
      *      or PropertyDefinition as first member and ASC or DESC as second.
      *      E.g. valid strings: "cm:title ASC", "cm:title", "P:cm:title".
      *      Valid arrays: [PropertyDefinitionInterface, "ASC"], ["cm:title", "ASC"]
-     * @return string
      */
     protected function generateStatementFromPropertiesAndTypesLists(
         array $selectPropertyIds,
         array $fromTypes,
         $whereClause,
         array $orderByPropertyIds
-    ) {
+    ): string {
         $statementString = 'SELECT ' . $this->generateStatementPropertyList($selectPropertyIds, false);
 
         $primaryTable = array_shift($fromTypes);
-        list ($primaryTableQueryName, $primaryAlias) = $this->getQueryNameAndAliasForType($primaryTable, 'primary');
+        [$primaryTableQueryName, $primaryAlias] = $this->getQueryNameAndAliasForType($primaryTable, 'primary');
 
         $statementString .= ' FROM ' . $primaryTableQueryName . ' ' . $primaryAlias;
 
-        while (count($fromTypes) > 0) {
+        while ($fromTypes !== []) {
             $secondaryTable = array_shift($fromTypes);
             /*
              * we build an automatic alias here, a simple one-byte ASCII value
@@ -195,16 +188,16 @@ class QueryStatement implements QueryStatementInterface
              * only gets used if the type string does not contain an alias.
              */
             $alias = chr(97 + count($fromTypes));
-            list ($secondaryTableQueryName, $alias) = $this->getQueryNameAndAliasForType($secondaryTable, $alias);
+            [$secondaryTableQueryName, $alias] = $this->getQueryNameAndAliasForType($secondaryTable, $alias);
             $statementString .= ' JOIN ' . $secondaryTableQueryName . ' AS ' . $alias .
                 ' ON ' . $primaryAlias . '.cmis:objectId = ' . $alias . '.cmis:objectId';
         }
 
-        if (trim((string) $whereClause)) {
-            $statementString .= ' WHERE ' . trim($whereClause);
+        if (trim((string) $whereClause) !== '' && trim((string) $whereClause) !== '0') {
+            $statementString .= ' WHERE ' . trim((string) $whereClause);
         }
 
-        if (!empty($orderByPropertyIds)) {
+        if ($orderByPropertyIds !== []) {
             $statementString .= ' ORDER BY ' . $this->generateStatementPropertyList($orderByPropertyIds, true);
         }
         return trim($statementString);
@@ -219,25 +212,24 @@ class QueryStatement implements QueryStatementInterface
      *
      * @param mixed $typeDefinitionMixed Input describing the type
      * @param string $autoAlias If alias is not provided
-     * @return array
      */
-    protected function getQueryNameAndAliasForType($typeDefinitionMixed, $autoAlias)
+    protected function getQueryNameAndAliasForType(mixed $typeDefinitionMixed, $autoAlias): array
     {
         $alias = null;
         if (is_array($typeDefinitionMixed)) {
-            list ($typeDefinitionMixed, $alias) = $typeDefinitionMixed;
+            [$typeDefinitionMixed, $alias] = $typeDefinitionMixed;
         }
         if ($typeDefinitionMixed instanceof TypeDefinitionInterface) {
             $queryName = $typeDefinitionMixed->getQueryName();
         } elseif (is_string($typeDefinitionMixed) && strpos($typeDefinitionMixed, ' ')) {
-            list ($typeDefinitionMixed, $alias) = explode(' ', $typeDefinitionMixed, 2);
+            [$typeDefinitionMixed, $alias] = explode(' ', $typeDefinitionMixed, 2);
         }
         try {
             $queryName = $this->session->getTypeDefinition($typeDefinitionMixed)->getQueryName();
-        } catch (CmisObjectNotFoundException $error) {
+        } catch (CmisObjectNotFoundException) {
             $queryName = $typeDefinitionMixed;
         }
-        return [$queryName, ($alias ? $alias : $autoAlias)];
+        return [$queryName, ($alias ?: $autoAlias)];
     }
 
     /**
@@ -247,27 +239,21 @@ class QueryStatement implements QueryStatementInterface
      * when $withOrdering is true, an array of arrays each containing
      * a string or PropertyDefinition plus ASC or DESC as second value.
      *
-     * @param array $properties
      * @param boolean $withOrdering
-     * @return string
      */
-    protected function generateStatementPropertyList(array $properties, $withOrdering)
+    protected function generateStatementPropertyList(array $properties, $withOrdering): string
     {
         $statement = [];
         foreach ($properties as $property) {
             $ordering = ($withOrdering ? 'ASC' : '');
             if ($withOrdering) {
                 if (is_array($property)) {
-                    list ($property, $ordering) = $property;
+                    [$property, $ordering] = $property;
                 } elseif (is_string($property) && strpos($property, ' ')) {
-                    list ($property, $ordering) = explode(' ', $property, 2);
+                    [$property, $ordering] = explode(' ', $property, 2);
                 }
             }
-            if ($property instanceof PropertyDefinitionInterface) {
-                $propertyQueryName = $property->getQueryName();
-            } else {
-                $propertyQueryName = $property;
-            }
+            $propertyQueryName = $property instanceof PropertyDefinitionInterface ? $property->getQueryName() : $property;
             $statement[] = rtrim($propertyQueryName . ' ' . $ordering);
         }
         return implode(', ', $statement);
@@ -292,7 +278,7 @@ class QueryStatement implements QueryStatementInterface
      * @param integer $parameterIndex the parameter index (one-based)
      * @param boolean $bool the boolean
      */
-    public function setBoolean($parameterIndex, $bool)
+    public function setBoolean($parameterIndex, $bool): void
     {
         $this->setParameter($parameterIndex, $bool === true ? 'TRUE' : 'FALSE');
     }
@@ -301,9 +287,9 @@ class QueryStatement implements QueryStatementInterface
      * Sets the designated parameter to the given DateTime value.
      *
      * @param integer $parameterIndex the parameter index (one-based)
-     * @param \DateTime $dateTime the DateTime value as DateTime object
+     * @param DateTime $dateTime the DateTime value as DateTime object
      */
-    public function setDateTime($parameterIndex, \DateTime $dateTime)
+    public function setDateTime($parameterIndex, DateTime $dateTime): void
     {
         $this->setParameter($parameterIndex, $dateTime->format(Constants::QUERY_DATETIMEFORMAT));
     }
@@ -312,9 +298,9 @@ class QueryStatement implements QueryStatementInterface
      * Sets the designated parameter to the given DateTime value with the prefix 'TIMESTAMP '.
      *
      * @param integer $parameterIndex the parameter index (one-based)
-     * @param \DateTime $dateTime the DateTime value as DateTime object
+     * @param DateTime $dateTime the DateTime value as DateTime object
      */
-    public function setDateTimeTimestamp($parameterIndex, \DateTime $dateTime)
+    public function setDateTimeTimestamp($parameterIndex, DateTime $dateTime): void
     {
         $this->setParameter($parameterIndex, 'TIMESTAMP ' . $dateTime->format(Constants::QUERY_DATETIMEFORMAT));
     }
@@ -325,7 +311,7 @@ class QueryStatement implements QueryStatementInterface
      * @param integer $parameterIndex the parameter index (one-based)
      * @param ObjectIdInterface $id the object ID
      */
-    public function setId($parameterIndex, ObjectIdInterface $id)
+    public function setId($parameterIndex, ObjectIdInterface $id): void
     {
         $this->setParameter($parameterIndex, $this->escape($id->getId()));
     }
@@ -337,7 +323,7 @@ class QueryStatement implements QueryStatementInterface
      * @param integer $number the value to be set as number
      * @throws CmisInvalidArgumentException If number not of type integer
      */
-    public function setNumber($parameterIndex, $number)
+    public function setNumber($parameterIndex, $number): void
     {
         if (!is_int($number)) {
             throw new CmisInvalidArgumentException('Number must be of type integer!');
@@ -350,10 +336,9 @@ class QueryStatement implements QueryStatementInterface
      * Sets the designated parameter to the query name of the given property.
      *
      * @param integer $parameterIndex the parameter index (one-based)
-     * @param PropertyDefinitionInterface $propertyDefinition
      * @throws CmisInvalidArgumentException If property has no query name
      */
-    public function setProperty($parameterIndex, PropertyDefinitionInterface $propertyDefinition)
+    public function setProperty($parameterIndex, PropertyDefinitionInterface $propertyDefinition): void
     {
         $queryName = $propertyDefinition->getQueryName();
         if (empty($queryName)) {
@@ -370,7 +355,7 @@ class QueryStatement implements QueryStatementInterface
      * @param string $string the string
      * @throws CmisInvalidArgumentException If given value is not a string
      */
-    public function setString($parameterIndex, $string)
+    public function setString($parameterIndex, $string): void
     {
         if (!is_string($string)) {
             throw new CmisInvalidArgumentException('Parameter string must be of type string!');
@@ -407,7 +392,7 @@ class QueryStatement implements QueryStatementInterface
      * @param string $string the CONTAINS string
      * @throws CmisInvalidArgumentException If given value is not a string
      */
-    public function setStringContains($parameterIndex, $string)
+    public function setStringContains($parameterIndex, $string): void
     {
         if (!is_string($string)) {
             throw new CmisInvalidArgumentException('Parameter string must be of type string!');
@@ -424,7 +409,7 @@ class QueryStatement implements QueryStatementInterface
      * @param $string
      * @throws CmisInvalidArgumentException If given value is not a string
      */
-    public function setStringLike($parameterIndex, $string)
+    public function setStringLike($parameterIndex, $string): void
     {
         if (!is_string($string)) {
             throw new CmisInvalidArgumentException('Parameter string must be of type string!');
@@ -439,7 +424,7 @@ class QueryStatement implements QueryStatementInterface
      * @param integer $parameterIndex the parameter index (one-based)
      * @param ObjectTypeInterface $type the object type
      */
-    public function setType($parameterIndex, ObjectTypeInterface $type)
+    public function setType($parameterIndex, ObjectTypeInterface $type): void
     {
         $this->setParameter($parameterIndex, $this->escape($type->getQueryName()));
     }
@@ -448,10 +433,9 @@ class QueryStatement implements QueryStatementInterface
      * Sets the designated parameter to the given value
      *
      * @param integer $parameterIndex
-     * @param mixed $value
      * @throws CmisInvalidArgumentException If parameter index is not of type integer
      */
-    protected function setParameter($parameterIndex, $value)
+    protected function setParameter($parameterIndex, mixed $value)
     {
         if (!is_int($parameterIndex)) {
             throw new CmisInvalidArgumentException('Parameter index must be of type integer!');
@@ -465,7 +449,7 @@ class QueryStatement implements QueryStatementInterface
      *
      * @return string the query statement, not null
      */
-    public function toQueryString()
+    public function toQueryString(): string
     {
         $queryString = '';
         $inString = false;
@@ -473,13 +457,9 @@ class QueryStatement implements QueryStatementInterface
         $length = strlen($this->statement);
 
         for ($i=0; $i < $length; $i++) {
-            $char = $this->statement{$i};
+            $char = $this->statement[$i];
             if ($char === '\'') {
-                if ($inString && $this->statement{max(0, $i-1)} === '\\') {
-                    $inString = true;
-                } else {
-                    $inString = !$inString;
-                }
+                $inString = $inString && $this->statement[max(0, $i-1)] === '\\' ? true : !$inString;
                 $queryString .= $char;
             } elseif ($char === '?' && !$inString) {
                 $parameterIndex ++;
@@ -496,22 +476,20 @@ class QueryStatement implements QueryStatementInterface
      * Escapes string for query
      *
      * @param $string
-     * @return string
      */
-    protected function escape($string)
+    protected function escape($string): string
     {
-        return "'" . addcslashes($string, '\'\\') . "'";
+        return "'" . addcslashes((string) $string, '\'\\') . "'";
     }
 
     /**
      * Escapes string, but not escapes backslashes ('\') in front of '%' and '_'.
      *
      * @param $string
-     * @return string
      */
-    protected function escapeLike($string)
+    protected function escapeLike($string): string
     {
-        $escapedString = addcslashes($string, '\'\\');
+        $escapedString = addcslashes((string) $string, '\'\\');
         $replace = [
             '\\\\%' => '\\%',
             '\\\\_' => '\\_',
@@ -524,11 +502,10 @@ class QueryStatement implements QueryStatementInterface
      * Escapes string, but not escapes backslashes ('\') in front of '*' and '?'.
      *
      * @param $string
-     * @return string
      */
-    protected function escapeContains($string)
+    protected function escapeContains($string): string
     {
-        $escapedString = addcslashes($string, '"\'\\');
+        $escapedString = addcslashes((string) $string, '"\'\\');
         $replace = [
             '\\\\*' => '\*',
             '\\\\?' => '\?',

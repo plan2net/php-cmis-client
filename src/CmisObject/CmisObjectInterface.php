@@ -30,7 +30,6 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Adds ACEs to the object and refreshes this object afterwards.
      * @param AceInterface[] $addAces
-     * @param AclPropagation $aclPropagation
      * @return AclInterface the new ACL of this object
      */
     public function addAcl(array $addAces, AclPropagation $aclPropagation);
@@ -40,7 +39,6 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      *
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
-     * @param AclPropagation $aclPropagation
      * @return AclInterface the new ACL of this object
      */
     public function applyAcl(array $addAces, array $removeAces, AclPropagation $aclPropagation);
@@ -127,8 +125,6 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Removes ACEs from the object and refreshes this object afterwards.
      *
-     * @param array $removeAces
-     * @param AclPropagation $aclPropagation
      * @return AclInterface the new ACL of this object
      */
     public function removeAcl(array $removeAces, AclPropagation $aclPropagation);

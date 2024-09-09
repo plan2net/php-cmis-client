@@ -9,7 +9,8 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\DataObjects\AbstractPropertyDefinition;
 use Dkd\PhpCmis\DataObjects\PropertyDecimalDefinition;
 use Dkd\PhpCmis\Enum\DecimalPrecision;
 use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
@@ -17,7 +18,7 @@ use Dkd\PhpCmis\Test\Unit\DataProviderCollectionTrait;
 /**
  * Class PropertyDecimalDefinitionTest
  */
-class PropertyDecimalDefinitionTest extends \PHPUnit_Framework_TestCase
+class PropertyDecimalDefinitionTest extends PHPUnit_Framework_TestCase
 {
     use DataProviderCollectionTrait;
 
@@ -26,15 +27,15 @@ class PropertyDecimalDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     protected $propertyDecimalDefinition;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->propertyDecimalDefinition = new PropertyDecimalDefinition('testId');
     }
 
-    public function testAssertIsInstanceOfAbstractPropertyDefinition()
+    public function testAssertIsInstanceOfAbstractPropertyDefinition(): void
     {
         $this->assertInstanceOf(
-            '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyDefinition',
+            AbstractPropertyDefinition::class,
             $this->propertyDecimalDefinition
         );
     }
@@ -42,9 +43,8 @@ class PropertyDecimalDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider integerCastDataProvider
      * @param integer $expected
-     * @param mixed $value
      */
-    public function testSetMaxValueCastsValueToIntegerAndSetsProperty($expected, $value)
+    public function testSetMaxValueCastsValueToIntegerAndSetsProperty($expected, mixed $value): void
     {
         @$this->propertyDecimalDefinition->setMaxValue($value);
         $this->assertAttributeSame($expected, 'maxValue', $this->propertyDecimalDefinition);
@@ -53,7 +53,7 @@ class PropertyDecimalDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetMaxValueCastsValueToIntegerAndSetsProperty
      */
-    public function testGetMaxValueReturnsPropertyValue()
+    public function testGetMaxValueReturnsPropertyValue(): void
     {
         $this->propertyDecimalDefinition->setMaxValue(100);
         $this->assertSame(100, $this->propertyDecimalDefinition->getMaxValue());
@@ -62,9 +62,8 @@ class PropertyDecimalDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider integerCastDataProvider
      * @param integer $expected
-     * @param mixed $value
      */
-    public function testSetMinValueCastsValueToIntegerAndSetsProperty($expected, $value)
+    public function testSetMinValueCastsValueToIntegerAndSetsProperty($expected, mixed $value): void
     {
         @$this->propertyDecimalDefinition->setMinValue($value);
         $this->assertAttributeSame($expected, 'minValue', $this->propertyDecimalDefinition);
@@ -73,13 +72,13 @@ class PropertyDecimalDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetMinValueCastsValueToIntegerAndSetsProperty
      */
-    public function testGetMinValueReturnsPropertyValue()
+    public function testGetMinValueReturnsPropertyValue(): void
     {
         $this->propertyDecimalDefinition->setMinValue(100);
         $this->assertSame(100, $this->propertyDecimalDefinition->getMinValue());
     }
 
-    public function testSetPrecisionSetsProperty()
+    public function testSetPrecisionSetsProperty(): void
     {
         $precision = DecimalPrecision::cast(DecimalPrecision::BITS32);
         $this->propertyDecimalDefinition->setPrecision($precision);
@@ -89,7 +88,7 @@ class PropertyDecimalDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetPrecisionSetsProperty
      */
-    public function testGetPrecisionReturnsPropertyValue()
+    public function testGetPrecisionReturnsPropertyValue(): void
     {
         $precision = DecimalPrecision::cast(DecimalPrecision::BITS32);
         $this->propertyDecimalDefinition->setPrecision($precision);

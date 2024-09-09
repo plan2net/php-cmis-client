@@ -9,10 +9,10 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use Dkd\PhpCmis\Converter\JsonConverter;
+use Dkd\PhpCmis\Bindings\CmisBindingsHelper;
 use Dkd\PhpCmis\Bindings\Browser\NavigationService;
 use Dkd\PhpCmis\Constants;
-use Dkd\PhpCmis\Data\ExtensionDataInterface;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
 use League\Url\Url;
@@ -51,7 +51,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $includePathSegment = false,
         $maxItems = null,
         $skipCount = 0
-    ) {
+    ): void {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertObjectInFolderList',
@@ -158,7 +158,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $renditionFilter = Constants::RENDITION_NONE,
         $maxItems = null,
         $skipCount = 0
-    ) {
+    ): void {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertObjectList',
@@ -242,7 +242,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         IncludeRelationships $includeRelationships = null,
         $renditionFilter = Constants::RENDITION_NONE,
         $includePathSegment = false
-    ) {
+    ): void {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertDescendants',
@@ -329,7 +329,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         $repositoryId,
         $folderId,
         $filter = null
-    ) {
+    ): void {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertObject',
@@ -391,7 +391,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         IncludeRelationships $includeRelationships = null,
         $renditionFilter = Constants::RENDITION_NONE,
         $includePathSegment = false
-    ) {
+    ): void {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertDescendants',
@@ -471,7 +471,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         IncludeRelationships $includeRelationships = null,
         $renditionFilter = Constants::RENDITION_NONE,
         $includeRelativePathSegment = false
-    ) {
+    ): void {
         $navigationService = $this->getNavigationServiceMockForParameterizedQueryTest(
             $expectedUrl,
             'convertObjectParents',
@@ -545,7 +545,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
         )->setMethods(['getBody'])->getMock();
         $responseMock->expects($this->any())->method('getBody')->willReturn(json_encode($responseData));
 
-        $jsonConverterMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Converter\\JsonConverter')->setMethods(
+        $jsonConverterMock = $this->getMockBuilder(JsonConverter::class)->setMethods(
             [$convertFunctionName]
         )->getMock();
 
@@ -554,7 +554,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
             $dummyObjectData
         );
 
-        $cmisBindingsHelperMock = $this->getMockBuilder('\\Dkd\\PhpCmis\\Bindings\\CmisBindingsHelper')->setMethods(
+        $cmisBindingsHelperMock = $this->getMockBuilder(CmisBindingsHelper::class)->setMethods(
             ['getJsonConverter']
         )->getMock();
         $cmisBindingsHelperMock->expects($this->any())->method('getJsonConverter')->willReturn($jsonConverterMock);
@@ -566,7 +566,7 @@ class NavigationServiceTest extends AbstractBrowserBindingServiceTestCase
             ['getObjectUrl', 'read']
         )->getMock();
 
-        list($repositoryId, $objectId, $selector) = $getObjectUrlParams;
+        [$repositoryId, $objectId, $selector] = $getObjectUrlParams;
         $navigationService->expects($this->once())->method('getObjectUrl')->with(
             $repositoryId,
             $objectId,

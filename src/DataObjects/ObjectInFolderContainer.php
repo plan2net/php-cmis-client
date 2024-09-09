@@ -30,8 +30,6 @@ class ObjectInFolderContainer extends AbstractExtensionData implements ObjectInF
 
     /**
      * Creates new ObjectInFolderContainer
-     *
-     * @param ObjectInFolderDataInterface $object
      */
     public function __construct(ObjectInFolderDataInterface $object)
     {
@@ -53,7 +51,7 @@ class ObjectInFolderContainer extends AbstractExtensionData implements ObjectInF
      *
      * @param ObjectInFolderContainerInterface[] $children
      */
-    public function setChildren(array $children)
+    public function setChildren(array $children): void
     {
         foreach ($children as $child) {
             $this->checkType(ObjectInFolderContainerInterface::class, $child);
@@ -73,10 +71,8 @@ class ObjectInFolderContainer extends AbstractExtensionData implements ObjectInF
 
     /**
      * Sets the object
-     *
-     * @param ObjectInFolderDataInterface $object
      */
-    public function setObject(ObjectInFolderDataInterface $object)
+    public function setObject(ObjectInFolderDataInterface $object): void
     {
         $this->object = $object;
     }

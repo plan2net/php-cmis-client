@@ -9,7 +9,7 @@ namespace Dkd\PhpCmis\Data;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use DateTime;
 use Dkd\PhpCmis\DataObjects\DocumentTypeDefinition;
 use Dkd\PhpCmis\DataObjects\FolderTypeDefinition;
 use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
@@ -48,10 +48,9 @@ interface BindingsObjectFactoryInterface
      * @param string $filename
      * @param integer $length
      * @param string $mimeType
-     * @param mixed $stream
      * @return StreamInterface
      */
-    public function createContentStream($filename, $length, $mimeType, $stream);
+    public function createContentStream($filename, $length, $mimeType, mixed $stream);
 
     /**
      * Create an array of property data objects
@@ -64,8 +63,6 @@ interface BindingsObjectFactoryInterface
     /**
      * Create a property data object
      *
-     * @param PropertyDefinitionInterface $propertyDefinition
-     * @param array $values
      * @return PropertyDataInterface
      */
     public function createPropertyData(PropertyDefinitionInterface $propertyDefinition, array $values);
@@ -83,7 +80,7 @@ interface BindingsObjectFactoryInterface
      * Create a property data time data object
      *
      * @param string $id
-     * @param \DateTime[] $values
+     * @param DateTime[] $values
      * @return PropertyDateTimeInterface
      */
     public function createPropertyDateTimeData($id, array $values);

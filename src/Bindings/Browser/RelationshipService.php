@@ -63,7 +63,7 @@ class RelationshipService extends AbstractBrowserBindingService implements Relat
         $url = $this->getObjectUrl($repositoryId, $objectId, Constants::SELECTOR_RELATIONSHIPS);
         $query = $url->getQuery();
 
-        if ($relationshipDirection === null) {
+        if (!$relationshipDirection instanceof RelationshipDirection) {
             $relationshipDirection = RelationshipDirection::cast(RelationshipDirection::SOURCE);
         }
 

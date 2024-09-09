@@ -36,7 +36,7 @@ class RepositoryInfoBrowserBinding extends RepositoryInfo
     /**
      * @param string $repositoryUrl
      */
-    public function setRepositoryUrl($repositoryUrl)
+    public function setRepositoryUrl($repositoryUrl): void
     {
         $this->repositoryUrl = $this->castValueToSimpleType('string', $repositoryUrl);
     }
@@ -52,7 +52,7 @@ class RepositoryInfoBrowserBinding extends RepositoryInfo
     /**
      * @param string $rootUrl
      */
-    public function setRootUrl($rootUrl)
+    public function setRootUrl($rootUrl): void
     {
         $this->rootUrl = $this->castValueToSimpleType('string', $rootUrl);
     }

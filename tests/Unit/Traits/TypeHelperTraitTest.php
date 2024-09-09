@@ -9,14 +9,17 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Closure;
+use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
+use DateTime;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 use Dkd\PhpCmis\Traits\TypeHelperTrait;
 
 /**
  * Class TypeHelperTraitTest
  */
-class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
+class TypeHelperTraitTest extends PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
 
@@ -27,10 +30,10 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
      */
     protected $typeHelperTrait;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->typeHelperTrait = $this->getMockBuilder(
-            '\\Dkd\\PhpCmis\\Traits\\TypeHelperTrait'
+            TypeHelperTrait::class
         )->setMockClassName(self::CLASS_TO_TEST)->getMockForTrait();
     }
 
@@ -38,16 +41,15 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
      * @dataProvider checkTypeDataProvider
      * @param string $expectedType
      * @param string $value
-     * @param \Closure $callback
      * @param boolean $nullAllowed
      */
     public function testCheckTypeThrowsExceptionIfGivenValueIsNotOfExpectedType(
         $expectedType,
         $value,
-        \Closure $callback = null,
+        Closure $callback = null,
         $nullAllowed = false
-    ) {
-        if ($callback !== null) {
+    ): void {
+        if ($callback instanceof Closure) {
             $callback($this);
         }
 
@@ -92,9 +94,9 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
             [
                 'string',
                 1,
-                function (TypeHelperTraitTest $parent) {
+                function (TypeHelperTraitTest $parent): void {
                     $parent->setExpectedException(
-                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        CmisInvalidArgumentException::class,
                         '',
                         1413440336
                     );
@@ -103,9 +105,9 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
             [
                 'integer',
                 '1',
-                function (TypeHelperTraitTest $parent) {
+                function (TypeHelperTraitTest $parent): void {
                     $parent->setExpectedException(
-                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        CmisInvalidArgumentException::class,
                         '',
                         1413440336
                     );
@@ -114,9 +116,9 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
             [
                 'double',
                 1,
-                function (TypeHelperTraitTest $parent) {
+                function (TypeHelperTraitTest $parent): void {
                     $parent->setExpectedException(
-                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        CmisInvalidArgumentException::class,
                         '',
                         1413440336
                     );
@@ -124,7 +126,7 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '\\DateTime',
-                new \DateTime()
+                new DateTime()
             ],
             [
                 '\\DateTime',
@@ -135,9 +137,9 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
             [
                 '\\DateTime',
                 'now',
-                function (TypeHelperTraitTest $parent) {
+                function (TypeHelperTraitTest $parent): void {
                     $parent->setExpectedException(
-                        '\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException',
+                        CmisInvalidArgumentException::class,
                         '',
                         1413440336
                     );
@@ -149,14 +151,12 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider castValueToSimpleTypeDataProvider
      * @param string $expectedType
-     * @param mixed $expectedValue
-     * @param mixed $value
      */
     public function testCastValueToSimpleTypeCastsValueToExpectedType(
         $expectedType,
-        $expectedValue,
-        $value
-    ) {
+        mixed $expectedValue,
+        mixed $value
+    ): void {
         $method = $this->getMethod(self::CLASS_TO_TEST, 'castValueToSimpleType');
         $result = @$method->invokeArgs($this->typeHelperTrait, [$expectedType, $value]);
         $this->assertSame($expectedValue, $result);
@@ -165,16 +165,14 @@ class TypeHelperTraitTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider castValueToSimpleTypeDataProvider
      * @param string $expectedType
-     * @param mixed $expectedValue
-     * @param mixed $value
      * @param boolean $errorNoticeMessageExpected
      */
     public function testCastValueToSimpleTypeTriggersErrorNoticeIfValueIsCasted(
         $expectedType,
-        $expectedValue,
-        $value,
+        mixed $expectedValue,
+        mixed $value,
         $errorNoticeMessageExpected
-    ) {
+    ): void {
         if (PHP_INT_SIZE == 4) {
             //TODO: 32bit - handle this specially?
             //we might get doubles instead of values at other points, thus the notification is disabled

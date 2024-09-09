@@ -18,7 +18,6 @@ use Dkd\PhpCmis\PrincipalInterface;
 interface MutableAceInterface extends AceInterface
 {
     /**
-     * @param PrincipalInterface $principal
      * @param string[] $permissions
      */
     public function __construct(PrincipalInterface $principal, array $permissions);
@@ -32,8 +31,6 @@ interface MutableAceInterface extends AceInterface
 
     /**
      * Set the ACE principal.
-     *
-     * @param PrincipalInterface $principal
      */
     public function setPrincipal(PrincipalInterface $principal);
 

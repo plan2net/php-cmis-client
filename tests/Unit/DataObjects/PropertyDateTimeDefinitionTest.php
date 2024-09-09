@@ -9,34 +9,35 @@ namespace Dkd\PhpCmis\Test\Unit\DataObjects;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
+use PHPUnit_Framework_TestCase;
+use Dkd\PhpCmis\DataObjects\AbstractPropertyDefinition;
 use Dkd\PhpCmis\DataObjects\PropertyDateTimeDefinition;
 use Dkd\PhpCmis\Enum\DateTimeResolution;
 
 /**
  * Class PropertyDateTimeDefinitionTest
  */
-class PropertyDateTimeDefinitionTest extends \PHPUnit_Framework_TestCase
+class PropertyDateTimeDefinitionTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var PropertyDateTimeDefinition
      */
     protected $propertyDateTimeDefinition;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->propertyDateTimeDefinition = new PropertyDateTimeDefinition('testId');
     }
 
-    public function testAssertIsInstanceOfAbstractPropertyDefinition()
+    public function testAssertIsInstanceOfAbstractPropertyDefinition(): void
     {
         $this->assertInstanceOf(
-            '\\Dkd\\PhpCmis\\DataObjects\\AbstractPropertyDefinition',
+            AbstractPropertyDefinition::class,
             $this->propertyDateTimeDefinition
         );
     }
 
-    public function testSetPrecisionSetsProperty()
+    public function testSetPrecisionSetsProperty(): void
     {
         $dateTimeResolution = DateTimeResolution::cast(DateTimeResolution::YEAR);
         $this->propertyDateTimeDefinition->setDateTimeResolution($dateTimeResolution);
@@ -46,7 +47,7 @@ class PropertyDateTimeDefinitionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testSetPrecisionSetsProperty
      */
-    public function testGetPrecisionReturnsPropertyValue()
+    public function testGetPrecisionReturnsPropertyValue(): void
     {
         $dateTimeResolution = DateTimeResolution::cast(DateTimeResolution::YEAR);
         $this->propertyDateTimeDefinition->setDateTimeResolution($dateTimeResolution);

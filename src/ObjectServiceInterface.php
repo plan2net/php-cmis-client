@@ -59,7 +59,6 @@ interface ObjectServiceInterface
      *
      * @param string $repositoryId the identifier for the repository
      * @param BulkUpdateObjectIdAndChangeTokenInterface[] $objectIdsAndChangeTokens
-     * @param PropertiesInterface $properties
      * @param string[] $addSecondaryTypeIds the secondary types to apply
      * @param string[] $removeSecondaryTypeIds the secondary types to remove
      * @param ExtensionDataInterface|null $extension

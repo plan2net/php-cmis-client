@@ -14,7 +14,6 @@ use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\BindingsObjectFactoryInterface;
-use Dkd\PhpCmis\Data\ChangeEventInfoInterface;
 use Dkd\PhpCmis\Data\ObjectDataInterface;
 use Dkd\PhpCmis\Data\ObjectListInterface;
 use Dkd\PhpCmis\Data\ObjectTypeInterface;
@@ -77,10 +76,9 @@ class ObjectFactory implements ObjectFactoryInterface
     /**
      * Initialize the object factory with a session.
      *
-     * @param SessionInterface $session
      * @param string[] $parameters
      */
-    public function initialize(SessionInterface $session, $parameters = [])
+    public function initialize(SessionInterface $session, $parameters = []): void
     {
         $this->session = $session;
     }
@@ -101,21 +99,15 @@ class ObjectFactory implements ObjectFactoryInterface
         return $this->getBindingsObjectFactory()->createAccessControlList($aces);
     }
 
-    /**
-     * @param ObjectDataInterface $objectData
-     * @return ChangeEventInfoInterface
-     */
-    public function convertChangeEvent(ObjectDataInterface $objectData)
+    public function convertChangeEvent(ObjectDataInterface $objectData): void
     {
         // TODO: Implement convertChangeEvent() method.
     }
 
     /**
      * @param string $changeLogToken
-     * @param ObjectListInterface $objectList
-     * @return ChangeEventsInterface
      */
-    public function convertChangeEvents($changeLogToken, ObjectListInterface $objectList)
+    public function convertChangeEvents($changeLogToken, ObjectListInterface $objectList): void
     {
         // TODO: Implement convertChangeEvents() method.
     }
@@ -126,7 +118,7 @@ class ObjectFactory implements ObjectFactoryInterface
      * @param StreamInterface $contentStream the original ContentStream object
      * @return StreamInterface the ContentStream object
      */
-    public function convertContentStream(StreamInterface $contentStream)
+    public function convertContentStream(StreamInterface $contentStream): StreamInterface
     {
         // TODO: Implement convertContentStream() method.
         return $contentStream;
@@ -135,32 +127,36 @@ class ObjectFactory implements ObjectFactoryInterface
     /**
      * Convert given ObjectData to a high level API object
      *
-     * @param ObjectDataInterface $objectData
-     * @param OperationContextInterface $context
      * @return CmisObjectInterface
      * @throws CmisRuntimeException
      */
-    public function convertObject(ObjectDataInterface $objectData, OperationContextInterface $context)
+    public function convertObject(ObjectDataInterface $objectData, OperationContextInterface $context): Document|Folder|Policy|Relationship|Item
     {
         $type = $this->getTypeFromObjectData($objectData);
         if ($type === null) {
             throw new CmisRuntimeException('Could not get type from object data.');
         }
         $baseTypeId = $objectData->getBaseTypeId();
-
         if ($baseTypeId->equals(BaseTypeId::CMIS_DOCUMENT)) {
             return new Document($this->session, $type, $context, $objectData);
-        } elseif ($baseTypeId->equals(BaseTypeId::CMIS_FOLDER)) {
+        }
+        if ($baseTypeId->equals(BaseTypeId::CMIS_FOLDER)) {
             return new Folder($this->session, $type, $context, $objectData);
-        } elseif ($baseTypeId->equals(BaseTypeId::CMIS_POLICY)) {
+        }
+        if ($baseTypeId->equals(BaseTypeId::CMIS_POLICY)) {
             return new Policy($this->session, $type, $context, $objectData);
-        } elseif ($baseTypeId->equals(BaseTypeId::CMIS_RELATIONSHIP)) {
+        }
+        if ($baseTypeId->equals(BaseTypeId::CMIS_RELATIONSHIP)) {
             return new Relationship($this->session, $type, $context, $objectData);
-        } elseif ($baseTypeId->equals(BaseTypeId::CMIS_ITEM)) {
+        }
+        if ($baseTypeId->equals(BaseTypeId::CMIS_ITEM)) {
             return new Item($this->session, $type, $context, $objectData);
-        } elseif ($baseTypeId->equals(BaseTypeId::CMIS_SECONDARY)) {
+        }
+
+        if ($baseTypeId->equals(BaseTypeId::CMIS_SECONDARY)) {
             throw new CmisRuntimeException('Secondary type is used as object type: ' . $baseTypeId);
-        } else {
+        }
+        else {
             throw new CmisRuntimeException('Unsupported base type: ' . $baseTypeId);
         }
     }
@@ -171,7 +167,7 @@ class ObjectFactory implements ObjectFactoryInterface
      * @param PolicyInterface[] $policies
      * @return string[]
      */
-    public function convertPolicies(array $policies)
+    public function convertPolicies(array $policies): array
     {
         $result = [];
 
@@ -187,9 +183,7 @@ class ObjectFactory implements ObjectFactoryInterface
     /**
      * Convert Properties in Properties instance to a list of PropertyInterface objects
      *
-     * @param ObjectTypeInterface $objectType
      * @param SecondaryTypeInterface[] $secondaryTypes
-     * @param PropertiesInterface $properties
      * @return PropertyInterface[]
      * @throws CmisInvalidArgumentException
      */
@@ -197,7 +191,7 @@ class ObjectFactory implements ObjectFactoryInterface
         ObjectTypeInterface $objectType,
         array $secondaryTypes,
         PropertiesInterface $properties
-    ) {
+    ): array {
         if (count($objectType->getPropertyDefinitions()) === 0) {
             throw new CmisInvalidArgumentException('Object type has no property definitions!');
         }
@@ -219,9 +213,7 @@ class ObjectFactory implements ObjectFactoryInterface
     /**
      * Convert PropertyData into a property API object
      *
-     * @param ObjectTypeInterface $objectType
      * @param SecondaryTypeInterface[] $secondaryTypes
-     * @param PropertyDataInterface $propertyData
      * @return PropertyInterface
      * @throws CmisRuntimeException
      */
@@ -233,7 +225,7 @@ class ObjectFactory implements ObjectFactoryInterface
         $definition = $objectType->getPropertyDefinition($propertyData->getId());
 
         // search secondary types
-        if ($definition === null && !empty($secondaryTypes)) {
+        if ($definition === null && $secondaryTypes !== []) {
             foreach ($secondaryTypes as $secondaryType) {
                 $propertyDefinitions = $secondaryType->getPropertyDefinitions();
                 if (!empty($propertyDefinitions)) {
@@ -250,7 +242,7 @@ class ObjectFactory implements ObjectFactoryInterface
             $reloadedObjectType = $this->session->getTypeDefinition($objectType->getId(), false);
             $definition = $reloadedObjectType->getPropertyDefinition($propertyData->getId());
 
-            if ($definition === null && !empty($secondaryTypes)) {
+            if ($definition === null && $secondaryTypes !== []) {
                 foreach ($secondaryTypes as $secondaryType) {
                     $reloadedSecondaryType = $this->session->getTypeDefinition($secondaryType->getId(), false);
                     $propertyDefinitions = $reloadedSecondaryType->getPropertyDefinitions();
@@ -288,13 +280,13 @@ class ObjectFactory implements ObjectFactoryInterface
         array $secondaryTypes = [],
         array $updatabilityFilter = []
     ) {
-        if (empty($properties)) {
+        if ($properties === []) {
             return null;
         }
 
-        if ($type === null) {
+        if (!$type instanceof ObjectTypeInterface) {
             $type = $this->getTypeDefinition(
-                isset($properties[PropertyIds::OBJECT_TYPE_ID]) ? $properties[PropertyIds::OBJECT_TYPE_ID] : null
+                $properties[PropertyIds::OBJECT_TYPE_ID] ?? null
             );
         }
 
@@ -325,7 +317,7 @@ class ObjectFactory implements ObjectFactoryInterface
             );
         }
 
-        if (!empty($secondaryTypes) && empty($allSecondaryTypes)) {
+        if ($secondaryTypes !== [] && $allSecondaryTypes === []) {
             $allSecondaryTypes = $secondaryTypes;
         }
 
@@ -345,7 +337,7 @@ class ObjectFactory implements ObjectFactoryInterface
 
             $definition = $type->getPropertyDefinition($propertyId);
 
-            if ($definition === null && !empty($allSecondaryTypes)) {
+            if ($definition === null && $allSecondaryTypes !== []) {
                 foreach ($allSecondaryTypes as $secondaryType) {
                     $definition = $secondaryType->getPropertyDefinition($propertyId);
 
@@ -362,7 +354,7 @@ class ObjectFactory implements ObjectFactoryInterface
             }
 
             // check updatability
-            if (!empty($updatabilityFilter) && !in_array($definition->getUpdatability(), $updatabilityFilter)) {
+            if ($updatabilityFilter !== [] && !in_array($definition->getUpdatability(), $updatabilityFilter)) {
                 continue;
             }
 
@@ -410,11 +402,9 @@ class ObjectFactory implements ObjectFactoryInterface
     /**
      * Get a value from an array. Return <code>null</code> if the key does not exist in the array.
      *
-     * @param integer|string $needle
-     * @param mixed $haystack
      * @return mixed
      */
-    private function getValueFromArray($needle, $haystack)
+    private function getValueFromArray(string $needle, mixed $haystack)
     {
         if (!is_array($haystack) || !isset($haystack[$needle])) {
             return null;
@@ -424,7 +414,6 @@ class ObjectFactory implements ObjectFactoryInterface
     }
 
     /**
-     * @param PropertiesInterface $properties
      * @return PropertyDataInterface[]
      */
     public function convertQueryProperties(PropertiesInterface $properties)
@@ -434,11 +423,8 @@ class ObjectFactory implements ObjectFactoryInterface
 
     /**
      * Converts ObjectData to QueryResult
-     *
-     * @param ObjectDataInterface $objectData
-     * @return QueryResult
      */
-    public function convertQueryResult(ObjectDataInterface $objectData)
+    public function convertQueryResult(ObjectDataInterface $objectData): QueryResult
     {
         return new QueryResult($this->session, $objectData);
     }
@@ -447,10 +433,9 @@ class ObjectFactory implements ObjectFactoryInterface
      * Converts RenditionData to Rendition
      *
      * @param string $objectId
-     * @param RenditionDataInterface $renditionData
      * @return RenditionInterface
      */
-    public function convertRendition($objectId, RenditionDataInterface $renditionData)
+    public function convertRendition($objectId, RenditionDataInterface $renditionData): Rendition
     {
         $rendition = new Rendition($this->session, $objectId);
         $rendition->populate($renditionData);
@@ -458,11 +443,7 @@ class ObjectFactory implements ObjectFactoryInterface
         return $rendition;
     }
 
-    /**
-     * @param RepositoryInfoInterface $repositoryInfo
-     * @return RepositoryInfoInterface
-     */
-    public function convertRepositoryInfo(RepositoryInfoInterface $repositoryInfo)
+    public function convertRepositoryInfo(RepositoryInfoInterface $repositoryInfo): void
     {
         // TODO: Implement convertRepositoryInfo() method.
     }
@@ -470,27 +451,32 @@ class ObjectFactory implements ObjectFactoryInterface
     /**
      * Convert a type definition to a type
      *
-     * @param TypeDefinitionInterface $typeDefinition
      * @return ObjectTypeInterface
      * @throws CmisRuntimeException
      */
-    public function convertTypeDefinition(TypeDefinitionInterface $typeDefinition)
+    public function convertTypeDefinition(TypeDefinitionInterface $typeDefinition): DocumentType|FolderType|RelationshipType|PolicyType|ItemType|SecondaryType
     {
         if ($typeDefinition instanceof DocumentTypeDefinitionInterface) {
             return new DocumentType($this->session, $typeDefinition);
-        } elseif ($typeDefinition instanceof FolderTypeDefinitionInterface) {
+        }
+        if ($typeDefinition instanceof FolderTypeDefinitionInterface) {
             return new FolderType($this->session, $typeDefinition);
-        } elseif ($typeDefinition instanceof RelationshipTypeDefinitionInterface) {
+        }
+        if ($typeDefinition instanceof RelationshipTypeDefinitionInterface) {
             return new RelationshipType($this->session, $typeDefinition);
-        } elseif ($typeDefinition instanceof PolicyTypeDefinitionInterface) {
+        }
+        if ($typeDefinition instanceof PolicyTypeDefinitionInterface) {
             return new PolicyType($this->session, $typeDefinition);
-        } elseif ($typeDefinition instanceof ItemTypeDefinitionInterface) {
+        }
+        if ($typeDefinition instanceof ItemTypeDefinitionInterface) {
             return new ItemType($this->session, $typeDefinition);
-        } elseif ($typeDefinition instanceof SecondaryTypeDefinitionInterface) {
+        }
+        if ($typeDefinition instanceof SecondaryTypeDefinitionInterface) {
             return new SecondaryType($this->session, $typeDefinition);
-        } else {
+        }
+        else {
             throw new CmisRuntimeException(
-                sprintf('Unknown base type! Received "%s"', get_class($typeDefinition)),
+                sprintf('Unknown base type! Received "%s"', $typeDefinition::class),
                 1422028427
             );
         }
@@ -499,18 +485,16 @@ class ObjectFactory implements ObjectFactoryInterface
     /**
      * @param string $principal
      * @param string[] $permissions
-     * @return AceInterface
      */
-    public function createAce($principal, array $permissions)
+    public function createAce($principal, array $permissions): void
     {
         // TODO: Implement createAce() method.
     }
 
     /**
      * @param AceInterface[] $aces
-     * @return AclInterface
      */
-    public function createAcl(array $aces)
+    public function createAcl(array $aces): void
     {
         // TODO: Implement createAcl() method.
     }
@@ -523,21 +507,16 @@ class ObjectFactory implements ObjectFactoryInterface
      * @param string $mimeType
      * @param mixed $stream @TODO define datatype
      * @param boolean $partial
-     * @return StreamInterface
      */
-    public function createContentStream($filename, $length, $mimeType, $stream, $partial = false)
+    public function createContentStream($filename, $length, $mimeType, $stream, $partial = false): void
     {
         // TODO: Implement createContentStream() method.
     }
 
     /**
      * Create a public API Property that contains the property definition and values.
-     *
-     * @param PropertyDefinitionInterface $type
-     * @param array $values
-     * @return Property
      */
-    public function createProperty(PropertyDefinitionInterface $type, array $values)
+    public function createProperty(PropertyDefinitionInterface $type, array $values): Property
     {
         return new Property($type, $values);
     }
@@ -545,7 +524,6 @@ class ObjectFactory implements ObjectFactoryInterface
     /**
      * Try to determined what object type the given objectData belongs to and return that type.
      *
-     * @param ObjectDataInterface $objectData
      * @return ObjectTypeInterface|null The object type or <code>null</code> if type could not be determined
      */
     public function getTypeFromObjectData(ObjectDataInterface $objectData)
@@ -649,7 +627,7 @@ class ObjectFactory implements ObjectFactoryInterface
         $typeDefinition->setQueryName($queryName);
         $typeDefinition->setDisplayName($displayName);
         $typeDefinition->setDescription($description);
-        if ($typeMutability !== null) {
+        if ($typeMutability instanceof TypeMutabilityInterface) {
             $typeDefinition->setTypeMutability($typeMutability);
         }
 

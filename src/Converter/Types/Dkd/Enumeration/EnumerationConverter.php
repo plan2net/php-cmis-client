@@ -26,7 +26,7 @@ class EnumerationConverter implements TypeConverterInterface
      * @return string String representation of Enumeration value
      * @throws CmisInvalidArgumentException is thrown if given object does not implement expected Enumeration interface
      */
-    public static function convertToSimpleType($object)
+    public static function convertToSimpleType($object): string
     {
         if (!$object instanceof Enumeration) {
             throw new CmisInvalidArgumentException('Given object must be of type Enumeration');

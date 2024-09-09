@@ -1,15 +1,22 @@
 <?php
+use GuzzleHttp\Client;
+use Dkd\PhpCmis\SessionParameter;
+use Dkd\PhpCmis\Enum\BindingType;
+use Dkd\PhpCmis\SessionFactory;
+use GuzzleHttp\Stream\Stream;
+use Dkd\PhpCmis\PropertyIds;
+use Dkd\PhpCmis\Exception\CmisVersioningException;
+
 require_once(__DIR__ . '/../vendor/autoload.php');
 if (!is_file(__DIR__ . '/conf/Configuration.php')) {
 	die("Please add your connection credentials to the file \"" . __DIR__ . "/conf/Configuration.php\".\n");
-} else {
-	require_once(__DIR__ . '/conf/Configuration.php');
 }
+require_once(__DIR__ . '/conf/Configuration.php');
 
 // Extracting arguments for example script
-$major = (boolean) isset($argv[1]) ? $argv[1] : false;
+$major = $argv[1] ?? false;
 
-$httpInvoker = new \GuzzleHttp\Client(
+$httpInvoker = new Client(
 	[
 		'defaults' => [
 			'auth' => [
@@ -21,13 +28,13 @@ $httpInvoker = new \GuzzleHttp\Client(
 );
 
 $parameters = [
-	\Dkd\PhpCmis\SessionParameter::BINDING_TYPE => \Dkd\PhpCmis\Enum\BindingType::BROWSER,
-	\Dkd\PhpCmis\SessionParameter::BROWSER_URL => CMIS_BROWSER_URL,
-	\Dkd\PhpCmis\SessionParameter::BROWSER_SUCCINCT => false,
-	\Dkd\PhpCmis\SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker,
+	SessionParameter::BINDING_TYPE => BindingType::BROWSER,
+	SessionParameter::BROWSER_URL => CMIS_BROWSER_URL,
+	SessionParameter::BROWSER_SUCCINCT => false,
+	SessionParameter::HTTP_INVOKER_OBJECT => $httpInvoker,
 ];
 
-$sessionFactory = new \Dkd\PhpCmis\SessionFactory();
+$sessionFactory = new SessionFactory();
 
 // If no repository id is defined use the first repository
 if (CMIS_REPOSITORY_ID === null) {
@@ -37,7 +44,7 @@ if (CMIS_REPOSITORY_ID === null) {
 	$repositoryId = CMIS_REPOSITORY_ID;
 }
 
-$parameters[\Dkd\PhpCmis\SessionParameter::REPOSITORY_ID] = $repositoryId;
+$parameters[SessionParameter::REPOSITORY_ID] = $repositoryId;
 
 $session = $sessionFactory->createSession($parameters);
 $rootFolder = $session->getObject($session->createObjectId($session->getRootFolder()->getId()));
@@ -45,7 +52,7 @@ $rootFolder = $session->getObject($session->createObjectId($session->getRootFold
 try {
 
 	$document = null;
-	$stream = \GuzzleHttp\Stream\Stream::factory(fopen(__DIR__ . '/../README.md', 'r'));
+	$stream = Stream::factory(fopen(__DIR__ . '/../README.md', 'r'));
 	foreach ($rootFolder->getChildren() as $child) {
 		if ($child->getName() === 'Demo Object') {
 			echo "[*] Using existing README.md document in repository root folder.\n";
@@ -58,8 +65,8 @@ try {
 		echo "[*] Create CMIS Document with file README.md\n";
 
 		$properties = [
-			\Dkd\PhpCmis\PropertyIds::OBJECT_TYPE_ID => 'cmis:document',
-			\Dkd\PhpCmis\PropertyIds::NAME => 'Demo Object'
+			PropertyIds::OBJECT_TYPE_ID => 'cmis:document',
+			PropertyIds::NAME => 'Demo Object'
 		];
 
 		$document = $session->createDocument($properties, $rootFolder, $stream);
@@ -93,7 +100,7 @@ try {
 	$checkedInDocumentId = $session->getObject($checkedOutDocumentId)->checkIn(
 		$major,
 		[
-			\Dkd\PhpCmis\PropertyIds::DESCRIPTION => 'New description'
+			PropertyIds::DESCRIPTION => 'New description'
 		],
 		$stream,
 		'Checked out/in by system'
@@ -113,7 +120,7 @@ try {
 
 	echo "Please delete README.md from repository now by hand if you so wish!\n";
 	echo "You can run this script again if you don't - it will use the same file/document.\n";
-} catch (\Dkd\PhpCmis\Exception\CmisVersioningException $e) {
+} catch (CmisVersioningException $e) {
 	echo "********* ERROR **********\n";
 	echo $e->getMessage() . "\n";
 	echo "**************************\n";
