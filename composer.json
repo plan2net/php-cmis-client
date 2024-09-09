@@ -14,10 +14,10 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=8.2.0",
         "dkd/enumeration": "~0.1",
         "dkd/php-populate": "^1",
-        "guzzlehttp/guzzle": "^6",
+        "guzzlehttp/guzzle": "^7",
         "guzzlehttp/streams": "^3",
         "doctrine/cache": "^1",
         "league/url": "^2|^3"
