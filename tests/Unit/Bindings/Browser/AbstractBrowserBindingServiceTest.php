@@ -48,7 +48,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Client;
-use League\Url\Url;
+use League\Uri\Uri as Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**

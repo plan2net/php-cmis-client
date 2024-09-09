@@ -11,10 +11,10 @@ namespace Dkd\PhpCmis\Bindings;
  */
 
 use Dkd\PhpCmis\Bindings\Browser\CmisBrowserBinding;
+use Dkd\PhpCmis\Common\Cache\ArrayCache;
 use Dkd\PhpCmis\Converter\JsonConverter;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\SessionParameter;
-use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use GuzzleHttp\Client;
 

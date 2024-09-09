@@ -13,7 +13,7 @@ use PHPUnit_Framework_TestCase;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Bindings\Browser\RepositoryUrlCache;
 use Dkd\PhpCmis\Constants;
-use League\Url\Url;
+use League\Uri\Uri as Url;
 
 /**
  * Class RepositoryUrlCacheTest

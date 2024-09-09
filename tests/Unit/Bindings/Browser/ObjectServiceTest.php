@@ -32,7 +32,7 @@ use Dkd\PhpCmis\Enum\VersioningState;
 use Dkd\PhpCmis\SessionParameter;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Stream\StreamInterface;
-use League\Url\Url;
+use League\Uri\Uri as Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**

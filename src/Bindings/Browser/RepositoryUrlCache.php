@@ -12,7 +12,8 @@ namespace Dkd\PhpCmis\Bindings\Browser;
 
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
-use League\Url\Url;
+use League\Uri\Uri;
+use League\Uri\Modifier;
 
 /**
  * URL cache for repository and root URLs.
@@ -85,7 +86,7 @@ class RepositoryUrlCache
         $repositoryUrl = $this->buildUrl($baseUrl);
 
         if ($selector !== null && $selector !== '') {
-            $repositoryUrl->getQuery()->modify([Constants::PARAM_SELECTOR => $selector]);
+            $repositoryUrl = Modifier::from($repositoryUrl)->appendQuery(Constants::PARAM_SELECTOR . '=' . $selector)->getUri();
         }
 
         return $repositoryUrl;
@@ -117,11 +118,10 @@ class RepositoryUrlCache
         }
 
         $url = $this->buildUrl($this->getRootUrl($repositoryId));
-        $urlQuery = $url->getQuery();
-        $urlQuery->modify([Constants::PARAM_OBJECT_ID => (string) $objectId]);
+        $url = Modifier::from($url)->appendQuery(Constants::PARAM_OBJECT_ID . '=' . (string) $objectId)->getUri();
 
         if (!empty($selector)) {
-            $urlQuery->modify([Constants::PARAM_SELECTOR => (string) $selector]);
+            $url = Modifier::from($url)->appendQuery(Constants::PARAM_SELECTOR . '=' . (string) $selector)->getUri();
         }
 
         return $url;
@@ -145,7 +145,7 @@ class RepositoryUrlCache
         $url->getPath()->append($path);
 
         if (!empty($selector)) {
-            $url->getQuery()->modify([Constants::PARAM_SELECTOR => $selector]);
+            $url = Modifier::from($url)->appendQuery(Constants::PARAM_SELECTOR . '=' . $selector)->getUri();
         }
 
         return $url;
@@ -155,10 +155,10 @@ class RepositoryUrlCache
      * Build an instance of \League\Url\Url for the given url
      *
      * @param string $url
-     * @return Url
+     * @return Uri
      */
     public function buildUrl($url)
     {
-        return Url::createFromUrl($url);
+        return Uri::new($url);
     }
 }

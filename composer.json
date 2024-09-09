@@ -1,40 +1,44 @@
 {
-    "name": "dkd/php-cmis",
-    "type": "library",
-    "description": "PHP CMIS client library based on CMIS 1.1",
-    "keywords": ["cmis"],
-    "homepage": "https://phabricator.dkd.de/diffusion/PHPCMIS/",
-    "license": "Apache-2.0",
-    "authors": [
-        {
-            "name": "Sascha Egerer",
-            "email": "sascha.egerer@dkd.de",
-            "homepage": "http://www.dkd.de",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "php": ">=8.2.0",
-        "dkd/enumeration": "~0.1",
-        "dkd/php-populate": "^1",
-        "guzzlehttp/guzzle": "^7",
-        "guzzlehttp/streams": "^3",
-        "doctrine/cache": "^2",
-        "league/url": "^2|^3"
-    },
-    "require-dev": {
-        "squizlabs/php_codesniffer": "~2.2",
-        "phpunit/phpunit": "~4.3",
-        "phpmd/phpmd" : "~2.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "Dkd\\PhpCmis\\": "src/"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.x-dev"
-        }
+  "name" : "dkd/php-cmis",
+  "type" : "library",
+  "description" : "PHP CMIS client library based on CMIS 1.1",
+  "keywords" : [
+    "cmis"
+  ],
+  "homepage" : "https://phabricator.dkd.de/diffusion/PHPCMIS/",
+  "license" : "Apache-2.0",
+  "authors" : [
+    {
+      "name" : "Sascha Egerer",
+      "email" : "sascha.egerer@dkd.de",
+      "homepage" : "http://www.dkd.de",
+      "role" : "Developer"
     }
+  ],
+  "require" : {
+    "php" : ">=8.2.0",
+    "dkd/enumeration" : "~0.1",
+    "dkd/php-populate" : "^1",
+    "guzzlehttp/guzzle" : "^7",
+    "guzzlehttp/streams" : "^3",
+    "doctrine/cache" : "^2",
+    "league/uri" : "^7.4",
+    "league/uri-components" : "^7.4",
+    "league/uri-interfaces" : "^7.4"
+  },
+  "require-dev" : {
+    "squizlabs/php_codesniffer" : "~2.2",
+    "phpunit/phpunit" : "~4.3",
+    "phpmd/phpmd" : "~2.1"
+  },
+  "autoload" : {
+    "psr-4" : {
+      "Dkd\\PhpCmis\\" : "src/"
+    }
+  },
+  "extra" : {
+    "branch-alias" : {
+      "dev-master" : "2.x-dev"
+    }
+  }
 }

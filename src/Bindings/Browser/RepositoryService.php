@@ -18,6 +18,7 @@ use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use Dkd\PhpCmis\Definitions\TypeDefinitionListInterface;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\RepositoryServiceInterface;
+use League\Uri\Modifier;
 
 /**
  * Repository Service Browser Binding client.
@@ -36,12 +37,12 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
     {
         $url = $this->getRepositoryUrl($repositoryId);
 
-        $url->getQuery()->modify(
+        $url = Modifier::from($url)->appendQueryParameters(
             [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_CREATE_TYPE,
                 Constants::CONTROL_TYPE => $this->getJsonConverter()->convertFromTypeDefinition($type)
             ]
-        );
+        )->getUri();
 
         return $this->getJsonConverter()->convertTypeDefinition($this->postJson($url));
     }
@@ -57,12 +58,12 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
     {
         $url = $this->getRepositoryUrl($repositoryId);
 
-        $url->getQuery()->modify(
+        $url = Modifier::from($url)->appendQueryParameters(
             [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_DELETE_TYPE,
                 Constants::CONTROL_TYPE_ID => $typeId
             ]
-        );
+        )->getUri();
 
         $this->post($url);
     }
@@ -123,20 +124,20 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
         ExtensionDataInterface $extension = null
     ) {
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_CHILDREN);
-        $url->getQuery()->modify(
+        $url = Modifier::from($url)->appendQueryParameters(
             [
                 Constants::PARAM_PROPERTY_DEFINITIONS => $includePropertyDefinitions ? 'true' : 'false',
-                Constants::PARAM_SKIP_COUNT => $skipCount,
+                Constants::PARAM_SKIP_COUNT => (string) $skipCount,
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
             ]
-        );
+        )->getUri();
 
         if ($typeId !== null) {
-            $url->getQuery()->modify([Constants::PARAM_TYPE_ID => $typeId]);
+            $url = Modifier::from($url)->appendQueryParameters([Constants::PARAM_TYPE_ID => $typeId])->getUri();
         }
 
         if ($maxItems !== null) {
-            $url->getQuery()->modify([Constants::PARAM_MAX_ITEMS => $maxItems]);
+            $url = Modifier::from($url)->appendQueryParameters([Constants::PARAM_MAX_ITEMS => (string) $maxItems])->getUri();
         }
 
         $responseData = (array) $this->readJson($url);
@@ -200,19 +201,19 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
         ExtensionDataInterface $extension = null
     ) {
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_DESCENDANTS);
-        $url->getQuery()->modify(
+        $url = Modifier::from($url)->appendQueryParameters(
             [
                 Constants::PARAM_PROPERTY_DEFINITIONS => $includePropertyDefinitions ? 'true' : 'false',
                 Constants::PARAM_DATETIME_FORMAT => (string) $this->getDateTimeFormat()
             ]
-        );
+        )->getUri();
 
         if ($typeId !== null) {
-            $url->getQuery()->modify([Constants::PARAM_TYPE_ID => $typeId]);
+            $url = Modifier::from($url)->appendQueryParameters([Constants::PARAM_TYPE_ID => $typeId])->getUri();
         }
 
         if ($depth !== null) {
-            $url->getQuery()->modify([Constants::PARAM_DEPTH => $depth]);
+            $url = Modifier::from($url)->appendQueryParameters([Constants::PARAM_DEPTH => (string) $depth])->getUri();
         }
 
         $responseData = (array) $this->readJson($url);
@@ -231,13 +232,12 @@ class RepositoryService extends AbstractBrowserBindingService implements Reposit
     public function updateType($repositoryId, TypeDefinitionInterface $type, ExtensionDataInterface $extension = null)
     {
         $url = $this->getRepositoryUrl($repositoryId);
-
-        $url->getQuery()->modify(
+        $url = Modifier::from($url)->appendQueryParameters(
             [
                 Constants::CONTROL_CMISACTION => Constants::CMISACTION_UPDATE_TYPE,
-                Constants::CONTROL_TYPE => json_encode($this->getJsonConverter()->convertFromTypeDefinition($type))
+                Constants::CONTROL_TYPE => $this->getJsonConverter()->convertFromTypeDefinition($type)
             ]
-        );
+        )->getUri();
 
         return $this->getJsonConverter()->convertTypeDefinition($this->postJson($url));
     }

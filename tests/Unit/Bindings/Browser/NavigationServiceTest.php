@@ -15,7 +15,7 @@ use Dkd\PhpCmis\Bindings\Browser\NavigationService;
 use Dkd\PhpCmis\Constants;
 use Dkd\PhpCmis\DataObjects\ObjectData;
 use Dkd\PhpCmis\Enum\IncludeRelationships;
-use League\Url\Url;
+use League\Uri\Uri as Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**

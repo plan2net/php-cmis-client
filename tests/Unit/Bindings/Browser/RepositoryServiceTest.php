@@ -18,7 +18,7 @@ use Dkd\PhpCmis\DataObjects\ItemTypeDefinition;
 use Dkd\PhpCmis\DataObjects\RepositoryInfoBrowserBinding;
 use Dkd\PhpCmis\Definitions\TypeDefinitionInterface;
 use GuzzleHttp\Psr7\Response;
-use League\Url\Url;
+use League\Uri\Uri as Url;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**

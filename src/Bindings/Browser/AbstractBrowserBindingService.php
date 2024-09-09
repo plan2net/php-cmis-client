@@ -37,7 +37,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Stream\StreamInterface;
-use League\Url\Url;
+use League\Uri\Modifier;
+use League\Uri\Uri as Url;
 use Psr\Http\Message\ResponseInterface;
 use function basename;
 use function is_array;
@@ -309,7 +310,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
             $exceptionName = '\\Dkd\\PhpCmis\\Exception\\Cmis' . ucfirst((string) $jsonError) . 'Exception';
 
             if (class_exists($exceptionName)) {
-                return new $exceptionName($message, null, $exception);
+                return new $exceptionName($message, 0, $exception);
             }
         }
 
@@ -483,8 +484,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
 
         // build URL
         $url = $this->getRepositoryUrl($repositoryId, Constants::SELECTOR_TYPE_DEFINITION);
-        $url->getQuery()->modify([Constants::PARAM_TYPE_ID => $typeId]);
-
+        $url = Modifier::from($url)->appendQuery(Constants::PARAM_TYPE_ID . '=' . $typeId)->getUri();
         return $this->getJsonConverter()->convertTypeDefinition(
             (array) $this->readJson($url)
         );
@@ -662,7 +662,9 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     protected function appendPoliciesToUrl(Url $url, array $policies)
     {
         if ($policies !== []) {
-            $url->getQuery()->modify($this->convertPolicyIdArrayToQueryArray($policies));
+            $url = Modifier::from($url)->appendQueryParameters(
+                $this->convertPolicyIdArrayToQueryArray($policies)
+            )->getUri();
         }
     }
 
@@ -674,13 +676,13 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     protected function appendAddAcesToUrl(Url $url, AclInterface $addAces = null)
     {
         if ($addAces instanceof AclInterface) {
-            $url->getQuery()->modify(
+            $url = Modifier::from($url)->appendQueryParameters(
                 $this->convertAclToQueryArray(
                     $addAces,
                     Constants::CONTROL_ADD_ACE_PRINCIPAL,
                     Constants::CONTROL_ADD_ACE_PERMISSION
                 )
-            );
+            )->getUri();
         }
     }
 
@@ -692,13 +694,13 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     protected function appendRemoveAcesToUrl(Url $url, AclInterface $removeAces = null)
     {
         if ($removeAces instanceof AclInterface) {
-            $url->getQuery()->modify(
+            $url = Modifier::from($url)->appendQueryParameters(
                 $this->convertAclToQueryArray(
                     $removeAces,
                     Constants::CONTROL_REMOVE_ACE_PRINCIPAL,
                     Constants::CONTROL_REMOVE_ACE_PERMISSION
                 )
-            );
+            )->getUri();
         }
     }
 
@@ -729,7 +731,7 @@ abstract class AbstractBrowserBindingService implements LinkAccessInterface
     {
         $result = $this->getRepositoryUrlCache()->getObjectUrl($repositoryId, $documentId, Constants::SELECTOR_CONTENT);
         if ($result !== null) {
-            $result->getQuery()->modify([Constants::PARAM_STREAM_ID => $streamId]);
+            $result = Modifier::from($result)->appendQuery(Constants::PARAM_STREAM_ID . '=' . $streamId)->getUri();
             $result = (string) $result;
         }
         return $result;

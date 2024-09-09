@@ -84,7 +84,7 @@ abstract class AbstractDataConverter implements DataConverterInterface
             $date = new DateTime();
             // DateTimes are given in a Timestamp with milliseconds.
             // see http://docs.oasis-open.org/cmis/CMIS/v1.1/os/CMIS-v1.1-os.html#x1-5420004
-            $date->setTimestamp($source / 1000);
+            $date->setTimestamp((int)($source / 1000));
         } elseif (PHP_INT_SIZE == 4 && is_float($source)) {
             //TODO: 32-bit - handle this specially?
             $date = new DateTime();
