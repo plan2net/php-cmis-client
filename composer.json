@@ -19,7 +19,7 @@
         "dkd/php-populate": "^1",
         "guzzlehttp/guzzle": "^7",
         "guzzlehttp/streams": "^3",
-        "doctrine/cache": "^1",
+        "doctrine/cache": "^2",
         "league/url": "^2|^3"
     },
     "require-dev": {
